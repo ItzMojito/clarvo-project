@@ -21,6 +21,14 @@ TRANSFORMS = standard_transformations + (
     convert_xor,
 )
 
+# parse_expr evaluates its input, so anything that reaches it must be small and math-only:
+# a single input like 9^9^9 would otherwise tie up the service computing a huge power.
+MAX_RAW_LENGTH = 200
+MAX_EXPR_LENGTH = 40
+ALLOWED_EXPR = re.compile(r"[0-9x+\-*/^().\s]+")
+BAD_EXPONENT = re.compile(r"(?:\^|\*\*)\s*+(?!2(?![\d.]))")
+LONG_NUMBER = re.compile(r"\d{5,}")
+
 
 class VerifyRequest(BaseModel):
     student_input: str
@@ -29,7 +37,7 @@ class VerifyRequest(BaseModel):
 
 
 def clean_math_text(text: str) -> str:
-    text = text.strip().replace("−", "-").replace("–", "-")
+    text = text.strip().replace("−", "-").replace("–", "-").replace("²", "^2").replace("×", "*")
     if re.search(r"=\s*0\s*$", text):
         text = re.sub(r"=\s*0\s*$", "", text).strip()
     return text
@@ -71,21 +79,48 @@ def check_pair(raw_in: str, raw_exp: str) -> dict:
     }
 
 
-def check_factored(raw_in: str, raw_exp: str) -> dict:
-    x = sp.Symbol("x")
-    expr_in = parse_expr(raw_in, local_dict={"x": x}, transformations=TRANSFORMS)
-    expr_exp = parse_expr(raw_exp, local_dict={"x": x}, transformations=TRANSFORMS)
+def is_safe_expression(text: str) -> bool:
+    """True if the text is short, math-only, and uses no exponent other than 2."""
+    return (
+        len(text) <= MAX_EXPR_LENGTH
+        and ALLOWED_EXPR.fullmatch(text) is not None
+        and not BAD_EXPONENT.search(text)
+        and not LONG_NUMBER.search(text)
+    )
 
-    if sp.simplify(expr_in - expr_exp) != 0:
+
+def is_factored(expr: sp.Expr, x: sp.Symbol) -> bool:
+    """True for a product of linear factors in x, including a square such as (x - 3)^2."""
+    if isinstance(expr, sp.Pow):
+        factors = [expr.base]
+    elif isinstance(expr, sp.Mul):
+        factors = [f.base if isinstance(f, sp.Pow) else f for f in expr.args if f.has(x)]
+    else:
+        return False
+    return bool(factors) and all(sp.degree(f, x) == 1 for f in factors)
+
+
+def check_factored(raw_in: str, raw_exp: str) -> dict:
+    if not is_safe_expression(raw_in):
+        return {
+            "status": "ignored_non_answer",
+            "is_correct": False,
+            "diagnostic_note": "Tulis bentuk faktor dengan angka kecil dan pangkat 2 saja, misalnya (x - a)(x - b).",
+        }
+
+    x = sp.Symbol("x")
+    # evaluate=False keeps (x - 3)(x - 3) as two brackets instead of folding it into a power.
+    expr_in = parse_expr(raw_in, local_dict={"x": x}, transformations=TRANSFORMS, evaluate=False)
+    expr_exp = parse_expr(raw_exp, local_dict={"x": x}, transformations=TRANSFORMS, evaluate=False)
+
+    if sp.expand(expr_in - expr_exp) != 0:
         return {
             "status": "wrong",
             "is_correct": False,
             "diagnostic_note": "Ekspresi belum ekuivalen dengan bentuk kuadrat pada soal.",
         }
 
-    # Wajib berbentuk perkalian (Mul) minimal 2 faktor linear yang memuat x
-    is_mul = isinstance(expr_in, sp.Mul) and sum(1 for a in expr_in.args if a.has(x)) >= 2
-    if not is_mul:
+    if not is_factored(expr_in, x):
         return {
             "status": "equivalent_not_factored",
             "is_correct": False,
@@ -133,7 +168,7 @@ def verify(req: VerifyRequest, x_api_key: str = Header(default="")):
     raw_in = clean_math_text(req.student_input)
     raw_exp = clean_math_text(req.expected_expr)
 
-    if is_non_math_sentence(raw_in):
+    if len(raw_in) > MAX_RAW_LENGTH or is_non_math_sentence(raw_in):
         return {
             "status": "ignored_non_answer",
             "is_correct": False,

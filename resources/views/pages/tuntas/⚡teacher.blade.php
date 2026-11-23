@@ -18,8 +18,10 @@ new #[Title('TUNTAS · Teacher View')] class extends Component
             ->orderByDesc('ls.updated_at')
             ->get();
 
+        // Only concepts the learner has actually been scored on; untouched ones sit at the 0.30 default.
         $masteriesByLearner = DB::table('student_masteries as sm')
             ->join('concepts as c', 'c.id', '=', 'sm.concept_id')
+            ->where('sm.total_attempts', '>', 0)
             ->select('sm.learner_id', 'c.name', 'sm.p_l')
             ->orderBy('sm.p_l')
             ->get()

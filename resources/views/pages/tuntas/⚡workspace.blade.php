@@ -183,9 +183,16 @@ new #[Title('TUNTAS · Learner Workspace')] class extends Component
                 </div>
 
                 @if ($session->status === 'remedial')
+                    @php
+                        $review = match ($activeStep['step']->required_form ?? 'integers_pair') {
+                            'factored_form' => ['Memfaktorkan', 'Bentuk x^2 + bx + c sama dengan (x + p)(x + q) jika p dikali q sama dengan c dan p ditambah q sama dengan b. Cari pasangan p dan q lebih dulu, lalu tulis dua kurung berdampingan.'],
+                            'roots_set'     => ['Mencari akar', 'Jika (x + p)(x + q) = 0, salah satu kurung harus bernilai nol. Jadi x + p = 0 atau x + q = 0, lalu pindahkan konstantanya ke ruas kanan.'],
+                            default         => ['Aturan tanda', 'Bilangan negatif dikali negatif menghasilkan positif, sedangkan dua bilangan negatif jika dijumlahkan tetap menghasilkan negatif. Jadi dua bilangan negatif bisa memiliki hasil kali positif dan hasil jumlah negatif.'],
+                        };
+                    @endphp
                     <div class="rounded-xl border-2 border-slate-300 bg-slate-50 p-4 space-y-3">
                         <p class="text-sm text-slate-800 leading-relaxed">
-                            <strong>Short review — Aturan tanda:</strong> Bilangan negatif dikali negatif menghasilkan positif, sedangkan dua bilangan negatif jika dijumlahkan tetap menghasilkan negatif. Jadi dua bilangan negatif bisa memiliki hasil kali positif dan hasil jumlah negatif.
+                            <strong>Short review — {{ $review[0] }}:</strong> {!! $this->formatMath($review[1]) !!}
                         </p>
                         <button wire:click="continueReview" class="px-4 py-2 rounded-lg bg-[#1d5c50] hover:bg-[#15453c] text-white text-sm font-semibold cursor-pointer">
                             Continue with new numbers

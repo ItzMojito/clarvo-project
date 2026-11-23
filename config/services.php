@@ -37,12 +37,12 @@ return [
 
     'gemini' => [
         'api_key' => env('GEMINI_API_KEY'),
-        'model'   => env('GEMINI_MODEL', 'gemini-3.5-flash-lite'),
+        'model'   => env('GEMINI_MODEL', 'gemini-2.5-flash'),
     ],
 
     'sympy' => [
         'url'    => env('SYMPY_API_URL', 'http://127.0.0.1:8001'),
-        'secret' => env('SYMPY_API_SECRET', 'tuntas-local-secret-123'),
+        'secret' => env('SYMPY_API_SECRET'),
     ],
 
 ];

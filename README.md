@@ -1,58 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TUNTAS – Socratic AI Math Tutor (Prototype)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Prototipe aplikasi web TUNTAS berbasis Laravel + Livewire 4 dengan pemisahan antara tutor Sokratik AI, verifikasi simbolik deterministik SymPy, dan Bayesian Knowledge Tracing (BKT).
 
-## About Laravel
+## Prasyarat
+- **PHP 8.3+** (ekstensi `pdo_mysql`, `curl`, `openssl`, `mbstring`)
+- **Composer** & **Node.js (LTS)**
+- **MySQL** (misalnya via XAMPP)
+- **Python 3.10+** (untuk layanan verifikasi simbolik SymPy di folder `sympy-service`)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Cara Menjalankan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Konfigurasi Environment
 ```bash
-composer require laravel/boost --dev
+cp .env.example .env
+composer install
+npm install
+php artisan key:generate
+```
+Isi konfigurasi database MySQL (`tuntas_db`), `SYMPY_API_SECRET` (string acak), serta `GEMINI_API_KEY` (opsional, dari Google AI Studio Free Tier) pada file `.env`.
 
-php artisan boost:install
+### 2. Migrasi & Seeder Database
+```bash
+php artisan migrate:fresh --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Jalankan Layanan Verifikasi SymPy (Python)
+Buka terminal baru di folder `sympy-service`:
+```bash
+cd sympy-service
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
 
-## Contributing
+pip install -r requirements.txt
+uvicorn main:app --port 8001
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Jalankan Aplikasi Web Laravel
+```bash
+npm run build
+php artisan serve
+```
+Akses aplikasi melalui browser:
+- **Learner View (Halaman Siswa)**: `http://127.0.0.1:8000/`
+- **Teacher View (Halaman Guru)**: `http://127.0.0.1:8000/teacher`
 
-## Code of Conduct
+### 5. Menjalankan Automated Testing
+Untuk memverifikasi logika BKT dan pelindung anti-kebocoran Sokratik:
+```bash
+php artisan test
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Arsitektur & Kepatuhan Privasi
+1. **Privasi Siswa**: Siswa hanya diidentifikasi dengan kode (`S01`–`S06`), tanpa data pribadi (PII), tanpa penyimpanan teks jawaban mentah di database, dan riwayat obrolan hanya hidup di memori komponen Livewire.
+2. **Pedagogi Sokratik**: Kunci jawaban tidak pernah dikirimkan ke LLM. Balasan diparafrase melalui Gemini via header `x-goog-api-key` dan disaring ketat dengan fungsi `isSafe()`.
+3. **Verifikasi Deterministik**: Perhitungan matematika diverifikasi langsung oleh SymPy (bukan tebakan probabilitas LLM).
+4. **Bayesian Knowledge Tracing (BKT)**: Mengatur pembukaan gerbang stepper 6 langkah berdasarkan probabilitas penguasaan $P(L) \ge 0.85$.

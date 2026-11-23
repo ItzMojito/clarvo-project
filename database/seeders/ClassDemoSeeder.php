@@ -4,22 +4,24 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class ClassDemoSeeder extends Seeder
 {
     public function run(): void
     {
         $concepts = DB::table('concepts')->pluck('id', 'code');
-        $quadraticId = $concepts['quadratic_equations'];
+        $quadraticId = $concepts['quadratic_equations'] ?? null;
 
-        $dummyStudents = [
+        $dummyLearners = [
             [
-                'name' => 'Alya Putri',
-                'email' => 'alya@tuntas.local',
+                'code' => 'S01',
+                'class_name' => 'Class X-2',
                 'status' => 'completed',
+                'current_step' => 'Completed',
+                'completed_steps' => 6,
                 'hints_used' => 1,
                 'failed_attempts' => 0,
+                'needs_help' => null,
                 'masteries' => [
                     'signed_integer_rules' => 0.94,
                     'integer_product_sum'  => 0.91,
@@ -28,11 +30,14 @@ class ClassDemoSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Budi Santoso',
-                'email' => 'budi@tuntas.local',
+                'code' => 'S02',
+                'class_name' => 'Class X-2',
                 'status' => 'remedial',
+                'current_step' => 'Gate 1: new numbers',
+                'completed_steps' => 1,
                 'hints_used' => 4,
                 'failed_attempts' => 3,
+                'needs_help' => 'Stuck on Gate 1: negative products',
                 'masteries' => [
                     'signed_integer_rules' => 0.19,
                     'integer_product_sum'  => 0.30,
@@ -41,11 +46,14 @@ class ClassDemoSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Citra Lestari',
-                'email' => 'citra@tuntas.local',
+                'code' => 'S03',
+                'class_name' => 'Class X-2',
                 'status' => 'active',
+                'current_step' => 'Write the factor form',
+                'completed_steps' => 2,
                 'hints_used' => 2,
                 'failed_attempts' => 1,
+                'needs_help' => null,
                 'masteries' => [
                     'signed_integer_rules' => 0.89,
                     'integer_product_sum'  => 0.87,
@@ -54,11 +62,14 @@ class ClassDemoSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Dimas Pratama',
-                'email' => 'dimas@tuntas.local',
+                'code' => 'S04',
+                'class_name' => 'Class X-2',
                 'status' => 'remedial',
+                'current_step' => 'Gate 2: factor a new one',
+                'completed_steps' => 3,
                 'hints_used' => 5,
                 'failed_attempts' => 3,
+                'needs_help' => 'Multiple incorrect factoring attempts',
                 'masteries' => [
                     'signed_integer_rules' => 0.88,
                     'integer_product_sum'  => 0.42,
@@ -66,50 +77,79 @@ class ClassDemoSeeder extends Seeder
                     'quadratic_equations'  => 0.30,
                 ],
             ],
+            [
+                'code' => 'S05',
+                'class_name' => 'Class X-2',
+                'status' => 'active',
+                'current_step' => 'Find the roots',
+                'completed_steps' => 4,
+                'hints_used' => 1,
+                'failed_attempts' => 0,
+                'needs_help' => null,
+                'masteries' => [
+                    'signed_integer_rules' => 0.90,
+                    'integer_product_sum'  => 0.86,
+                    'factoring_trinomials' => 0.88,
+                    'quadratic_equations'  => 0.65,
+                ],
+            ],
         ];
 
-        foreach ($dummyStudents as $item) {
-            $existing = DB::table('users')->where('email', $item['email'])->first();
-            if ($existing) {
-                continue;
-            }
-
-            $userId = DB::table('users')->insertGetId([
-                'name' => $item['name'],
-                'email' => $item['email'],
-                'password' => Hash::make('password'),
-                'role' => 'student',
-                'class_name' => 'Class X-2',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            foreach ($item['masteries'] as $code => $pL) {
-                DB::table('student_masteries')->insert([
-                    'user_id' => $userId,
-                    'concept_id' => $concepts[$code],
-                    'p_l' => $pL,
-                    'total_attempts' => $pL > 0.30 ? random_int(2, 6) : 1,
-                    'last_practiced_at' => now()->subMinutes(random_int(5, 120)),
+        foreach ($dummyLearners as $item) {
+            DB::table('learners')->updateOrInsert(
+                ['code' => $item['code']],
+                [
+                    'class_name' => $item['class_name'],
                     'created_at' => now(),
                     'updated_at' => now(),
-                ]);
+                ]
+            );
+
+            $learnerId = DB::table('learners')->where('code', $item['code'])->value('id');
+
+            foreach ($item['masteries'] as $code => $pL) {
+                if (!isset($concepts[$code])) {
+                    continue;
+                }
+
+                DB::table('student_masteries')->updateOrInsert(
+                    [
+                        'learner_id' => $learnerId,
+                        'concept_id' => $concepts[$code],
+                    ],
+                    [
+                        'p_l' => $pL,
+                        'total_attempts' => $pL > 0.30 ? random_int(2, 6) : 1,
+                        'last_practiced_at' => now()->subMinutes(random_int(5, 120)),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
             }
 
-            DB::table('learning_sessions')->insert([
-                'user_id' => $userId,
-                'target_concept_id' => $quadraticId,
-                'original_problem_latex' => 'x^2 - 5x + 6 = 0',
-                'problem_params_json' => json_encode(['a' => 1, 'b' => -5, 'c' => 6, 'r1' => 2, 'r2' => 3]),
-                'status' => $item['status'],
-                'hints_used' => $item['hints_used'],
-                'max_hints' => 5,
-                'failed_attempts_current_gate' => $item['failed_attempts'],
-                'final_answer_shown' => false,
-                'shared_with_teacher' => true,
-                'created_at' => now()->subMinutes(random_int(10, 90)),
-                'updated_at' => now(),
-            ]);
+            if ($quadraticId) {
+                DB::table('learning_sessions')->updateOrInsert(
+                    [
+                        'learner_id' => $learnerId,
+                        'target_concept_id' => $quadraticId,
+                    ],
+                    [
+                        'original_problem_latex' => 'x^2 - 5x + 6 = 0',
+                        'problem_params_json' => json_encode(['a' => 1, 'b' => -5, 'c' => 6, 'r1' => 2, 'r2' => 3]),
+                        'status' => $item['status'],
+                        'current_step_label' => $item['current_step'],
+                        'completed_steps_count' => $item['completed_steps'],
+                        'hints_used' => $item['hints_used'],
+                        'max_hints' => 3,
+                        'hint_level_current_item' => 0,
+                        'failed_attempts_current_gate' => $item['failed_attempts'],
+                        'final_answer_shown' => false,
+                        'needs_help_note' => $item['needs_help'],
+                        'created_at' => now()->subMinutes(random_int(10, 90)),
+                        'updated_at' => now(),
+                    ]
+                );
+            }
         }
     }
 }

@@ -194,7 +194,7 @@ class GateControllerService
         $systemFeedback = $diagNote;
 
         DB::transaction(function () use (
-            $sessionId, $session, $step, $item, $params, $vStatus, $isCorrect,
+            $sessionId, $session, $step, $item, $params, $vStatus, $isCorrect, $studentInput, $diagNote,
             $isValidMath, $shouldScore, $hintUsed, $pBefore, &$pAfter, &$gateOpened, &$enteredRemedial, &$systemFeedback
         ) {
             // _score(): perbarui BKT jika syarat scoring terpenuhi
@@ -271,8 +271,17 @@ class GateControllerService
                         'updated_at' => now(),
                     ]);
                 }
+            } elseif ($vStatus === 'verifier_error') {
+                $systemFeedback = 'Pemeriksa jawaban sedang tidak bisa dihubungi, jadi jawaban ini belum dinilai. Coba kirim lagi sebentar lagi.';
+            } elseif (!preg_match('/\p{L}{2,}/u', $studentInput)) {
+                // Malformed math such as "+3": keep the verifier's own note about the expected format.
+                $systemFeedback = $diagNote;
             } else {
-                $systemFeedback = 'Permintaan jawaban langsung diabaikan. TUNTAS tidak memberikan jawaban akhir; silakan masukkan jawaban matematikamu pada kotak Micro-Check.';
+                $systemFeedback = match ($this->classifyMessage($studentInput)) {
+                    'help'          => $this->advanceHint($session, $step)['text'],
+                    'answer_demand' => 'TUNTAS tidak memberikan jawaban akhir. Coba kerjakan langkah ini sendiri, atau tekan Hint kalau butuh petunjuk.',
+                    default         => "Tulis jawabanmu di kotak ini dengan {$item['placeholder']}. Kalau bingung, tekan Hint.",
+                };
             }
 
             // Simpan log TANPA student_input mentah (sesuai klausul privasi esai)
@@ -333,6 +342,7 @@ class GateControllerService
             DB::table('learning_sessions')->where('id', $sessionId)->update([
                 'status' => 'active',
                 'failed_attempts_current_gate' => 0,
+                'hint_level_current_item' => 0,
                 'current_step_label' => $newActive['step']->title,
                 'updated_at' => now(),
             ]);
@@ -352,6 +362,7 @@ class GateControllerService
         DB::table('learning_sessions')->where('id', $sessionId)->update([
             'status' => 'active',
             'failed_attempts_current_gate' => 0,
+            'hint_level_current_item' => 0,
             'current_step_label' => $step->title,
             'updated_at' => now(),
         ]);
@@ -368,10 +379,48 @@ class GateControllerService
             return ['ok' => false, 'message' => 'Sesi sudah selesai.'];
         }
 
-        $nextLevel = min(3, $session->hint_level_current_item + 1);
-        $step = $active['step'];
+        $hint = $this->advanceHint($session, $active['step']);
+        $msg = $this->gemini->rewordFeedback($hint['text'], $active['item']['forbidden'] ?? []);
 
-        // Tangga 3 petunjuk deterministik (tidak pernah menyebut angka jawaban)
+        return [
+            'ok'         => true,
+            'hint_level' => $hint['level'],
+            'message'    => $msg,
+            // Aliases for compatibility
+            'reply'      => $msg,
+            'hints_used' => $hint['hints_used'],
+        ];
+    }
+
+    /**
+     * Sorts a message that is not math: 'help' (the learner is stuck), 'answer_demand', or 'other'.
+     * Help wins unless the message also asks for the answer outright ("langsung", "kunci").
+     */
+    public function classifyMessage(string $text): string
+    {
+        $t = mb_strtolower($text);
+        $asksHelp = (bool) preg_match('/\b(paham|ngerti|mengerti|bingung|gimana|bagaimana|caranya|jelasin|jelaskan|kenapa|mengapa|bantu|bantuin|help|hint|petunjuk|stuck)\b/u', $t);
+        $demandsOutright = (bool) preg_match('/\b(langsung|kunci)\b/u', $t);
+
+        if ($asksHelp && !$demandsOutright) {
+            return 'help';
+        }
+        if ($demandsOutright || preg_match('/\b(jawab\w*|answer|solusi)\b/u', $t)) {
+            return 'answer_demand';
+        }
+
+        return 'other';
+    }
+
+    /**
+     * Moves the learner one rung up the 3-step hint ladder and returns the hint text (never an answer number).
+     *
+     * @return array{level: int, text: string, hints_used: int}
+     */
+    private function advanceHint(object $session, object $step): array
+    {
+        $nextLevel = min(3, $session->hint_level_current_item + 1);
+
         $ladder = match ($step->required_form) {
             'integers_pair' => [
                 1 => 'Petunjuk 1: Periksa tanda hasil kalinya lebih dulu. Hasil kali positif bisa berasal dari dua bilangan bertanda sama.',
@@ -390,20 +439,15 @@ class GateControllerService
             ],
         };
 
-        DB::table('learning_sessions')->where('id', $sessionId)->update([
+        DB::table('learning_sessions')->where('id', $session->id)->update([
             'hints_used'              => $session->hints_used + 1,
             'hint_level_current_item' => $nextLevel,
             'updated_at'              => now(),
         ]);
 
-        $msg = $this->gemini->rewordFeedback($ladder[$nextLevel], $active['item']['forbidden'] ?? []);
-
         return [
-            'ok'         => true,
-            'hint_level' => $nextLevel,
-            'message'    => $msg,
-            // Aliases for compatibility
-            'reply'      => $msg,
+            'level'      => $nextLevel,
+            'text'       => $ladder[$nextLevel],
             'hints_used' => $session->hints_used + 1,
         ];
     }

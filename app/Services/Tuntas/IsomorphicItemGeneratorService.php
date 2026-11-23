@@ -4,6 +4,10 @@ namespace App\Services\Tuntas;
 
 class IsomorphicItemGeneratorService
 {
+    /** Placeholders show only the answer format, never numbers that could be the answer. */
+    public const PAIR_FORMAT = 'format: a, b';
+    public const FACTOR_FORMAT = 'format: (x - a)(x - b)';
+
     /**
      * Parse persamaan kuadrat monik x^2 + bx + c = 0 menjadi parameter {b, c, p, q, r1, r2}.
      * Faktor: (x + p)(x + q) = x^2 + (p+q)x + (p*q) = 0, sehingga akar r1 = -p, r2 = -q.
@@ -57,7 +61,7 @@ class IsomorphicItemGeneratorService
                 return [
                     'label'         => 'GATE 1 · ANGKA BARU',
                     'prompt'        => "Cari dua bilangan bulat dengan hasil kali {$prodStr} dan hasil jumlah {$sum}.",
-                    'placeholder'   => 'contoh: -2, -4',
+                    'placeholder'   => self::PAIR_FORMAT,
                     'expected_expr' => $expected,
                     'required_form' => 'integers_pair',
                     'forbidden'     => [$expected, (string) $p, (string) $q],
@@ -68,7 +72,7 @@ class IsomorphicItemGeneratorService
         return [
             'label'         => 'GATE 1 · ANGKA BARU',
             'prompt'        => 'Cari dua bilangan bulat dengan hasil kali +15 dan hasil jumlah -8.',
-            'placeholder'   => 'contoh: -3, -5',
+            'placeholder'   => self::PAIR_FORMAT,
             'expected_expr' => '-3, -5',
             'required_form' => 'integers_pair',
             'forbidden'     => ['-3, -5', '-3', '-5'],
@@ -96,7 +100,7 @@ class IsomorphicItemGeneratorService
                     'prompt'        => $requiredForm === 'roots_set'
                         ? "Selesaikan secara mandiri: tentukan akar-akar dari {$expr} (pisahkan dengan koma)."
                         : "Faktorkan {$expr}",
-                    'placeholder'   => $requiredForm === 'roots_set' ? 'contoh: 3, 4' : 'contoh: (x - 4)(x - 5)',
+                    'placeholder'   => $requiredForm === 'roots_set' ? self::PAIR_FORMAT : self::FACTOR_FORMAT,
                     'expected_expr' => $expected,
                     'required_form' => $requiredForm,
                     'forbidden'     => [$factored, $roots, (string) (-$p), (string) (-$q)],
@@ -107,7 +111,7 @@ class IsomorphicItemGeneratorService
         return [
             'label'         => 'GATE 2 · FAKTOR BARU',
             'prompt'        => 'Faktorkan x^2 - 9x + 20',
-            'placeholder'   => 'contoh: (x - 4)(x - 5)',
+            'placeholder'   => self::FACTOR_FORMAT,
             'expected_expr' => '(x - 4)(x - 5)',
             'required_form' => 'factored_form',
             'forbidden'     => ['(x - 4)(x - 5)', '4', '5'],
@@ -128,7 +132,7 @@ class IsomorphicItemGeneratorService
             1 => [
                 'label'         => 'PREREQUISITE CHECK',
                 'prompt'        => "Cari dua bilangan bulat dengan hasil kali {$prodStr} dan hasil jumlah {$b}.",
-                'placeholder'   => 'contoh: -2, -3',
+                'placeholder'   => self::PAIR_FORMAT,
                 'expected_expr' => "{$p}, {$q}",
                 'required_form' => 'integers_pair',
                 'forbidden'     => ["{$p}, {$q}", (string) $p, (string) $q],
@@ -137,7 +141,7 @@ class IsomorphicItemGeneratorService
             3 => [
                 'label'         => 'WRITE THE FACTOR FORM (GUIDED)',
                 'prompt'        => 'Tuliskan bentuk faktor dari ' . $this->formatQuadratic($b, $c, false),
-                'placeholder'   => 'contoh: (x - a)(x - b)',
+                'placeholder'   => self::FACTOR_FORMAT,
                 'expected_expr' => $factored,
                 'required_form' => 'factored_form',
                 'forbidden'     => [$factored],
@@ -146,7 +150,7 @@ class IsomorphicItemGeneratorService
             5 => [
                 'label'         => 'FIND THE ROOTS',
                 'prompt'        => "Dari bentuk faktor {$factored} = 0, tentukan nilai-nilai x (pisahkan dengan koma).",
-                'placeholder'   => 'contoh: 2, 3',
+                'placeholder'   => self::PAIR_FORMAT,
                 'expected_expr' => $roots,
                 'required_form' => 'roots_set',
                 'forbidden'     => [$roots, (string) (-$p), (string) (-$q)],

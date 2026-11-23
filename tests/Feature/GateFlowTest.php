@@ -87,6 +87,30 @@ class GateFlowTest extends TestCase
         $this->assertFalse($res['is_scored']);
     }
 
+    public function test_a_scored_answer_shows_the_mastery_change(): void
+    {
+        $this->fakeVerifier(['status' => 'correct', 'is_correct' => true, 'diagnostic_note' => 'Tepat.']);
+
+        $res = $this->gate->submitAttempt($this->sessionId, '-2, -3');
+
+        $this->assertStringContainsString('0.30 → 0.71', $res['tutor_message']);
+    }
+
+    public function test_a_guided_step_says_it_is_not_scored_instead_of_an_unchanged_score(): void
+    {
+        $this->fakeVerifier(['status' => 'correct', 'is_correct' => true, 'diagnostic_note' => 'Tepat.']);
+
+        for ($i = 0; $i < 4 && $this->sessionRow()->current_step_label !== 'Write the factor form'; $i++) {
+            $this->gate->submitAttempt($this->sessionId, '-2, -3');
+        }
+        $this->assertSame('Write the factor form', $this->sessionRow()->current_step_label);
+
+        $res = $this->gate->submitAttempt($this->sessionId, '(x - 2)(x - 3)');
+
+        $this->assertStringContainsString('tidak dinilai', $res['tutor_message']);
+        $this->assertStringNotContainsString('→', $res['tutor_message']);
+    }
+
     /** @return array<string, array{string, string}> */
     public static function messages(): array
     {

@@ -244,7 +244,8 @@ class GateControllerService
                     if ($canOpen) {
                         $gateOpened = true;
                         $this->unlockNextStep($sessionId, (int) $step->session_step_id, (int) $step->step_order, $params);
-                        $systemFeedback = "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2) . '. Gerbang langkah berikutnya terbuka.';
+                        $finished = DB::table('learning_sessions')->where('id', $sessionId)->value('status') === 'completed';
+                        $systemFeedback = $this->correctAnswerFeedback($step, $shouldScore, $hintUsed, $pBefore, $pAfter, $finished);
                     } else {
                         $fresh = $step->required_form === 'factored_form'
                             ? $this->items->newQuadratic('factored_form', [$item['expected_expr']])
@@ -467,6 +468,24 @@ class GateControllerService
         return [
             'reply' => $reply,
         ];
+    }
+
+    /**
+     * Feedback for a correct answer that opens the next step. Only a scored answer reports a mastery change;
+     * a guided or hint-assisted one says the score stayed the same instead of showing "0.30 → 0.30".
+     */
+    private function correctAnswerFeedback(object $step, bool $scored, bool $hintUsed, float $pBefore, float $pAfter, bool $finished): string
+    {
+        $next = $finished ? 'Semua langkah sudah tuntas.' : 'Gerbang langkah berikutnya terbuka.';
+
+        if ($scored) {
+            return "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2) . ". {$next}";
+        }
+        if ($hintUsed) {
+            return "Benar. Karena kamu memakai petunjuk, jawaban ini tidak mengubah skor penguasaan. {$next}";
+        }
+
+        return "Benar. Langkah terbimbing ini tidak dinilai, jadi skor penguasaan tetap. {$next}";
     }
 
     private function capReached(int $failedAttempts): bool

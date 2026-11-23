@@ -16,7 +16,10 @@ new #[Title('TUNTAS · Teacher View')] class extends Component
                 'ls.completed_steps_count', 'ls.hints_used', 'ls.needs_help_note', 'ls.updated_at'
             )
             ->orderByDesc('ls.updated_at')
-            ->get();
+            ->get()
+            // One row per learner: their most recent session (rows are newest first).
+            ->unique('learner_id')
+            ->values();
 
         // Only concepts the learner has actually been scored on; untouched ones sit at the 0.30 default.
         $masteriesByLearner = DB::table('student_masteries as sm')

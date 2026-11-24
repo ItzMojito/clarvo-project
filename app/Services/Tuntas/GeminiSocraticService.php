@@ -31,7 +31,8 @@ ATURAN MUTLAK:
 PROMPT;
 
         try {
-            $response = Http::when(app()->isLocal(), fn ($http) => $http->withoutVerifying())
+            // TLS stays verified unless GEMINI_VERIFY_TLS=false (local workaround for a missing CA bundle; see README).
+            $response = Http::when(!config('services.gemini.verify_tls', true), fn ($http) => $http->withoutVerifying())
                 ->withHeaders(['x-goog-api-key' => $apiKey])
                 ->timeout(12)
                 ->post($url, [

@@ -44,7 +44,7 @@ def clean_math_text(text: str) -> str:
 
 
 def is_non_math_sentence(text: str) -> bool:
-    cleaned = re.sub(r"\b(dan|and|atau|or|x)\b", "", text, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\b(dan|and|atau|or|x|sqrt)\b", "", text, flags=re.IGNORECASE)
     return not text or bool(re.search(r"[a-zA-Z]{2,}", cleaned))
 
 
@@ -159,6 +159,101 @@ def check_roots(raw_in: str, raw_exp: str) -> dict:
     }
 
 
+SINGLE_VAL_RE = re.compile(
+    r"^(?:-?\d+(?:\.\d+)?(?:/-?\d+(?:\.\d+)?)?|(?:\d+\s*\*?\s*)?sqrt\(\s*\d+\s*\))$"
+)
+
+
+def parse_numeric_expr(text: str) -> sp.Expr:
+    cleaned = text.strip()
+    if re.fullmatch(r"-?\d+,\d+", cleaned):
+        cleaned = cleaned.replace(",", ".")
+    cleaned = re.sub(r"\s*/\s*", "/", cleaned)
+    cleaned = re.sub(r"(\d)\s*sqrt\(", r"\1*sqrt(", cleaned)
+    if re.fullmatch(r"-?\d+\.\d+", cleaned):
+        return sp.Rational(cleaned)
+    return parse_expr(cleaned, local_dict={"sqrt": sp.sqrt}, evaluate=True)
+
+
+def check_single_value(raw_in: str, raw_exp: str) -> dict:
+    val_in_str = re.sub(r"^[a-zA-Z]\s*=\s*", "", raw_in.strip())
+    if re.fullmatch(r"-?\d+,\d+", val_in_str):
+        val_in_str = val_in_str.replace(",", ".")
+    val_in_str = re.sub(r"\s*/\s*", "/", val_in_str)
+
+    if len(val_in_str) > MAX_EXPR_LENGTH or not SINGLE_VAL_RE.fullmatch(val_in_str):
+        return {
+            "status": "ignored_non_answer",
+            "is_correct": False,
+            "diagnostic_note": "Masukkan satu nilai angka (misal 8, -3, 12.5, atau 3/2).",
+        }
+
+    try:
+        expr_in = parse_numeric_expr(val_in_str)
+        expr_exp = parse_numeric_expr(raw_exp)
+        if expr_in in (sp.zoo, sp.oo, -sp.oo, sp.nan):
+            return {
+                "status": "ignored_non_answer",
+                "is_correct": False,
+                "diagnostic_note": "Pembagi tidak boleh bernilai nol.",
+            }
+        if sp.simplify(expr_in - expr_exp) == 0:
+            return {
+                "status": "correct",
+                "is_correct": True,
+                "diagnostic_note": "Tepat.",
+            }
+    except Exception:
+        return {
+            "status": "ignored_non_answer",
+            "is_correct": False,
+            "diagnostic_note": "Masukkan satu nilai angka yang valid.",
+        }
+
+    return {
+        "status": "wrong",
+        "is_correct": False,
+        "diagnostic_note": "Belum tepat: periksa kembali langkah hitungannya.",
+    }
+
+
+def check_quotient_remainder(raw_in: str, raw_exp: str) -> dict:
+    nums_in = [int(n) for n in re.findall(r"-?\d+", raw_in)]
+    nums_exp = [int(n) for n in re.findall(r"-?\d+", raw_exp)]
+
+    if len(nums_in) == 1 and len(nums_exp) == 2 and nums_exp[1] == 0 and nums_in[0] == nums_exp[0]:
+        return {
+            "status": "correct",
+            "is_correct": True,
+            "diagnostic_note": "Tepat (pembagian habis tanpa sisa).",
+        }
+
+    if len(nums_in) != 2:
+        return {
+            "status": "ignored_non_answer",
+            "is_correct": False,
+            "diagnostic_note": "Masukan harus berupa hasil bagi dan sisa (format: hasil_bagi, sisa).",
+        }
+
+    if nums_in == nums_exp:
+        return {
+            "status": "correct",
+            "is_correct": True,
+            "diagnostic_note": "Hasil bagi dan sisa pembagian sudah tepat.",
+        }
+
+    if nums_in[0] != nums_exp[0]:
+        note = "Hasil bagi bulatnya masih belum pas. Cek berapa kali pembagi masuk utuh ke bilangan awal."
+    else:
+        note = "Hasil bagi bulatnya sudah tepat, tetapi sisanya belum cocok. Hitung selisihnya kembali."
+
+    return {
+        "status": "wrong",
+        "is_correct": False,
+        "diagnostic_note": note,
+    }
+
+
 @app.post("/verify")
 def verify(req: VerifyRequest, x_api_key: str = Header(default="")):
     secret = os.getenv("SYMPY_API_SECRET", "")
@@ -182,6 +277,10 @@ def verify(req: VerifyRequest, x_api_key: str = Header(default="")):
             return check_factored(raw_in, raw_exp)
         if req.required_form == "roots_set":
             return check_roots(raw_in, raw_exp)
+        if req.required_form == "single_value":
+            return check_single_value(raw_in, raw_exp)
+        if req.required_form == "quotient_remainder":
+            return check_quotient_remainder(raw_in, raw_exp)
         return {
             "status": "ignored_non_answer",
             "is_correct": False,

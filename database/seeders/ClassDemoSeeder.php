@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ClassDemoSeeder extends Seeder
 {
@@ -100,6 +101,7 @@ class ClassDemoSeeder extends Seeder
                 ['code' => $item['code']],
                 [
                     'class_name' => $item['class_name'],
+                    'is_private' => false,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
@@ -151,5 +153,42 @@ class ClassDemoSeeder extends Seeder
                 );
             }
         }
+
+        // Demo Akun Guru & Individual (idempoten)
+        DB::table('users')->updateOrInsert(
+            ['email' => 'guru@tuntas.local'],
+            [
+                'name'       => 'Ibu Sari',
+                'password'   => Hash::make('tuntas123'),
+                'role'       => 'teacher',
+                'class_name' => 'Class X-2',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        DB::table('learners')->updateOrInsert(
+            ['code' => 'IND-RAKA'],
+            [
+                'class_name' => 'Mandiri',
+                'is_private' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+        $rakaLearnerId = DB::table('learners')->where('code', 'IND-RAKA')->value('id');
+
+        DB::table('users')->updateOrInsert(
+            ['email' => 'raka@tuntas.local'],
+            [
+                'name'       => 'Raka',
+                'password'   => Hash::make('tuntas123'),
+                'role'       => 'individual',
+                'class_name' => null,
+                'learner_id' => $rakaLearnerId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
     }
 }

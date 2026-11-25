@@ -14,28 +14,36 @@ class GateControllerService
         private GeminiSocraticService $gemini,
         private IsomorphicItemGeneratorService $items,
         private PrerequisiteGraphService $graph,
+        private AdaptiveTheoryService $theory,
     ) {}
 
-    public function startSession(string $learnerCode, string $problemInput): array
+    public function startSession(string $learnerCode, string $problemInput, string $className = 'Class 10A', bool $isPrivate = false): array
     {
         $code = strtoupper(trim($learnerCode)) ?: 'S06';
-        $parsed = $this->items->parseQuadratic($problemInput);
+        $parsed = $this->items->parseProblem($problemInput);
 
         if (!$parsed) {
             return [
                 'ok' => false,
-                'error' => 'Format belum didukung. Gunakan persamaan kuadrat berakar bulat seperti x^2 - 5x + 6 = 0 atau x^2 + 2x - 8 = 0.',
+                'error' => 'Format soal belum dikenali. Coba masukkan: Kuadrat (x^2 - 5x + 6 = 0), Linear (2x + 6 = 14), Modulus (17 mod 5), Hasil Bagi (19 / 4), atau Rumus Dasar (25% dari 80, pythagoras 3, 4, luas persegi panjang 8 x 5, sqrt(144)).',
             ];
         }
 
-        $quadratic = DB::table('concepts')->where('code', 'quadratic_equations')->firstOrFail();
+        $targetConcept = DB::table('concepts')->where('code', $parsed['concept_code'])->firstOrFail();
 
-        $sessionId = DB::transaction(function () use ($code, $parsed, $quadratic) {
-            DB::table('learners')->updateOrInsert(
-                ['code' => $code],
-                ['class_name' => 'Class 10A', 'updated_at' => now(), 'created_at' => now()]
-            );
-            $learnerId = DB::table('learners')->where('code', $code)->value('id');
+        $sessionId = DB::transaction(function () use ($code, $parsed, $targetConcept, $className, $isPrivate) {
+            $existingLearner = DB::table('learners')->where('code', $code)->first();
+            if ($existingLearner) {
+                $learnerId = $existingLearner->id;
+            } else {
+                $learnerId = DB::table('learners')->insertGetId([
+                    'code'       => $code,
+                    'class_name' => $className,
+                    'is_private' => $isPrivate,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
             foreach (DB::table('concepts')->get() as $c) {
                 DB::table('student_masteries')->insertOrIgnore([
@@ -49,11 +57,12 @@ class GateControllerService
             }
 
             // Diagnosis mundur pada DAG prasyarat
-            $weakPrereqs = $this->graph->weakestPrerequisites($learnerId, $quadratic->id);
-            $startOrder = $weakPrereqs->isNotEmpty() ? 1 : 3;
+            $hasPrereqs = DB::table('concept_prerequisites')->where('concept_id', $targetConcept->id)->exists();
+            $weakPrereqs = $hasPrereqs ? $this->graph->weakestPrerequisites($learnerId, $targetConcept->id) : collect();
+            $startOrder = (!$hasPrereqs || $weakPrereqs->isNotEmpty()) ? 1 : 3;
 
             $blueprints = DB::table('step_blueprints')
-                ->where('concept_id', $quadratic->id)
+                ->where('concept_id', $targetConcept->id)
                 ->orderBy('step_order')
                 ->get();
 
@@ -61,7 +70,7 @@ class GateControllerService
 
             $sessionId = DB::table('learning_sessions')->insertGetId([
                 'learner_id'                   => $learnerId,
-                'target_concept_id'            => $quadratic->id,
+                'target_concept_id'            => $targetConcept->id,
                 'original_problem_latex'       => $parsed['latex'],
                 'problem_params_json'          => json_encode($parsed),
                 'status'                       => 'active',
@@ -100,12 +109,37 @@ class GateControllerService
         });
 
         $active = $this->getActiveStepData($sessionId);
-        $opening = "Sebelum memfaktorkan {$parsed['latex']}, mari cek prasyarat yang kamu butuhkan. {$active['item']['prompt']}";
+        $sessionRow = DB::table('learning_sessions')
+            ->where('id', $sessionId)
+            ->first(['learner_id', 'problem_params_json']);
+
+        $params = json_decode((string) ($sessionRow->problem_params_json ?? '[]'), true) ?: [];
+        $initialPL = (float) (DB::table('student_masteries')
+            ->where('learner_id', $sessionRow->learner_id)
+            ->where('concept_id', $active['step']->tracked_concept_id)
+            ->value('p_l') ?? 0.30);
+
+        $tier = $this->theory->resolveTier($initialPL, 0, 0, false);
+        $theoryRaw = $this->theory->buildTheoryIntro($active['step']->required_form, $params, $tier);
+        $theoryMessage = $this->gemini->adaptTheoryMessage($theoryRaw, $tier, $active['item']['forbidden'] ?? []);
+        $introAction = match ($parsed['family'] ?? 'quadratic') {
+            'modulo'   => "Sebelum menghitung {$parsed['latex']}, mari pahami langkah dasarnya dulu.",
+            'division' => "Sebelum menyelesaikan pembagian {$parsed['latex']}, mari cek konsep dasarnya.",
+            'linear'   => "Sebelum menyelesaikan persamaan {$parsed['latex']}, mari cek langkah awalnya.",
+            'formula'  => "Sebelum menyelesaikan soal {$parsed['latex']}, mari pecah langkah perhitungannya.",
+            default    => "Sebelum memfaktorkan {$parsed['latex']}, mari cek prasyarat yang kamu butuhkan.",
+        };
+        $challengeMessage = "{$introAction}\n\n{$active['item']['prompt']}";
+        $opening = "{$theoryMessage}\n\n{$challengeMessage}";
 
         return [
-            'ok' => true,
-            'session_id' => $sessionId,
-            'opening_message' => $opening,
+            'ok'                => true,
+            'session_id'        => $sessionId,
+            'opening_message'   => $opening,
+            'theory_message'    => $theoryMessage,
+            'challenge_message' => $challengeMessage,
+            'theory_tier'       => $tier,
+            'theory_tier_label' => $this->theory->tierLabel($tier),
         ];
     }
 
@@ -192,10 +226,20 @@ class GateControllerService
         $gateOpened = false;
         $enteredRemedial = false;
         $systemFeedback = $diagNote;
+        $tierBefore = $this->theory->resolveTier(
+            $pBefore,
+            (int) $session->failed_attempts_current_gate,
+            (int) $session->hint_level_current_item,
+            false
+        );
+        $tier = $tierBefore;
+        $useAdaptiveTheory = false;
+        $extraForbidden = [];
 
         DB::transaction(function () use (
             $sessionId, $session, $step, $item, $params, $vStatus, $isCorrect, $studentInput, $diagNote,
-            $isValidMath, $shouldScore, $hintUsed, $pBefore, &$pAfter, &$gateOpened, &$enteredRemedial, &$systemFeedback
+            $isValidMath, $shouldScore, $hintUsed, $pBefore, $tierBefore,
+            &$pAfter, &$gateOpened, &$enteredRemedial, &$systemFeedback, &$tier, &$useAdaptiveTheory, &$extraForbidden
         ) {
             // _score(): perbarui BKT jika syarat scoring terpenuhi
             if ($shouldScore) {
@@ -228,14 +272,13 @@ class GateControllerService
 
                 // Jika benar tapi dibantu hint pada langkah gate -> tidak dinilai, beri soal baru mandiri
                 if ($hintUsed && $step->step_type === 'gate_check') {
-                    $fresh = $step->required_form === 'factored_form'
-                        ? $this->items->newQuadratic('factored_form', [$item['expected_expr']])
-                        : $this->items->newPair([$item['expected_expr']]);
+                    $fresh = $this->items->regenerateStepItem((int) $step->step_order, $params, [$item['expected_expr']]);
 
                     DB::table('session_steps')->where('id', $step->session_step_id)->update([
                         'active_micro_item_json' => json_encode($fresh),
                         'updated_at' => now(),
                     ]);
+                    $tier = $this->theory->resolveTier($pAfter, 0, 0, false);
                     $systemFeedback = "Benar, tetapi karena kamu memakai petunjuk, jawaban ini belum mengubah skor penguasaan. Coba kerjakan soal baru secara mandiri: {$fresh['prompt']}";
                 } else {
                     $needsThreshold = $step->step_type === 'gate_check';
@@ -244,44 +287,83 @@ class GateControllerService
                     if ($canOpen) {
                         $gateOpened = true;
                         $this->unlockNextStep($sessionId, (int) $step->session_step_id, (int) $step->step_order, $params);
-                        $systemFeedback = "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2) . '. Gerbang langkah berikutnya terbuka.';
+                        $nextActive = $this->getActiveStepData($sessionId);
+
+                        if ($nextActive) {
+                            $nextPL = (float) (DB::table('student_masteries')
+                                ->where('learner_id', $session->learner_id)
+                                ->where('concept_id', $nextActive['step']->tracked_concept_id)
+                                ->value('p_l') ?? 0.30);
+
+                            $seedPL = ($nextPL >= 0.30 && $pAfter >= 0.85 && !$hintUsed && (int) $session->failed_attempts_current_gate === 0)
+                                ? max($nextPL, 0.68)
+                                : $nextPL;
+                            $tier = $this->theory->resolveTier($seedPL, 0, 0, false);
+                            $nextTheory = $this->theory->buildTheoryIntro($nextActive['step']->required_form, $params, $tier);
+                            $extraForbidden = $nextActive['item']['forbidden'] ?? [];
+                            $useAdaptiveTheory = true;
+
+                            $systemFeedback = "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2)
+                                . ". Gerbang langkah berikutnya terbuka.\n\n{$nextTheory}\n\nLangkah berikutnya: {$nextActive['item']['prompt']}";
+                        } else {
+                            $tier = $this->theory->resolveTier($pAfter, 0, 0, false);
+                            $systemFeedback = "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2) . '. Selamat, seluruh langkah soal ini telah tuntas!';
+                        }
                     } else {
-                        $fresh = $step->required_form === 'factored_form'
-                            ? $this->items->newQuadratic('factored_form', [$item['expected_expr']])
-                            : $this->items->newPair([$item['expected_expr']]);
+                        $fresh = $this->items->regenerateStepItem((int) $step->step_order, $params, [$item['expected_expr']]);
 
                         DB::table('session_steps')->where('id', $step->session_step_id)->update([
                             'active_micro_item_json' => json_encode($fresh),
                             'updated_at' => now(),
                         ]);
-                        $systemFeedback = "Benar. Penguasaan naik menjadi " . number_format($pAfter, 2) . " (ambang gerbang 0.85). Buktikan sekali lagi dengan angka baru: {$fresh['prompt']}";
+
+                        $tier = $this->theory->resolveTier($pAfter, 0, 0, false);
+                        $extraForbidden = $fresh['forbidden'] ?? [];
+                        $systemFeedback = 'Benar. Penguasaan naik menjadi ' . number_format($pAfter, 2) . ' (ambang gerbang 0.85).';
+                        if ($tier !== $tierBefore || $tier === 'advanced') {
+                            $reinforcement = $this->theory->buildTheoryIntro($step->required_form, $params, $tier);
+                            $systemFeedback .= "\n\n{$reinforcement}";
+                            $useAdaptiveTheory = true;
+                        }
+                        $systemFeedback .= " Buktikan sekali lagi dengan angka baru: {$fresh['prompt']}";
                     }
                 }
             } elseif ($isValidMath) {
                 $fails = ((int) $session->failed_attempts_current_gate) + 1;
                 $capReached = $this->capReached($fails);
+                $justDropped = $pAfter < $pBefore;
+                $tier = $this->theory->resolveTier($pAfter, $fails, (int) $session->hint_level_current_item, $justDropped);
+                $scaffold = $this->theory->buildWrongAnswerScaffold($step->required_form, $params, $tier);
+                $useAdaptiveTheory = true;
 
-                if ($step->step_order === 1 || $capReached) {
+                if ((int) $step->step_order === 1 || $capReached) {
                     $enteredRemedial = true;
                     $this->enterRemediate($sessionId, $step, $fails, $capReached);
-                    $systemFeedback .= ' Mari lihat ulasan singkat sebelum mencoba angka baru.';
+                    $systemFeedback .= "\n\n{$scaffold}\n\nMari lihat ulasan singkat sebelum mencoba angka baru.";
                 } else {
                     DB::table('learning_sessions')->where('id', $sessionId)->update([
                         'failed_attempts_current_gate' => $fails,
                         'updated_at' => now(),
                     ]);
+                    $systemFeedback .= "\n\n{$scaffold}";
                 }
-            } elseif ($vStatus === 'verifier_error') {
+            } elseif ($vStatus === 'verifier_error' && $this->classifyMessage($studentInput) === 'other') {
                 $systemFeedback = 'Pemeriksa jawaban sedang tidak bisa dihubungi, jadi jawaban ini belum dinilai. Coba kirim lagi sebentar lagi.';
-            } elseif (!preg_match('/\p{L}{2,}/u', $studentInput)) {
+            } elseif (!preg_match('/\p{L}{2,}/u', $studentInput) && $this->classifyMessage($studentInput) === 'other') {
                 // Malformed math such as "+3": keep the verifier's own note about the expected format.
                 $systemFeedback = $diagNote;
             } else {
-                $systemFeedback = match ($this->classifyMessage($studentInput)) {
-                    'help'          => $this->advanceHint($session, $step)['text'],
-                    'answer_demand' => 'TUNTAS tidak memberikan jawaban akhir. Coba kerjakan langkah ini sendiri, atau tekan Hint kalau butuh petunjuk.',
-                    default         => "Tulis jawabanmu di kotak ini dengan {$item['placeholder']}. Kalau bingung, tekan Hint.",
-                };
+                $classification = $this->classifyMessage($studentInput);
+                if ($classification === 'help') {
+                    $hint = $this->advanceHint($session, $step);
+                    $tier = $hint['tier'];
+                    $systemFeedback = $hint['text'];
+                    $useAdaptiveTheory = true;
+                } elseif ($classification === 'answer_demand') {
+                    $systemFeedback = 'Clarvo tidak memberikan jawaban akhir. Coba kerjakan langkah ini sendiri, atau tekan Hint kalau butuh petunjuk.';
+                } else {
+                    $systemFeedback = "Tulis jawabanmu di kotak ini dengan {$item['placeholder']}. Kalau bingung, tekan Hint.";
+                }
             }
 
             // Simpan log TANPA student_input mentah (sesuai klausul privasi esai)
@@ -301,20 +383,25 @@ class GateControllerService
         });
 
         // Parafrase opsional lewat Gemini dengan guard isSafe()
-        $finalMessage = $this->gemini->rewordFeedback($systemFeedback, $item['forbidden'] ?? []);
+        $forbidden = array_values(array_unique(array_merge($item['forbidden'] ?? [], $extraForbidden)));
+        $finalMessage = $useAdaptiveTheory
+            ? $this->gemini->adaptTheoryMessage($systemFeedback, $tier, $forbidden)
+            : $this->gemini->rewordFeedback($systemFeedback, $forbidden);
 
         return [
-            'status'          => $vStatus,
-            'is_correct'      => $isCorrect,
-            'is_scored'       => $shouldScore,
-            'p_l_before'      => number_format($pBefore, 2),
-            'p_l_after'       => number_format($pAfter, 2),
-            'gate_opened'     => $gateOpened,
-            'entered_remedial'=> $enteredRemedial,
-            'tutor_message'   => $finalMessage,
+            'status'            => $vStatus,
+            'is_correct'        => $isCorrect,
+            'is_scored'         => $shouldScore,
+            'p_l_before'        => number_format($pBefore, 2),
+            'p_l_after'         => number_format($pAfter, 2),
+            'gate_opened'       => $gateOpened,
+            'entered_remedial'  => $enteredRemedial,
+            'theory_tier'       => $tier,
+            'theory_tier_label' => $this->theory->tierLabel($tier),
+            'tutor_message'     => $finalMessage,
             // Aliases for compatibility
-            'tutor_reply'     => $finalMessage,
-            'diagnostic_note' => $diagNote,
+            'tutor_reply'       => $finalMessage,
+            'diagnostic_note'   => $diagNote,
         ];
     }
 
@@ -346,13 +433,23 @@ class GateControllerService
                 'current_step_label' => $newActive['step']->title,
                 'updated_at' => now(),
             ]);
-            return "Sekarang coba dengan angka baru: {$newActive['item']['prompt']}";
+
+            $nextPL = (float) (DB::table('student_masteries')
+                ->where('learner_id', $session->learner_id)
+                ->where('concept_id', $newActive['step']->tracked_concept_id)
+                ->value('p_l') ?? 0.30);
+            $tier = $this->theory->resolveTier($nextPL, 0, 0, $nextPL < 0.30);
+            $theoryIntro = $this->gemini->adaptTheoryMessage(
+                $this->theory->buildTheoryIntro($newActive['step']->required_form, $params, $tier),
+                $tier,
+                $newActive['item']['forbidden'] ?? []
+            );
+
+            return "{$theoryIntro}\n\nSekarang coba dengan angka baru: {$newActive['item']['prompt']}";
         }
 
         // Jika di Gate lain, bangkitkan angka baru dan reset hitungan gagal
-        $fresh = $step->required_form === 'factored_form'
-            ? $this->items->newQuadratic('factored_form', [$active['item']['expected_expr'] ?? ''])
-            : $this->items->newPair([$active['item']['expected_expr'] ?? '']);
+        $fresh = $this->items->regenerateStepItem((int) $step->step_order, $params, [$active['item']['expected_expr'] ?? '']);
 
         DB::table('session_steps')->where('id', $step->session_step_id)->update([
             'active_micro_item_json' => json_encode($fresh),
@@ -367,7 +464,43 @@ class GateControllerService
             'updated_at' => now(),
         ]);
 
-        return "Ulasan selesai. Coba angka baru ini: {$fresh['prompt']}";
+        $nextPL = (float) (DB::table('student_masteries')
+            ->where('learner_id', $session->learner_id)
+            ->where('concept_id', $step->tracked_concept_id)
+            ->value('p_l') ?? 0.30);
+        $tier = $this->theory->resolveTier($nextPL, 0, 0, $nextPL < 0.30);
+        $theoryIntro = $this->gemini->adaptTheoryMessage(
+            $this->theory->buildTheoryIntro($step->required_form, $params, $tier),
+            $tier,
+            $fresh['forbidden'] ?? []
+        );
+
+        return "Ulasan selesai.\n\n{$theoryIntro}\n\nCoba angka baru ini: {$fresh['prompt']}";
+    }
+
+    public function getRemedialReview(int $sessionId): array
+    {
+        $session = DB::table('learning_sessions')->where('id', $sessionId)->first();
+        $active  = $this->getActiveStepData($sessionId);
+
+        if (!$session || !$active) {
+            return $this->theory->buildRemedialReview('integers_pair', ['b' => 0, 'c' => 0], 'baby');
+        }
+
+        $params = json_decode((string) $session->problem_params_json, true) ?: [];
+        $pL = (float) (DB::table('student_masteries')
+            ->where('learner_id', $session->learner_id)
+            ->where('concept_id', $active['step']->tracked_concept_id)
+            ->value('p_l') ?? 0.30);
+
+        $tier = $this->theory->resolveTier(
+            $pL,
+            (int) $session->failed_attempts_current_gate,
+            (int) $session->hint_level_current_item,
+            $pL < 0.30
+        );
+
+        return $this->theory->buildRemedialReview($active['step']->required_form, $params, $tier);
     }
 
     public function requestHint(int $sessionId): array
@@ -380,15 +513,17 @@ class GateControllerService
         }
 
         $hint = $this->advanceHint($session, $active['step']);
-        $msg = $this->gemini->rewordFeedback($hint['text'], $active['item']['forbidden'] ?? []);
+        $msg = $this->gemini->adaptTheoryMessage($hint['text'], $hint['tier'], $active['item']['forbidden'] ?? []);
 
         return [
-            'ok'         => true,
-            'hint_level' => $hint['level'],
-            'message'    => $msg,
+            'ok'                => true,
+            'hint_level'        => $hint['level'],
+            'theory_tier'       => $hint['tier'],
+            'theory_tier_label' => $this->theory->tierLabel($hint['tier']),
+            'message'           => $msg,
             // Aliases for compatibility
-            'reply'      => $msg,
-            'hints_used' => $hint['hints_used'],
+            'reply'             => $msg,
+            'hints_used'        => $hint['hints_used'],
         ];
     }
 
@@ -398,15 +533,34 @@ class GateControllerService
      */
     public function classifyMessage(string $text): string
     {
-        $t = mb_strtolower($text);
-        $asksHelp = (bool) preg_match('/\b(paham|ngerti|mengerti|bingung|gimana|bagaimana|caranya|jelasin|jelaskan|kenapa|mengapa|bantu|bantuin|help|hint|petunjuk|stuck)\b/u', $t);
-        $demandsOutright = (bool) preg_match('/\b(langsung|kunci)\b/u', $t);
+        $t = trim(mb_strtolower($text));
+        if ($t === '') {
+            return 'other';
+        }
 
-        if ($asksHelp && !$demandsOutright) {
+        if (preg_match('/^\?+$/', $t) === 1) {
             return 'help';
         }
-        if ($demandsOutright || preg_match('/\b(jawab\w*|answer|solusi)\b/u', $t)) {
+
+        $demandsOutright = (bool) preg_match('/\b(langsung|kunci|bocoran|bocorin)\b/u', $t);
+        $asksAnswerNoun = (bool) preg_match('/\b(jawaban\w*|answer|solusi\w*)\b/u', $t)
+            && !preg_match('/\b(cara|langkah|proses|bagaimana|gimana|gmn)\b/u', $t)
+            && !preg_match('/\b(?:ga|gak|gk|tidak|nggak)\s+minta\b/u', $t)
+            && !preg_match('/\bjawaban\s+(?:saya|aku|ku)\b/u', $t);
+        $imperativeJawab = (bool) preg_match('/\bjawab(?:in)?\b/u', $t)
+            && !preg_match('/(?:(?:ga|gak|gk|nggak|ndak|tidak|belum|belom|susah|sulit|bingung)\s+(?:bisa\s+)?|gabisa\s+|cara\s+|langkah\s+|bagaimana\s+|gimana\s+|gmn\s+)jawab/u', $t);
+
+        if ($demandsOutright || $asksAnswerNoun || $imperativeJawab) {
             return 'answer_demand';
+        }
+
+        $asksHelp = (bool) preg_match(
+            '/(?:\b(?:paham|ngerti|mengerti|mudeng|bingung|gimana|gmn|bagaimana|bgmn|caranya|jelas(?:in|kan)?|maksud(?:nya)?|kenapa|mengapa|knp|bantu(?:in)?|tolong|tlg|ajar(?:in|i)?|pandu|bimbing|susah|sulit|pusing|mumet|ribet|nyerah|menyerah|lupa|blank|stuck|help|hint|petunjuk|ulasan|teori)\b|(?:(?:ga|gak|gk|nggak|ndak|tak|kurang|belum|belom)\s*(?:paham\w*|ngerti\w*|mengerti|mudeng|tau|tahu|bisa|jelas))|\b(?:gatau|gapaham|gangerti|gabisa|gbs|gajelas)\b|\bkok\s+(?:bisa|gitu|salah|gagal|susah)\b)/u',
+            $t
+        );
+
+        if ($asksHelp) {
+            return 'help';
         }
 
         return 'other';
@@ -415,29 +569,31 @@ class GateControllerService
     /**
      * Moves the learner one rung up the 3-step hint ladder and returns the hint text (never an answer number).
      *
-     * @return array{level: int, text: string, hints_used: int}
+     * @return array{level: int, text: string, tier: string, hints_used: int}
      */
     private function advanceHint(object $session, object $step): array
     {
-        $nextLevel = min(3, $session->hint_level_current_item + 1);
+        $currentLevel = (int) $session->hint_level_current_item;
+        $nextLevel = min(3, $currentLevel + 1);
+        $params = json_decode((string) $session->problem_params_json, true) ?: [];
+        $pL = (float) (DB::table('student_masteries')
+            ->where('learner_id', $session->learner_id)
+            ->where('concept_id', $step->tracked_concept_id)
+            ->value('p_l') ?? 0.30);
 
-        $ladder = match ($step->required_form) {
-            'integers_pair' => [
-                1 => 'Petunjuk 1: Periksa tanda hasil kalinya lebih dulu. Hasil kali positif bisa berasal dari dua bilangan bertanda sama.',
-                2 => 'Petunjuk 2: Bandingkan dengan tanda hasil jumlahnya. Dua bilangan negatif bila dijumlahkan menghasilkan negatif.',
-                3 => 'Petunjuk 3: Daftar pasangan faktor dari hasil kalinya, lalu cek pasangan mana yang jumlahnya tepat sama dengan target.',
-            ],
-            'factored_form' => [
-                1 => 'Petunjuk 1: Bentuk faktor dari x^2 + bx + c selalu berbentuk perkalian dua kurung (x + p)(x + q).',
-                2 => 'Petunjuk 2: Cari dua bilangan p dan q yang hasil kalinya sama dengan konstanta dan jumlahnya sama dengan koefisien x.',
-                3 => 'Petunjuk 3: Pastikan menuliskan dua tanda kurung berdampingan tanpa menjabarkannya kembali.',
-            ],
-            default => [
-                1 => 'Petunjuk 1: Jika hasil kali dua kurung sama dengan nol, maka minimal salah satu kurung bernilai nol.',
-                2 => 'Petunjuk 2: Samakan masing-masing kurung dengan nol, lalu pindahkan konstanta ke ruas kanan.',
-                3 => 'Petunjuk 3: Perhatikan perubahan tanda saat memindahkan konstanta melewati tanda sama dengan.',
-            ],
-        };
+        $tier = $this->theory->resolveTier(
+            $pL,
+            (int) $session->failed_attempts_current_gate,
+            $nextLevel,
+            false
+        );
+        $text = $this->theory->buildAdaptiveHint($step->required_form, $nextLevel, $params, $tier);
+
+        if ($currentLevel >= 3) {
+            $tier = 'baby';
+            $extraScaffold = $this->theory->buildWrongAnswerScaffold($step->required_form, $params, 'baby');
+            $text .= "\n\n{$extraScaffold}";
+        }
 
         DB::table('learning_sessions')->where('id', $session->id)->update([
             'hints_used'              => $session->hints_used + 1,
@@ -447,7 +603,8 @@ class GateControllerService
 
         return [
             'level'      => $nextLevel,
-            'text'       => $ladder[$nextLevel],
+            'text'       => $text,
+            'tier'       => $tier,
             'hints_used' => $session->hints_used + 1,
         ];
     }

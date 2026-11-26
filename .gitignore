@@ -31,3 +31,10 @@ Thumbs.db
 /sympy-service/.venv/
 __pycache__/
 *.pyc
+
+# Config agen AI (Laravel Boost / Claude Code): hanya lokal, buat ulang dengan php artisan boost:install
+/.claude/
+/.mcp.json
+/AGENTS.md
+/CLAUDE.md
+/boost.json

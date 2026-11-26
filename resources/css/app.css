@@ -508,6 +508,159 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
     }
 }
 
+/* Built-in Math Keyboard (Batik Kawung Emerald & Gold) */
+.math-kbd-toggle {
+    position: absolute;
+    inset-inline-end: 0.45rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0B352D;
+    background-color: #EAF2EF;
+    border: 1px solid #C6D8D1;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 120ms ease;
+    cursor: pointer;
+}
+
+.math-kbd-toggle:hover {
+    background-color: #DDECE7;
+    border-color: #0B352D;
+}
+
+.math-kbd-toggle[aria-expanded='true'] {
+    background-color: var(--kawung-gold);
+    border-color: #D49B27;
+    color: #092B24;
+}
+
+.math-kbd-panel {
+    margin-block-start: 0.625rem;
+    border-radius: 0.9rem;
+    background-color: #F4F8F6;
+    border: 1px solid #C8D7D2;
+    padding: 0.65rem;
+    box-shadow: 0 12px 28px -10px rgba(7, 38, 32, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: mathKbdReveal 160ms ease-out;
+}
+
+.math-kbd-panel[hidden] {
+    display: none;
+}
+
+@keyframes mathKbdReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.math-kbd-chip {
+    flex-shrink: 0;
+    padding: 0.35rem 0.65rem;
+    min-height: 32px;
+    border-radius: 0.5rem;
+    background-color: #FFFFFF;
+    color: #0B352D;
+    border: 1px solid #C8D7D2;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 130ms ease, border-color 130ms ease;
+}
+
+.math-kbd-chip:hover {
+    background-color: #EAF2EF;
+    border-color: #0B352D;
+}
+
+.math-kbd-key {
+    min-block-size: 42px;
+    border-radius: 0.55rem;
+    background-color: #FFFFFF;
+    color: #0B352D;
+    border: 1px solid #CFDCD7;
+    border-block-end-width: 2px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 110ms ease, transform 80ms ease, border-color 110ms ease;
+}
+
+.math-kbd-key:hover {
+    background-color: #EAF2EF;
+    border-color: #0E4D42;
+}
+
+.math-kbd-key:active {
+    transform: translateY(1px);
+}
+
+.math-kbd-key--fn {
+    background-color: #E7EFEC;
+    color: #134A3F;
+}
+
+.math-kbd-key--accent {
+    background-color: var(--kawung-gold);
+    border-color: #C78C14;
+    color: #092B24;
+    font-weight: 800;
+}
+
+.math-kbd-key--accent:hover {
+    background-color: var(--kawung-gold-hover);
+    border-color: #A8740C;
+}
+
+.math-kbd-key--submit {
+    background-color: #0B352D;
+    border-color: #072620;
+    color: #EBB134;
+    font-weight: 800;
+}
+
+.math-kbd-key--submit:hover {
+    background-color: #134A3F;
+    border-color: #0B352D;
+}
+
+.no-scrollbar {
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+@media (pointer: coarse) {
+    .math-kbd-key {
+        min-block-size: 46px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .math-kbd-panel {
+        animation: none;
+    }
+}
+
 /* Forced Colors / Windows High Contrast fallback (modern-web-guidance: color) */
 @media (forced-colors: active) {
     .kawung-banner {
@@ -518,8 +671,12 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
         outline: 2px solid Highlight;
     }
 
-    .step-card-item {
-        border: 1px solid CanvasText;
+    .step-card-item,
+    .math-kbd-panel,
+    .math-kbd-key,
+    .math-kbd-chip,
+    .math-kbd-toggle {
+        border: 1px solid ButtonText;
     }
 
     .mastery-bar-track {

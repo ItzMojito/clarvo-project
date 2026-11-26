@@ -218,4 +218,27 @@ class MultiTopicSupportAndOnboardingTest extends TestCase
             ->assertSeeHtml('Langkah <strong class="text-white">1</strong> dari 4')
             ->assertSee('Rumus & aritmetika dasar');
     }
+
+    public function test_workspace_renders_built_in_math_keyboard_for_problem_and_ai_chat_answer_boxes(): void
+    {
+        // Box input soal
+        Livewire::test('pages::tuntas.workspace')
+            ->assertSee('data-math-input="problem-math-keypad"', false)
+            ->assertSee('data-math-toggle="problem-math-keypad"', false)
+            ->assertSee('id="problem-math-keypad"', false)
+            ->assertSee('data-math-insert="^2"', false)
+            ->assertSee('data-math-insert="sqrt("', false)
+            ->assertSee('data-math-action="abc"', false)
+            ->assertSee('data-math-action="backspace"', false);
+
+        // Box jawaban / tanya Tutor AI saat sesi aktif
+        Livewire::test('pages::tuntas.workspace')
+            ->set('problemInput', 'x^2 - 5x + 6 = 0')
+            ->call('startNewProblem')
+            ->assertSee('data-math-input="answer-math-keypad"', false)
+            ->assertSee('data-math-toggle="answer-math-keypad"', false)
+            ->assertSee('id="answer-math-keypad"', false)
+            ->assertSee('data-math-insert="(x - "', false)
+            ->assertSee('data-math-action="submit"', false);
+    }
 }

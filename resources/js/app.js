@@ -85,10 +85,71 @@ function scrollChatFeedToBottom() {
     });
 }
 
+const openMathKeypads = new Set();
+const dismissedMathKeypads = new Set();
+
+function syncMathKeypads() {
+    for (const keypadId of [...openMathKeypads]) {
+        const keypad = document.getElementById(keypadId);
+        const toggle = document.querySelector(`[data-math-toggle="${keypadId}"]`);
+        if (!keypad) {
+            openMathKeypads.delete(keypadId);
+            continue;
+        }
+        keypad.hidden = false;
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    }
+}
+
+function setMathKeypadOpen(keypadId, shouldOpen, { markDismissed = false } = {}) {
+    const keypad = document.getElementById(keypadId);
+    const toggle = document.querySelector(`[data-math-toggle="${keypadId}"]`);
+
+    if (shouldOpen) {
+        for (const otherId of [...openMathKeypads]) {
+            if (otherId !== keypadId) {
+                setMathKeypadOpen(otherId, false);
+            }
+        }
+        if (keypad) keypad.hidden = false;
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+        openMathKeypads.add(keypadId);
+        dismissedMathKeypads.delete(keypadId);
+        return;
+    }
+
+    if (keypad) keypad.hidden = true;
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    openMathKeypads.delete(keypadId);
+    if (markDismissed) {
+        dismissedMathKeypads.add(keypadId);
+    } else {
+        dismissedMathKeypads.delete(keypadId);
+    }
+}
+
+function insertIntoMathInput(input, rawText) {
+    const val = input.value;
+    const start = input.selectionStart ?? val.length;
+    const end = input.selectionEnd ?? val.length;
+    let text = rawText;
+
+    if (text.startsWith(' ') && start > 0 && val[start - 1] === ' ') {
+        text = text.slice(1);
+    }
+
+    input.value = val.slice(0, start) + text + val.slice(end);
+    const nextPos = start + text.length;
+    input.setSelectionRange(nextPos, nextPos);
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.focus();
+}
+
 document.addEventListener('livewire:init', () => {
     if (window.Livewire?.hook) {
         window.Livewire.hook('morphed', () => {
             requestAnimationFrame(scrollChatFeedToBottom);
+            syncMathKeypads();
         });
     }
 });
@@ -104,7 +165,108 @@ window.addEventListener('open-auth-dialog', () => {
     }
 });
 
+// Auto-open math keyboard saat mengetuk/memfokuskan box soal maupun box jawaban/chat AI
+document.addEventListener('focusin', (event) => {
+    const input = event.target.closest?.('[data-math-input]');
+    if (!input) return;
+    const keypadId = input.dataset.mathInput;
+    if (keypadId && !dismissedMathKeypads.has(keypadId)) {
+        setMathKeypadOpen(keypadId, true);
+    }
+});
+
+document.addEventListener('mousedown', (event) => {
+    if (event.target.closest?.('[data-math-keypad] button, [data-math-toggle]')) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener('click', (event) => {
+    const toggleBtn = event.target.closest?.('[data-math-toggle]');
+    if (toggleBtn) {
+        const keypadId = toggleBtn.getAttribute('data-math-toggle');
+        const keypad = keypadId ? document.getElementById(keypadId) : null;
+        if (!keypad) return;
+        const willOpen = keypad.hidden;
+        setMathKeypadOpen(keypadId, willOpen, { markDismissed: !willOpen });
+        const input = document.getElementById(keypad.dataset.targetInput);
+        input?.focus();
+        return;
+    }
+
+    const keyBtn = event.target.closest?.('[data-math-keypad] button');
+    if (keyBtn) {
+        const keypad = keyBtn.closest('[data-math-keypad]');
+        const keypadId = keypad?.id;
+        const input = keypad ? document.getElementById(keypad.dataset.targetInput) : null;
+        if (!keypad || !input) return;
+
+        if (keyBtn.dataset.mathInsert !== undefined) {
+            insertIntoMathInput(input, keyBtn.dataset.mathInsert);
+            return;
+        }
+
+        const action = keyBtn.dataset.mathAction;
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? input.value.length;
+
+        if (action === 'backspace') {
+            if (start !== end) {
+                input.value = input.value.slice(0, start) + input.value.slice(end);
+                input.setSelectionRange(start, start);
+            } else if (start > 0) {
+                input.value = input.value.slice(0, start - 1) + input.value.slice(start);
+                input.setSelectionRange(start - 1, start - 1);
+            }
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.focus();
+        } else if (action === 'left') {
+            const pos = Math.max(0, start - 1);
+            input.setSelectionRange(pos, pos);
+            input.focus();
+        } else if (action === 'right') {
+            const pos = Math.min(input.value.length, end + 1);
+            input.setSelectionRange(pos, pos);
+            input.focus();
+        } else if (action === 'abc' || action === 'close') {
+            setMathKeypadOpen(keypadId, false, { markDismissed: true });
+            input.focus();
+        } else if (action === 'submit') {
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            input.form?.requestSubmit();
+        }
+        return;
+    }
+
+    for (const keypadId of [...openMathKeypads]) {
+        const keypad = document.getElementById(keypadId);
+        const wrapper = keypad?.closest('[data-math-wrapper]');
+        if (wrapper && !wrapper.contains(event.target)) {
+            setMathKeypadOpen(keypadId, false, { markDismissed: false });
+        }
+    }
+});
+
 document.addEventListener('keydown', (event) => {
+    const mathInput = event.target.closest?.('[data-math-input]');
+    if (mathInput && event.key === 'Enter') {
+        if (event.isComposing || event.keyCode === 229) {
+            event.preventDefault();
+            return;
+        }
+    }
+
+    if (event.key === 'Escape') {
+        const wrapper = event.target.closest?.('[data-math-wrapper]');
+        const keypad = wrapper?.querySelector('[data-math-keypad]');
+        if (keypad && !keypad.hidden) {
+            event.preventDefault();
+            setMathKeypadOpen(keypad.id, false, { markDismissed: true });
+            document.getElementById(keypad.dataset.targetInput)?.focus();
+            return;
+        }
+    }
+
     const tab = event.target.closest('[role="tab"]');
     if (!tab) return;
     const tablist = tab.closest('[role="tablist"]');

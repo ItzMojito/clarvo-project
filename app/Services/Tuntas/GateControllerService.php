@@ -3,10 +3,13 @@
 namespace App\Services\Tuntas;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GateControllerService
 {
     public const FAILURE_CAP = 3;
+
+    private const REVIEW_PENDING = 'Baca ulasan singkat dulu, lalu tekan Lanjut dengan angka baru.';
 
     public function __construct(
         private BktEngineService $bkt,
@@ -127,7 +130,9 @@ class GateControllerService
             'division' => "Sebelum menyelesaikan pembagian {$parsed['latex']}, mari cek konsep dasarnya.",
             'linear'   => "Sebelum menyelesaikan persamaan {$parsed['latex']}, mari cek langkah awalnya.",
             'formula'  => "Sebelum menyelesaikan soal {$parsed['latex']}, mari pecah langkah perhitungannya.",
-            default    => "Sebelum memfaktorkan {$parsed['latex']}, mari cek prasyarat yang kamu butuhkan.",
+            default    => (int) $active['step']->step_order === 1
+                ? "Sebelum memfaktorkan {$parsed['latex']}, mari cek prasyarat yang kamu butuhkan."
+                : "Prasyarat untuk {$parsed['latex']} sudah di atas ambang gerbang, jadi sesi dimulai dari bentuk faktor.",
         };
         $challengeMessage = "{$introAction}\n\n{$active['item']['prompt']}";
         $opening = "{$theoryMessage}\n\n{$challengeMessage}";
@@ -178,7 +183,7 @@ class GateControllerService
             ->select(
                 'ss.id as session_step_id', 'ss.active_micro_item_json',
                 'sb.step_order', 'sb.title', 'sb.step_type', 'sb.required_form', 'sb.is_scored_step',
-                'sb.tracked_concept_id', 'c.name as concept_name',
+                'sb.tracked_concept_id', 'c.code as concept_code', 'c.name as concept_name',
                 'c.default_p_t', 'c.default_p_s', 'c.default_p_g'
             )
             ->first();
@@ -200,6 +205,9 @@ class GateControllerService
 
         if (!$active || !$active['item']) {
             return ['status' => 'completed', 'tutor_message' => 'Seluruh langkah sudah tuntas.'];
+        }
+        if ($session->status !== 'active') {
+            return ['status' => $session->status, 'tutor_message' => self::REVIEW_PENDING];
         }
 
         $step = $active['step'];
@@ -303,11 +311,11 @@ class GateControllerService
                             $extraForbidden = $nextActive['item']['forbidden'] ?? [];
                             $useAdaptiveTheory = true;
 
-                            $systemFeedback = "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2)
-                                . ". Gerbang langkah berikutnya terbuka.\n\n{$nextTheory}\n\nLangkah berikutnya: {$nextActive['item']['prompt']}";
+                            $systemFeedback = $this->masteryLine($step, $shouldScore, $hintUsed, $pBefore, $pAfter)
+                                . " Gerbang langkah berikutnya terbuka.\n\n{$nextTheory}\n\nLangkah berikutnya: {$nextActive['item']['prompt']}";
                         } else {
                             $tier = $this->theory->resolveTier($pAfter, 0, 0, false);
-                            $systemFeedback = "Benar. Penguasaan {$step->concept_name}: " . number_format($pBefore, 2) . ' → ' . number_format($pAfter, 2) . '. Selamat, seluruh langkah soal ini telah tuntas!';
+                            $systemFeedback = $this->masteryLine($step, $shouldScore, $hintUsed, $pBefore, $pAfter) . ' Selamat, seluruh langkah soal ini telah tuntas!';
                         }
                     } else {
                         $fresh = $this->items->regenerateStepItem((int) $step->step_order, $params, [$item['expected_expr']]);
@@ -319,7 +327,7 @@ class GateControllerService
 
                         $tier = $this->theory->resolveTier($pAfter, 0, 0, false);
                         $extraForbidden = $fresh['forbidden'] ?? [];
-                        $systemFeedback = 'Benar. Penguasaan naik menjadi ' . number_format($pAfter, 2) . ' (ambang gerbang 0.85).';
+                        $systemFeedback = 'Benar. Penguasaan naik menjadi ' . number_format($pAfter, 2, ',', '.') . ' (ambang gerbang 0,85).';
                         if ($tier !== $tierBefore || $tier === 'advanced') {
                             $reinforcement = $this->theory->buildTheoryIntro($step->required_form, $params, $tier);
                             $systemFeedback .= "\n\n{$reinforcement}";
@@ -419,6 +427,9 @@ class GateControllerService
         if (!$active) {
             return 'Sesi telah selesai.';
         }
+        if ($session->status !== 'remedial') {
+            return 'Tidak ada ulasan yang sedang berjalan. Lanjutkan soal yang ada.';
+        }
 
         $step = $active['step'];
 
@@ -510,6 +521,9 @@ class GateControllerService
 
         if (!$active) {
             return ['ok' => false, 'message' => 'Sesi sudah selesai.'];
+        }
+        if ($session->status !== 'active') {
+            return ['ok' => false, 'message' => self::REVIEW_PENDING];
         }
 
         $hint = $this->advanceHint($session, $active['step']);
@@ -624,6 +638,23 @@ class GateControllerService
         return [
             'reply' => $reply,
         ];
+    }
+
+    /**
+     * Kalimat pembuka untuk jawaban benar. Hanya jawaban yang dinilai yang menyebut perubahan penguasaan;
+     * langkah terbimbing atau yang dibantu hint menyebut skor tetap, bukan "0,30 → 0,30".
+     */
+    private function masteryLine(object $step, bool $scored, bool $hintUsed, float $pBefore, float $pAfter): string
+    {
+        if ($scored) {
+            $concept = Str::lcfirst(AdaptiveTheoryService::conceptLabel($step->concept_code, $step->concept_name));
+
+            return "Benar. Penguasaan {$concept}: " . number_format($pBefore, 2, ',', '.') . ' → ' . number_format($pAfter, 2, ',', '.') . '.';
+        }
+
+        return $hintUsed
+            ? 'Benar. Karena kamu memakai petunjuk, jawaban ini tidak mengubah skor penguasaan.'
+            : 'Benar. Langkah terbimbing ini tidak dinilai, jadi skor penguasaan tetap.';
     }
 
     private function capReached(int $failedAttempts): bool

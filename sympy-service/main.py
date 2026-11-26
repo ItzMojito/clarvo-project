@@ -73,7 +73,7 @@ def check_pair(raw_in: str, raw_exp: str) -> dict:
         "status": "wrong",
         "is_correct": False,
         "diagnostic_note": (
-            f"Belum tepat: {a} x {b} = {a * b} dan {a} + {b} = {a + b}. "
+            f"Belum tepat: {a} × {b} = {a * b} dan {a} + {b} = {a + b}. "
             f"Kamu butuh hasil kali {prod_exp} dan hasil jumlah {sum_exp}."
         ),
     }

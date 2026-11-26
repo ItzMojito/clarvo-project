@@ -15,7 +15,7 @@
     <footer class="mt-auto border-t border-[#DCE6E2] px-4 py-4 text-sm text-[#3A544E]">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
             <span>Clarvo · Purwarupa untuk NEC 6</span>
-            <a href="https://github.com/ItzMojito/tuntas-project" class="font-medium text-[#0B352D] underline underline-offset-2">Kode sumber (AGPL-3.0)</a>
+            <a href="https://github.com/ItzMojito/clarvo-project" class="font-medium text-[#0B352D] underline underline-offset-2">Kode sumber (AGPL-3.0)</a>
         </div>
     </footer>
 

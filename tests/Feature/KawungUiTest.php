@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Services\Tuntas\AdaptiveTheoryService;
+use App\Services\Tuntas\GateControllerService;
 use App\Services\Tuntas\TuntasAuthService;
 use Database\Seeders\ClassDemoSeeder;
 use Database\Seeders\QuadraticCurriculumSeeder;
@@ -81,16 +83,31 @@ class KawungUiTest extends TestCase
         Livewire::test('pages::tuntas.teacher')
             ->assertSee('S01')
             ->assertSee('S02')
-            ->assertSee('Stuck on Gate 1: negative products')
+            ->assertSee('Aturan tanda bilangan bulat (di 02 · Gerbang 1: Angka baru)')
             ->call('setFilter', 'help')
-            ->assertSee('Stuck on Gate 1: negative products')
+            ->assertSee('Aturan tanda bilangan bulat (di 02 · Gerbang 1: Angka baru)')
             ->assertDontSee('Persamaan kuadrat')
             ->call('setFilter', 'completed')
             ->assertSee('S01')
-            ->assertDontSee('Stuck on Gate 1: negative products')
+            ->assertDontSee('Aturan tanda bilangan bulat (di 02 · Gerbang 1: Angka baru)')
             ->call('setFilter', 'all')
             ->set('search', 'S05')
             ->assertSee('S05')
-            ->assertDontSee('Stuck on Gate 1: negative products');
+            ->assertDontSee('Aturan tanda bilangan bulat (di 02 · Gerbang 1: Angka baru)');
+    }
+
+    public function test_teacher_dashboard_shows_one_row_per_learner(): void
+    {
+        $gate = app(GateControllerService::class);
+        $gate->startSession('T09', 'x^2 - 5x + 6 = 0', 'Class X-2', false);
+        $this->travel(1)->minutes();
+        $gate->startSession('T09', 'x^2 - 6x + 9 = 0', 'Class X-2', false);
+
+        app(TuntasAuthService::class)->loginTeacher('guru@tuntas.local', 'tuntas123');
+
+        Livewire::test('pages::tuntas.teacher')
+            ->set('search', 'T09')
+            ->assertSee(AdaptiveTheoryService::formatMathHtml('x^2 - 6x + 9 = 0'), false)
+            ->assertDontSee(AdaptiveTheoryService::formatMathHtml('x^2 - 5x + 6 = 0'), false);
     }
 }

@@ -672,7 +672,12 @@ class GateControllerService
         ];
 
         if ($flagTeacher) {
-            $update['needs_help_note'] = "{$step->concept_name} (at {$step->title})";
+            // Disimpan sebagai JSON supaya dasbor guru bisa menampilkan label konsep dan langkah dalam bahasa Indonesia.
+            $update['needs_help_note'] = json_encode([
+                'concept_code' => $step->concept_code,
+                'concept'      => $step->concept_name,
+                'step'         => $step->title,
+            ]);
         }
 
         DB::table('learning_sessions')->where('id', $sessionId)->update($update);

@@ -38,7 +38,7 @@ class ClassDemoSeeder extends Seeder
                 'completed_steps' => 1,
                 'hints_used' => 4,
                 'failed_attempts' => 3,
-                'needs_help' => 'Stuck on Gate 1: negative products',
+                'needs_help' => ['concept_code' => 'signed_integer_rules', 'concept' => 'Signed-integer rules', 'step' => 'Gate 1: new numbers'],
                 'masteries' => [
                     'signed_integer_rules' => 0.19,
                     'integer_product_sum'  => 0.30,
@@ -70,7 +70,7 @@ class ClassDemoSeeder extends Seeder
                 'completed_steps' => 3,
                 'hints_used' => 5,
                 'failed_attempts' => 3,
-                'needs_help' => 'Multiple incorrect factoring attempts',
+                'needs_help' => ['concept_code' => 'factoring_trinomials', 'concept' => 'Factoring trinomials', 'step' => 'Gate 2: factor a new one'],
                 'masteries' => [
                     'signed_integer_rules' => 0.88,
                     'integer_product_sum'  => 0.42,
@@ -146,7 +146,7 @@ class ClassDemoSeeder extends Seeder
                         'hint_level_current_item' => 0,
                         'failed_attempts_current_gate' => $item['failed_attempts'],
                         'final_answer_shown' => false,
-                        'needs_help_note' => $item['needs_help'],
+                        'needs_help_note' => $item['needs_help'] ? json_encode($item['needs_help']) : null,
                         'created_at' => now()->subMinutes(random_int(10, 90)),
                         'updated_at' => now(),
                     ]

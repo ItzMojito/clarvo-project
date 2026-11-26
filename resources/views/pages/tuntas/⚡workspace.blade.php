@@ -420,21 +420,39 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                         </p>
 
                         <form wire:submit="startNewProblem" class="mt-6 space-y-5">
-                            <div>
+                            <div data-math-wrapper>
                                 <label for="problem-input" class="block text-xs font-bold uppercase tracking-wider text-[#0B352D] mb-1.5">
                                     Masukkan Soal
                                 </label>
-                                <input
-                                    id="problem-input"
-                                    type="text"
-                                    wire:model="problemInput"
-                                    autocorrect="off"
-                                    autocapitalize="none"
-                                    spellcheck="false"
-                                    required
-                                    class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-4 py-3 text-base font-mono text-[#0B352D] focus:bg-white focus:border-[#0B352D] transition"
-                                    placeholder="contoh: x^2 - 5x + 6 = 0, 17 mod 5, 19 / 4, atau 2x + 6 = 14"
-                                >
+                                <div class="relative">
+                                    <input
+                                        id="problem-input"
+                                        type="text"
+                                        wire:model="problemInput"
+                                        data-math-input="problem-math-keypad"
+                                        autocorrect="off"
+                                        autocapitalize="none"
+                                        spellcheck="false"
+                                        required
+                                        class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] pl-4 pr-12 py-3 text-base font-mono text-[#0B352D] focus:bg-white focus:border-[#0B352D] transition"
+                                        placeholder="contoh: x^2 - 5x + 6 = 0, 17 mod 5, 19 / 4, atau 2x + 6 = 14"
+                                    >
+                                    <button
+                                        type="button"
+                                        data-math-toggle="problem-math-keypad"
+                                        aria-expanded="false"
+                                        aria-controls="problem-math-keypad"
+                                        aria-label="Tampilkan atau sembunyikan keyboard matematika"
+                                        class="math-kbd-toggle"
+                                    >
+                                        <svg class="w-4 h-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                            <path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M10 13h.01M14 13h.01M18 13h.01M7 16h10"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <x-math-keyboard keypad-id="problem-math-keypad" input-id="problem-input" mode="problem" />
 
                                 {{-- Contoh soal cepat lintas topik --}}
                                 <div class="mt-3 space-y-1.5">
@@ -630,24 +648,40 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 {!! $this->formatMath($activeStep['item']['prompt']) !!}
                             </p>
 
-                            <form wire:submit="submitAnswer" class="space-y-2">
+                            <form wire:submit="submitAnswer" class="space-y-2" data-math-wrapper>
                                 <label for="micro-answer" class="block text-xs font-medium text-slate-300">
-                                    Jawabanmu
+                                    Jawabanmu atau Tanya Tutor AI
                                 </label>
 
                                 <div class="flex flex-col sm:flex-row gap-2.5">
-                                    <input
-                                        id="micro-answer"
-                                        type="text"
-                                        wire:model="microAnswer"
-                                        placeholder="{{ $activeStep['item']['placeholder'] }}"
-                                        autocomplete="off"
-                                        autocorrect="off"
-                                        autocapitalize="none"
-                                        spellcheck="false"
-                                        enterkeyhint="send"
-                                        class="flex-1 rounded-xl bg-white text-[#0B352D] placeholder:text-[#667B76] px-4 py-3 text-sm font-semibold border border-transparent focus:border-[#EBB134] min-h-[46px]"
-                                    >
+                                    <div class="relative flex-1">
+                                        <input
+                                            id="micro-answer"
+                                            type="text"
+                                            wire:model="microAnswer"
+                                            data-math-input="answer-math-keypad"
+                                            placeholder="{{ $activeStep['item']['placeholder'] }}"
+                                            autocomplete="off"
+                                            autocorrect="off"
+                                            autocapitalize="none"
+                                            spellcheck="false"
+                                            enterkeyhint="send"
+                                            class="w-full rounded-xl bg-white text-[#0B352D] placeholder:text-[#667B76] pl-4 pr-12 py-3 text-base font-semibold border border-transparent focus:border-[#EBB134] min-h-[46px]"
+                                        >
+                                        <button
+                                            type="button"
+                                            data-math-toggle="answer-math-keypad"
+                                            aria-expanded="false"
+                                            aria-controls="answer-math-keypad"
+                                            aria-label="Tampilkan atau sembunyikan keyboard matematika"
+                                            class="math-kbd-toggle"
+                                        >
+                                            <svg class="w-4 h-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                                <path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M10 13h.01M14 13h.01M18 13h.01M7 16h10"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                     <div class="flex gap-2.5">
                                         <button
                                             type="submit"
@@ -666,6 +700,8 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                         </button>
                                     </div>
                                 </div>
+
+                                <x-math-keyboard keypad-id="answer-math-keypad" input-id="micro-answer" mode="answer" />
                             </form>
 
                             <p class="text-[11px] text-slate-300/85 pt-0.5">

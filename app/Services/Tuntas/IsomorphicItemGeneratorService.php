@@ -32,7 +32,8 @@ class IsomorphicItemGeneratorService
         $clean = strtolower(str_replace([' ', '−', '–', '²'], ['', '-', '-', '^2'], trim($input)));
         $clean = preg_replace('/=0$/', '', $clean);
 
-        if (!preg_match('/^x\^2([+-]\d*x)?([+-]\d+)?$/', $clean, $m)) {
+        // PREG_UNMATCHED_AS_NULL: grup suku-x yang tidak cocok jadi null, bukan '', jadi x^2 - 9 terbaca b = 0.
+        if (!preg_match('/^x\^2([+-]\d*x)?([+-]\d+)?$/', $clean, $m, PREG_UNMATCHED_AS_NULL)) {
             return null;
         }
 
@@ -407,11 +408,13 @@ class IsomorphicItemGeneratorService
         $family = $params['family'] ?? 'quadratic';
 
         if ($family === 'quadratic') {
-            return $stepOrder === 4 || $stepOrder === 3
-                ? $this->newQuadratic('factored_form', $excludeExpected)
-                : ($stepOrder >= 5
-                    ? $this->newQuadratic('roots_set', $excludeExpected)
-                    : $this->newPair($excludeExpected));
+            return match ($stepOrder) {
+                1, 2 => $this->newPair($excludeExpected),
+                4 => $this->newQuadratic('factored_form', $excludeExpected),
+                6 => $this->newQuadratic('roots_set', $excludeExpected),
+                // Langkah 3 dan 5 tetap berbentuk soal utama (dibimbing / dari bentuk faktor), dengan akar baru.
+                default => $this->quadraticOnNewNumbers($stepOrder, $excludeExpected),
+            };
         }
 
         $targetStep = $stepOrder <= 2 ? 2 : 4;
@@ -423,6 +426,21 @@ class IsomorphicItemGeneratorService
         }
 
         return $this->forMainProblem($targetStep, $params);
+    }
+
+    private function quadraticOnNewNumbers(int $stepOrder, array $excludeExpected): array
+    {
+        $candidates = [[-4, -5], [-3, -4], [-2, -5], [-3, -5], [4, -2], [2, 3], [-1, -6]];
+        shuffle($candidates);
+
+        foreach ($candidates as [$p, $q]) {
+            $item = $this->forQuadraticStep($stepOrder, ['p' => $p, 'q' => $q, 'b' => $p + $q, 'c' => $p * $q]);
+            if (!in_array($item['expected_expr'], $excludeExpected, true)) {
+                return $item;
+            }
+        }
+
+        return $this->forQuadraticStep($stepOrder, ['p' => -4, 'q' => -5, 'b' => -9, 'c' => 20]);
     }
 
     private function forQuadraticStep(int $stepOrder, array $params): array

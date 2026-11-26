@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Services\Tuntas\GateControllerService;
+use App\Services\Tuntas\IsomorphicItemGeneratorService;
 use Database\Seeders\QuadraticCurriculumSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -38,10 +39,18 @@ class GateFlowTest extends TestCase
         return DB::table('learning_sessions')->where('id', $this->sessionId)->first();
     }
 
+    private function enterReview(): void
+    {
+        $this->fakeVerifier(['status' => 'wrong', 'is_correct' => false, 'diagnostic_note' => 'Belum tepat.']);
+        $this->gate->submitAttempt($this->sessionId, '2, 3');
+        $this->assertSame('remedial', $this->sessionRow()->status);
+    }
+
     public function test_review_clears_the_hint_level_so_the_next_unaided_answer_counts(): void
     {
         $this->gate->requestHint($this->sessionId);
         $this->assertSame(1, (int) $this->sessionRow()->hint_level_current_item);
+        $this->enterReview();
 
         $this->gate->continueAfterReview($this->sessionId);
 
@@ -97,6 +106,83 @@ class GateFlowTest extends TestCase
             'asks for the key'         => ['kasih tau kunci jawabannya', 'answer_demand'],
             'small talk'               => ['halo', 'other'],
         ];
+    }
+
+    public function test_continuing_a_review_that_was_never_opened_does_not_skip_step_one(): void
+    {
+        $msg = $this->gate->continueAfterReview($this->sessionId);
+
+        $this->assertStringContainsString('Tidak ada ulasan', $msg);
+        $this->assertSame(1, (int) $this->gate->getActiveStepData($this->sessionId)['step']->step_order);
+    }
+
+    public function test_an_answer_sent_during_a_review_does_not_skip_the_review(): void
+    {
+        $this->enterReview();
+
+        $this->fakeVerifier(['status' => 'correct', 'is_correct' => true, 'diagnostic_note' => 'Tepat.']);
+        $res = $this->gate->submitAttempt($this->sessionId, '-2, -3');
+
+        $this->assertSame('remedial', $res['status']);
+        $this->assertSame('remedial', $this->sessionRow()->status);
+    }
+
+    public function test_a_review_at_the_roots_step_serves_a_roots_question(): void
+    {
+        $steps = DB::table('session_steps as ss')
+            ->join('step_blueprints as sb', 'sb.id', '=', 'ss.step_blueprint_id')
+            ->where('ss.learning_session_id', $this->sessionId)
+            ->pluck('ss.id', 'sb.step_order');
+        DB::table('session_steps')->where('learning_session_id', $this->sessionId)->update(['status' => 'passed']);
+        DB::table('session_steps')->where('id', $steps[5])->update([
+            'status' => 'active',
+            'active_micro_item_json' => json_encode(app(IsomorphicItemGeneratorService::class)
+                ->forMainProblem(5, json_decode($this->sessionRow()->problem_params_json, true))),
+        ]);
+        DB::table('learning_sessions')->where('id', $this->sessionId)->update(['status' => 'remedial']);
+
+        $this->gate->continueAfterReview($this->sessionId);
+
+        $item = $this->gate->getActiveStepData($this->sessionId)['item'];
+        $this->assertSame('roots_set', $item['required_form']);
+        $this->assertSame('FIND THE ROOTS', $item['label']);
+        $this->assertStringStartsWith('Dari bentuk faktor', $item['prompt']);
+        $this->assertNotSame('2, 3', $item['expected_expr']);
+    }
+
+    public function test_a_learner_with_strong_prerequisites_is_not_told_to_do_the_prerequisite_check(): void
+    {
+        $learnerId = DB::table('learners')->where('code', 'T01')->value('id');
+        DB::table('student_masteries')->where('learner_id', $learnerId)->update(['p_l' => 0.95]);
+
+        $res = $this->gate->startSession('T01', 'x^2 - 7x + 12 = 0');
+
+        $this->assertStringNotContainsString('cek prasyarat', $res['opening_message']);
+        $this->assertStringContainsString('dimulai dari bentuk faktor', $res['opening_message']);
+    }
+
+    public function test_a_scored_answer_shows_the_mastery_change_in_indonesian(): void
+    {
+        $this->fakeVerifier(['status' => 'correct', 'is_correct' => true, 'diagnostic_note' => 'Tepat.']);
+
+        $res = $this->gate->submitAttempt($this->sessionId, '-2, -3');
+
+        $this->assertStringContainsString('Penguasaan aturan tanda bilangan bulat: 0,30 → 0,71', $res['tutor_message']);
+    }
+
+    public function test_a_guided_step_says_it_is_not_scored_instead_of_an_unchanged_score(): void
+    {
+        $this->fakeVerifier(['status' => 'correct', 'is_correct' => true, 'diagnostic_note' => 'Tepat.']);
+
+        for ($i = 0; $i < 4 && $this->sessionRow()->current_step_label !== 'Write the factor form'; $i++) {
+            $this->gate->submitAttempt($this->sessionId, '-2, -3');
+        }
+        $this->assertSame('Write the factor form', $this->sessionRow()->current_step_label);
+
+        $res = $this->gate->submitAttempt($this->sessionId, '(x - 2)(x - 3)');
+
+        $this->assertStringContainsString('tidak dinilai', $res['tutor_message']);
+        $this->assertStringNotContainsString('→', $res['tutor_message']);
     }
 
     #[DataProvider('messages')]

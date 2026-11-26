@@ -4,11 +4,14 @@ use App\Services\Tuntas\AdaptiveTheoryService;
 use App\Services\Tuntas\GateControllerService;
 use App\Services\Tuntas\TuntasAuthService;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 new #[Title('Clarvo · Ruang Belajar')] class extends Component
 {
+    /** Locked: browser tidak boleh mengganti ID ini, karena itu sama dengan masuk ke sesi pelajar lain. */
+    #[Locked]
     public ?int $sessionId = null;
     public string $role = 'individual';
     public string $learnerCode = 'IND-TAMU';
@@ -29,6 +32,11 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
         $this->className = $auth['class_name'] ?? 'Mandiri';
         $this->displayName = $auth['name'] ?? 'Tamu';
         $this->isPrivate = (bool) ($auth['is_private'] ?? true);
+    }
+
+    public function changeProblem(): void
+    {
+        $this->reset('sessionId', 'messages', 'lastResult');
     }
 
     public function selectPreset(string $equation): void
@@ -153,17 +161,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
     public function conceptLabel(string $code, string $fallback): string
     {
-        return match ($code) {
-            'signed_integer_rules'    => 'Aturan tanda bilangan bulat',
-            'integer_product_sum'     => 'Hasil kali dan jumlah',
-            'factoring_trinomials'    => 'Memfaktorkan trinomial',
-            'quadratic_equations'     => 'Persamaan kuadrat',
-            'integer_division_basics' => 'Pembagian & hasil bagi',
-            'modulo_arithmetic'       => 'Aritmetika modulus',
-            'linear_equations'        => 'Persamaan linear',
-            'basic_formulas'          => 'Rumus & aritmetika dasar',
-            default                   => $fallback,
-        };
+        return AdaptiveTheoryService::conceptLabel($code, $fallback);
     }
 
     public function with(GateControllerService $gate): array
@@ -308,7 +306,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                         </span>
                         <button
                             type="button"
-                            wire:click="$set('sessionId', null)"
+                            wire:click="changeProblem"
                             class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer py-1 px-1.5 rounded-lg"
                         >
                             Ganti soal
@@ -599,7 +597,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             <div class="pt-1 flex flex-wrap gap-2.5">
                                 <button
                                     type="button"
-                                    wire:click="$set('sessionId', null)"
+                                    wire:click="changeProblem"
                                     class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
                                 >
                                     Coba Soal Baru

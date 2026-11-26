@@ -10,7 +10,7 @@ class PrerequisiteGraphService
     /**
      * Menelusuri graf DAG mundur untuk menemukan prasyarat terlemah di bawah ambang gate (0.85).
      */
-    public function weakestPrerequisites(int $learnerId, int $targetConceptId, float $threshold = 0.85): Collection
+    public function weakestPrerequisites(int $learnerId, int $targetConceptId, float $threshold = BktEngineService::GATE_THRESHOLD): Collection
     {
         $sql = "
             WITH RECURSIVE prereq_tree AS (
@@ -30,7 +30,8 @@ class PrerequisiteGraphService
             LEFT JOIN student_masteries sm
                 ON sm.concept_id = c.id AND sm.learner_id = ?
             GROUP BY c.id, c.code, c.name, sm.p_l, c.default_p_l0
-            HAVING current_p_l < ?
+            -- CAST: Laravel mengirim binding float sebagai teks, dan di SQLite angka apa pun < teks.
+            HAVING current_p_l < CAST(? AS REAL)
             ORDER BY depth DESC, current_p_l ASC
         ";
 

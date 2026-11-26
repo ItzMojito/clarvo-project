@@ -37,17 +37,19 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
 
     public function conceptLabel(string $code, string $fallback): string
     {
-        return match ($code) {
-            'signed_integer_rules'    => 'Aturan tanda bilangan bulat',
-            'integer_product_sum'     => 'Hasil kali dan jumlah',
-            'factoring_trinomials'    => 'Memfaktorkan trinomial',
-            'quadratic_equations'     => 'Persamaan kuadrat',
-            'integer_division_basics' => 'Pembagian & hasil bagi',
-            'modulo_arithmetic'       => 'Aritmetika modulus',
-            'linear_equations'        => 'Persamaan linear',
-            'basic_formulas'          => 'Rumus & aritmetika dasar',
-            default => $fallback,
-        };
+        return AdaptiveTheoryService::conceptLabel($code, $fallback);
+    }
+
+    /**
+     * Catatan dari GateControllerService berupa JSON {concept_code, concept, step}; catatan lama masih teks biasa.
+     */
+    public function helpNote(?string $note): ?string
+    {
+        $parts = $note ? json_decode($note, true) : null;
+
+        return is_array($parts)
+            ? $this->conceptLabel($parts['concept_code'] ?? '', $parts['concept'] ?? '').' (di '.$this->stepLabel($parts['step'] ?? '').')'
+            : $note;
     }
 
     public function stepLabel(string $raw): string
@@ -76,10 +78,15 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                 'ls.completed_steps_count', 'ls.hints_used', 'ls.needs_help_note', 'ls.updated_at'
             )
             ->orderByDesc('ls.updated_at')
-            ->get();
+            ->get()
+            // Satu baris per pelajar: sesi terbarunya (baris sudah urut dari yang terbaru).
+            ->unique('learner_id')
+            ->values();
 
+        // Hanya konsep yang sudah pernah dinilai; konsep yang belum disentuh masih di default 0.30.
         $masteriesByLearner = DB::table('student_masteries as sm')
             ->join('concepts as c', 'c.id', '=', 'sm.concept_id')
+            ->where('sm.total_attempts', '>', 0)
             ->select('sm.learner_id', 'c.code', 'c.name', 'sm.p_l')
             ->orderBy('sm.p_l')
             ->get()
@@ -108,7 +115,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                 'hints_used'     => (int) $s->hints_used,
                 'hints_ratio'    => $hintsPerStepRaw,
                 'hints_label'    => "{$s->hints_used} ({$hintsPerStep})",
-                'needs_help'     => $s->needs_help_note,
+                'needs_help'     => $this->helpNote($s->needs_help_note),
                 'last_activity'  => \Carbon\Carbon::parse($s->updated_at)->format('d/m/Y, H:i'),
             ];
         });

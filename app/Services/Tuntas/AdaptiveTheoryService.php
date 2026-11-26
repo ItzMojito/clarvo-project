@@ -498,6 +498,24 @@ class AdaptiveTheoryService
     }
 
     /**
+     * Label konsep berbahasa Indonesia; nama di tabel concepts sebagian masih bahasa Inggris.
+     */
+    public static function conceptLabel(string $code, string $fallback): string
+    {
+        return match ($code) {
+            'signed_integer_rules'    => 'Aturan tanda bilangan bulat',
+            'integer_product_sum'     => 'Hasil kali dan jumlah',
+            'factoring_trinomials'    => 'Memfaktorkan trinomial',
+            'quadratic_equations'     => 'Persamaan kuadrat',
+            'integer_division_basics' => 'Pembagian & hasil bagi',
+            'modulo_arithmetic'       => 'Aritmetika modulus',
+            'linear_equations'        => 'Persamaan linear',
+            'basic_formulas'          => 'Rumus & aritmetika dasar',
+            default                   => $fallback,
+        };
+    }
+
+    /**
      * Memformat teks matematika menjadi HTML bersih tanpa menampilkan tanda dolar LaTeX mentah.
      */
     public static function formatMathHtml(string $text): string

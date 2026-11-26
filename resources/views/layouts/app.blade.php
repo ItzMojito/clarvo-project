@@ -11,6 +11,14 @@
 
     {{ $slot }}
 
+    {{-- AGPL-3.0 pasal 13: pengguna aplikasi yang di-hosting harus ditawari source code-nya. --}}
+    <footer class="mt-auto border-t border-[#DCE6E2] px-4 py-4 text-sm text-[#3A544E]">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
+            <span>Clarvo · Purwarupa untuk NEC 6</span>
+            <a href="https://github.com/ItzMojito/clarvo-project" class="font-medium text-[#0B352D] underline underline-offset-2">Kode sumber (AGPL-3.0)</a>
+        </div>
+    </footer>
+
     {{-- Modal Informasi "Tentang Clarvo" (Native Dialog) --}}
     <dialog id="about-clarvo-dialog" class="kawung-dialog" aria-labelledby="about-dialog-title">
         <div class="kawung-banner px-6 py-5 flex items-center justify-between">

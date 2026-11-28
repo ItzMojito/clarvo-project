@@ -1,6 +1,6 @@
 // Polyfill popover hanya jika dukungan native belum tersedia
 if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
-    import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js').catch(() => {});
+    import('@oddbird/popover-polyfill').catch(() => {});
 }
 
 let supportsDisplayTransition;

@@ -30,16 +30,16 @@ class MultiTopicSupportAndOnboardingTest extends TestCase
         $this->get(route('tuntas.landing'))
             ->assertStatus(200)
             ->assertSee('Clarvo')
-            ->assertSee('Buat Akun Clarvo')
-            ->assertDontSee('Buat Akun TUNTAS');
+            ->assertSee('Buat akun Clarvo')
+            ->assertDontSee('TUNTAS');
 
         app(TuntasAuthService::class)->registerStudent('Class 10A', 'S21');
 
         $this->get(route('tuntas.workspace'))
             ->assertStatus(200)
             ->assertSee('Clarvo')
-            ->assertSee('Masukkan Soal Matematika')
-            ->assertSee('Masukkan Soal')
+            ->assertSee('Masukkan soal matematika')
+            ->assertSee('Masukkan soal')
             ->assertDontSee('Mulai Latihan Persamaan Kuadrat')
             ->assertDontSee('Soal Persamaan Kuadrat');
 

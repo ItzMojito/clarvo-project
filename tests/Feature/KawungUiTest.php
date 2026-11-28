@@ -76,7 +76,7 @@ class KawungUiTest extends TestCase
         $this->get(route('tuntas.teacher'))
             ->assertStatus(200)
             ->assertSee('kawung-banner')
-            ->assertSee('Pemantauan Kemajuan Kelas')
+            ->assertSee('Pemantauan kemajuan kelas')
             ->assertSee('Dasbor Guru')
             ->assertSee('kawung-table');
 

@@ -92,6 +92,35 @@ const dismissedMathKeypads = new Set();
 const isTouchScreen = () => window.matchMedia('(pointer: coarse)').matches;
 
 // inputmode="none" menahan keyboard bawaan ponsel selama keypad matematika dipakai.
+// Momen belajar: bandingkan penguasaan dan langkah aktif sebelum dan sesudah Livewire memperbarui halaman.
+let learningState = null;
+
+function readLearningState() {
+    const mastery = {};
+    document.querySelectorAll('[data-mastery-code]').forEach((track) => {
+        mastery[track.dataset.masteryCode] = parseFloat(track.dataset.masteryValue);
+    });
+    const active = document.querySelector('[data-step-status="active"]');
+    return { mastery, activeStep: active ? Number(active.dataset.stepOrder) : null };
+}
+
+function markLearningMoments() {
+    const next = readLearningState();
+    if (learningState) {
+        document.querySelectorAll('[data-mastery-code]').forEach((track) => {
+            const before = learningState.mastery[track.dataset.masteryCode];
+            const after = next.mastery[track.dataset.masteryCode];
+            if (before === undefined || !(after > before)) return;
+            track.classList.add('mastery-rising');
+            if (before < 0.85 && after >= 0.85) track.classList.add('gate-just-crossed');
+        });
+        if (next.activeStep !== null && learningState.activeStep !== null && next.activeStep > learningState.activeStep) {
+            document.querySelector('[data-step-status="active"]')?.classList.add('step-just-unlocked');
+        }
+    }
+    learningState = next;
+}
+
 function syncMathInputModes() {
     document.querySelectorAll('[data-math-input]').forEach((input) => {
         if (isTouchScreen() && !dismissedMathKeypads.has(input.dataset.mathInput)) {
@@ -166,6 +195,7 @@ document.addEventListener('livewire:init', () => {
     if (window.Livewire?.hook) {
         window.Livewire.hook('morphed', () => {
             requestAnimationFrame(scrollChatFeedToBottom);
+            markLearningMoments();
             syncMathKeypads();
         });
     }
@@ -318,6 +348,7 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('DOMContentLoaded', () => {
     scrollChatFeedToBottom();
     syncMathInputModes();
+    learningState = readLearningState();
     document.querySelectorAll('dialog[data-auto-open="true"]').forEach((dialog) => {
         if (!dialog.open && typeof dialog.showModal === 'function') {
             dialog.showModal();

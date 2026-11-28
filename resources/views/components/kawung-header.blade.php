@@ -17,12 +17,13 @@
         <div class="kawung-glow-layer"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        {{-- Top Navigation Row --}}
-        <div class="py-3.5 flex items-center justify-between gap-3 border-b border-white/10">
+    {{-- Bilah atas solid, sama dengan beranda, supaya navigasi terpisah dari isi header --}}
+    <div class="landing-topbar relative z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="py-3 flex items-center justify-between gap-3">
             <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]" title="Kembali ke Beranda Clarvo">
                 <x-logo-mark :size="36" class="text-[#F3F7F5]" />
-                <span class="font-extrabold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
+                <span class="font-bold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
                 <span class="text-xs sm:text-sm font-medium text-[#EBB134] hidden md:inline">Paham dulu, baru lanjut.</span>
             </a>
 
@@ -32,11 +33,8 @@
                     <a
                         href="{{ route('tuntas.workspace') }}"
                         @if($current === 'workspace') aria-current="page" @endif
-                        class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition inline-flex items-center gap-1.5 min-h-11 {{ $current === 'workspace' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10 font-medium' }}"
+                        class="px-3.5 py-2 rounded-xl text-sm transition inline-flex items-center gap-1.5 min-h-11 {{ $current === 'workspace' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-[#D2E3DB] hover:text-white hover:bg-white/10 font-medium' }}"
                     >
-                        @if($current === 'workspace')
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#092B24]" aria-hidden="true"></span>
-                        @endif
                         Ruang Belajar
                     </a>
 
@@ -44,11 +42,8 @@
                         <a
                             href="{{ route('tuntas.teacher') }}"
                             @if($current === 'teacher') aria-current="page" @endif
-                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition inline-flex items-center gap-1.5 min-h-11 {{ $current === 'teacher' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10 font-medium' }}"
+                            class="px-3.5 py-2 rounded-xl text-sm transition inline-flex items-center gap-1.5 min-h-11 {{ $current === 'teacher' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-[#D2E3DB] hover:text-white hover:bg-white/10 font-medium' }}"
                         >
-                            @if($current === 'teacher')
-                                <span class="w-1.5 h-1.5 rounded-full bg-[#092B24]" aria-hidden="true"></span>
-                            @endif
                             Dasbor Guru
                         </a>
                     @endif
@@ -56,7 +51,7 @@
                     <button
                         type="button"
                         data-open-dialog="clarvo-welcome-dialog"
-                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-[#EBB134] hover:text-white hover:bg-white/10 font-semibold transition min-h-11 cursor-pointer"
+                        class="px-3 py-2 rounded-xl text-sm text-[#D2E3DB] hover:text-white hover:bg-white/10 font-medium transition-colors min-h-11 cursor-pointer"
                     >
                         Cakupan Soal
                     </button>
@@ -64,7 +59,7 @@
                     <button
                         type="button"
                         data-open-dialog="about-clarvo-dialog"
-                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-slate-200 hover:text-white hover:bg-white/10 font-medium transition min-h-11 cursor-pointer"
+                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-[#D2E3DB] hover:text-white hover:bg-white/10 font-medium transition min-h-11 cursor-pointer"
                     >
                         Tentang
                     </button>
@@ -73,17 +68,16 @@
                 {{-- Lencana Privasi & Pil Identitas Peran --}}
                 <div class="hidden sm:flex items-center gap-1.5">
                     @if ($privacyTag)
-                        <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-400/15 border border-emerald-300/25 text-xs font-bold text-emerald-100">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-semibold text-[#F3F7F5]">
                             {{ $privacyTag }}
                         </span>
                     @endif
-                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-xs font-semibold text-slate-100 tabular-nums">
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-xs font-semibold text-[#F3F7F5] tabular-nums">
                         {{ $badge }}
                     </span>
                 </div>
 
-                <span class="sm:hidden inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-slate-100 tabular-nums max-w-[140px] truncate">
+                <span class="sm:hidden inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-[#F3F7F5] tabular-nums max-w-[140px] truncate">
                     {{ $mobileBadge }}
                 </span>
 
@@ -92,7 +86,7 @@
                     @csrf
                     <button
                         type="submit"
-                        class="px-3 py-2 rounded-xl border border-white/20 bg-white/5 hover:bg-white/15 text-xs font-semibold text-slate-100 transition min-h-11 cursor-pointer"
+                        class="px-3 py-2 rounded-xl border border-white/20 bg-white/5 hover:bg-white/15 text-xs font-semibold text-[#F3F7F5] transition min-h-11 cursor-pointer"
                         title="Keluar atau ganti akun"
                     >
                         Keluar
@@ -116,10 +110,10 @@
 
                 {{-- Native Popover Menu List --}}
                 <ul id="kawung-mobile-menu" class="kawung-mobile-menu md:hidden space-y-1 text-sm" popover="auto">
-                    <li class="px-3.5 py-2 border-b border-white/10 flex items-center justify-between text-xs text-slate-200">
+                    <li class="px-3.5 py-2 border-b border-white/10 flex items-center justify-between text-xs text-[#D2E3DB]">
                         <span>{{ $badge }}</span>
                         @if ($privacyTag)
-                            <span class="px-2 py-0.5 rounded-full bg-white/10 text-[#EBB134] font-bold">{{ $privacyTag }}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-white/10 text-[#F3F7F5] font-semibold">{{ $privacyTag }}</span>
                         @endif
                     </li>
                     <li>
@@ -129,8 +123,7 @@
                             class="flex items-center justify-between px-3.5 py-3 rounded-xl transition min-h-[44px] {{ $current === 'workspace' ? 'bg-[#EBB134] text-[#092B24] font-bold' : 'text-white hover:bg-white/10 font-medium' }}"
                         >
                             <span>Ruang Belajar</span>
-                            @if($current === 'workspace') <span class="text-xs" aria-hidden="true">●</span> @endif
-                        </a>
+                            </a>
                     </li>
                     @if ($isTeacher)
                         <li>
@@ -140,8 +133,7 @@
                                 class="flex items-center justify-between px-3.5 py-3 rounded-xl transition min-h-[44px] {{ $current === 'teacher' ? 'bg-[#EBB134] text-[#092B24] font-bold' : 'text-white hover:bg-white/10 font-medium' }}"
                             >
                                 <span>Dasbor Guru</span>
-                                @if($current === 'teacher') <span class="text-xs" aria-hidden="true">●</span> @endif
-                            </a>
+                                </a>
                         </li>
                     @endif
                     <li>
@@ -169,14 +161,17 @@
                                 type="submit"
                                 class="w-full text-left flex items-center justify-between px-3.5 py-3 rounded-xl text-[#EBB134] hover:bg-white/10 font-bold transition min-h-[44px] cursor-pointer"
                             >
-                                <span>Keluar / Ganti Akun</span>
+                                <span>Keluar atau ganti akun</span>
                             </button>
                         </form>
                     </li>
                 </ul>
             </nav>
         </div>
+    </div>
+    </div>
 
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {{-- Hero Content Inside Batik Kawung Banner --}}
         @if(isset($slot) && !$slot->isEmpty())
             <div class="py-4 sm:py-5">

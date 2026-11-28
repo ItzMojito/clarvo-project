@@ -124,6 +124,12 @@ html {
     }
 }
 
+/* Bilah atas beranda: solid dan bergaris emas tipis supaya terpisah dari pola hero. */
+.landing-topbar {
+    background-color: var(--kawung-deep);
+    border-block-end: 2px solid var(--kawung-gold);
+}
+
 /* Panah tanya jawab berputar saat dibuka; tanpa animasi bila gerak dikurangi. */
 .faq-item summary::-webkit-details-marker {
     display: none;
@@ -460,7 +466,7 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
     z-index: 1;
     background-color: #FFFFFF;
     padding: 0.95rem 1rem;
-    font-weight: 800;
+    font-weight: 700;
     color: #0B352D;
     border-block-end: 1px solid #EEF3F1;
 }
@@ -528,7 +534,7 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
         gap: 0.75rem;
         padding: 0.625rem 1rem;
         border-block-end: 1px solid #F0F5F3;
-        font-size: 0.8125rem;
+        font-size: 0.875rem;
     }
 
     .kawung-table tbody td:last-child {
@@ -537,9 +543,9 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
 
     .kawung-table tbody td::before {
         content: attr(data-label);
-        font-weight: 700;
-        color: #526B65;
-        font-size: 0.75rem;
+        font-weight: 600;
+        color: #4E625C;
+        font-size: 0.8125rem;
         flex-shrink: 0;
     }
 }
@@ -674,7 +680,7 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
     background-color: var(--kawung-gold);
     border-color: #C78C14;
     color: #092B24;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .math-kbd-key--accent:hover {
@@ -686,7 +692,7 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
     background-color: #0B352D;
     border-color: #072620;
     color: #EBB134;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .math-kbd-key--submit:hover {

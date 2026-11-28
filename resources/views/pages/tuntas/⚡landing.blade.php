@@ -170,15 +170,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             {{-- Top Navbar --}}
             <div class="py-4 flex items-center justify-between gap-4 border-b border-white/10">
                 <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]">
-                    <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200" aria-hidden="true">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                            <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                            <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                            <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                            <circle cx="12" cy="12" r="2"/>
-                        </svg>
-                    </span>
+                    <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                     <span class="font-extrabold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
                     <span class="text-xs sm:text-sm font-medium text-[#EBB134] hidden sm:inline">
                         {{ $en ? 'Understand first, then move on.' : 'Paham dulu, baru lanjut.' }}
@@ -641,15 +633,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <span class="w-8 h-8 rounded-lg bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0" aria-hidden="true">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                        <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                        <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                        <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                        <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                        <circle cx="12" cy="12" r="2"/>
-                    </svg>
-                </span>
+                <x-logo-mark :size="32" class="text-[#F3F7F5]" />
                 <span class="font-extrabold tracking-wider text-white text-sm">Clarvo</span>
                 <span class="text-xs font-medium text-[#EBB134]">
                     {{ $en ? 'Understand first, then move on.' : 'Paham dulu, baru lanjut.' }}
@@ -695,15 +679,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
             <div class="relative z-10 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0" aria-hidden="true">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                            <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                            <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                            <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                            <circle cx="12" cy="12" r="2"/>
-                        </svg>
-                    </span>
+                    <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                     <div>
                         <h2 id="auth-dialog-title" class="text-base font-extrabold text-white">
                             {{ $authMode === 'register' ? 'Buat Akun Clarvo' : 'Masuk ke Akun Clarvo' }}
@@ -777,7 +753,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 aria-selected="{{ $authRole === 'individual' ? 'true' : 'false' }}"
                 class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'individual' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
-                <span aria-hidden="true">✨</span>
+                <x-icon name="user" :size="16" />
                 <span>Individual</span>
             </button>
         </div>

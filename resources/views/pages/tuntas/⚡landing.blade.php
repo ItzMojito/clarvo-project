@@ -166,27 +166,28 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             <div class="kawung-glow-layer"></div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            {{-- Top Navbar --}}
-            <div class="py-4 flex items-center justify-between gap-4 border-b border-white/10">
+        {{-- Bilah atas berwarna solid agar navigasi terpisah jelas dari hero --}}
+        <div class="landing-topbar relative z-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="py-3 flex items-center justify-between gap-4">
                 <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]">
                     <x-logo-mark :size="36" class="text-[#F3F7F5]" />
-                    <span class="font-extrabold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
+                    <span class="font-bold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
                     <span class="text-xs sm:text-sm font-medium text-[#EBB134] hidden sm:inline">
                         {{ $en ? 'Understand first, then move on.' : 'Paham dulu, baru lanjut.' }}
                     </span>
                 </a>
 
                 <nav aria-label="Utama" class="flex items-center gap-2 sm:gap-3">
-                    <div class="hidden md:flex items-center gap-5 mr-2 text-xs sm:text-sm font-semibold text-slate-200">
-                        <a href="#opsi-akun" class="hover:text-[#EBB134] transition py-2">
-                            {{ $en ? 'Account Options' : 'Pilihan Akun' }}
+                    <div class="hidden md:flex items-center gap-6 mr-2 text-sm font-medium text-[#D2E3DB]">
+                        <a href="#opsi-akun" class="hover:text-white transition py-2">
+                            {{ $en ? 'Account options' : 'Pilihan akun' }}
                         </a>
-                        <a href="#cara-kerja" class="hover:text-[#EBB134] transition py-2">
-                            {{ $en ? 'How It Works' : 'Cara Kerja' }}
+                        <a href="#cara-kerja" class="hover:text-white transition py-2">
+                            {{ $en ? 'How it works' : 'Cara kerja' }}
                         </a>
-                        <a href="#tanya-jawab" class="hover:text-[#EBB134] transition py-2">
-                            {{ $en ? 'Questions' : 'Tanya Jawab' }}
+                        <a href="#tanya-jawab" class="hover:text-white transition py-2">
+                            {{ $en ? 'Questions' : 'Tanya jawab' }}
                         </a>
                     </div>
 
@@ -196,7 +197,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             type="button"
                             wire:click="setLang('id')"
                             aria-pressed="{{ $lang === 'id' ? 'true' : 'false' }}"
-                            class="px-2.5 py-1 rounded-full text-xs font-extrabold transition cursor-pointer {{ $lang === 'id' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-slate-200 hover:text-white' }}"
+                            class="px-2.5 py-1 rounded-full text-xs font-bold transition cursor-pointer {{ $lang === 'id' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-[#D2E3DB] hover:text-white' }}"
                         >
                             ID
                         </button>
@@ -204,7 +205,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             type="button"
                             wire:click="setLang('en')"
                             aria-pressed="{{ $lang === 'en' ? 'true' : 'false' }}"
-                            class="px-2.5 py-1 rounded-full text-xs font-extrabold transition cursor-pointer {{ $lang === 'en' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-slate-200 hover:text-white' }}"
+                            class="px-2.5 py-1 rounded-full text-xs font-bold transition cursor-pointer {{ $lang === 'en' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-[#D2E3DB] hover:text-white' }}"
                         >
                             EN
                         </button>
@@ -215,16 +216,15 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         wire:click="openAuth('login', 'student')"
                         class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-xs sm:text-sm font-semibold text-white transition min-h-11 cursor-pointer"
                     >
-                        <span aria-hidden="true">→</span>
-                        <span>{{ $en ? 'Sign In' : 'Masuk' }}</span>
+                        <span>{{ $en ? 'Sign in' : 'Masuk' }}</span>
                     </button>
 
                     <button
                         type="button"
                         wire:click="openAuth('register', 'student')"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-11 cursor-pointer"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-bold shadow-xs transition min-h-11 cursor-pointer"
                     >
-                        <span>{{ $en ? 'Sign Up' : 'Daftar' }}</span>
+                        <span>{{ $en ? 'Sign up' : 'Daftar' }}</span>
                     </button>
 
                     {{-- Mobile Hamburger Popover --}}
@@ -245,52 +245,51 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <ul id="landing-mobile-menu" class="kawung-mobile-menu md:hidden space-y-1 text-sm" popover="auto">
                         <li>
                             <a href="#opsi-akun" onclick="this.closest('[popover]')?.hidePopover?.()" class="block px-3.5 py-3 rounded-xl text-white hover:bg-white/10 font-medium">
-                                {{ $en ? 'Account Options' : 'Pilihan Akun' }}
+                                {{ $en ? 'Account options' : 'Pilihan akun' }}
                             </a>
                         </li>
                         <li>
                             <a href="#cara-kerja" onclick="this.closest('[popover]')?.hidePopover?.()" class="block px-3.5 py-3 rounded-xl text-white hover:bg-white/10 font-medium">
-                                {{ $en ? 'How It Works' : 'Cara Kerja' }}
+                                {{ $en ? 'How it works' : 'Cara kerja' }}
                             </a>
                         </li>
                         <li>
                             <a href="#tanya-jawab" onclick="this.closest('[popover]')?.hidePopover?.()" class="block px-3.5 py-3 rounded-xl text-white hover:bg-white/10 font-medium">
-                                {{ $en ? 'Questions' : 'Tanya Jawab' }}
+                                {{ $en ? 'Questions' : 'Tanya jawab' }}
                             </a>
                         </li>
                         <li>
                             <button type="button" wire:click="openAuth('login', 'student')" class="w-full text-left px-3.5 py-3 rounded-xl text-white hover:bg-white/10 font-semibold cursor-pointer">
-                                {{ $en ? 'Sign In' : 'Masuk ke Akun' }}
+                                {{ $en ? 'Sign in' : 'Masuk ke akun' }}
                             </button>
                         </li>
                         <li>
-                            <button type="button" wire:click="openAuth('register', 'student')" class="w-full text-left px-3.5 py-3 rounded-xl bg-[#EBB134] text-[#092B24] font-extrabold cursor-pointer">
-                                {{ $en ? 'Sign Up' : 'Daftar Sekarang' }}
+                            <button type="button" wire:click="openAuth('register', 'student')" class="w-full text-left px-3.5 py-3 rounded-xl bg-[#EBB134] text-[#092B24] font-bold cursor-pointer">
+                                {{ $en ? 'Sign up' : 'Daftar sekarang' }}
                             </button>
                         </li>
                     </ul>
                 </nav>
             </div>
+            </div>
+        </div>
 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             {{-- Hero Split Layout --}}
-            <div class="py-12 sm:py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            <div class="pt-10 pb-12 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                 {{-- Left Headline & CTA --}}
                 <div class="lg:col-span-7 space-y-6 animate-flow-in">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#EBB134] text-xs font-bold">
-                        <span>{{ $en ? 'Socratic AI tutor · mastery learning math' : 'Tutor AI Sokratik · belajar tuntas matematika' }}</span>
-                    </div>
-
-                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-[1.13] tracking-tight">
+                    <h1 class="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.08] tracking-tight text-balance">
                         @if ($en)
-                            Not Just Instant Answers.
-                            <span class="text-[#EBB134] block sm:inline">Understand First, Then Advance.</span>
+                            Not just instant answers.
+                            <span class="text-[#EBB134]">Understand first, then move on.</span>
                         @else
-                            Bukan Sekadar Jawaban Instan.
-                            <span class="text-[#EBB134]">Paham Dulu, Baru Lanjut.</span>
+                            Bukan sekadar jawaban instan.
+                            <span class="text-[#EBB134]">Paham dulu, baru lanjut.</span>
                         @endif
                     </h1>
 
-                    <p class="text-sm sm:text-base text-slate-200/90 max-w-xl leading-relaxed">
+                    <p class="text-base sm:text-lg text-[#D2E3DB] max-w-[58ch] leading-relaxed">
                         @if ($en)
                             Clarvo guides you step by step, traces missed prerequisite concepts backward, verifies algebra with SymPy, and keeps the next step locked until you master it independently.
                         @else
@@ -302,31 +301,30 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="openAuth('register', 'student')"
-                            class="px-6 py-3.5 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold shadow-md transition cursor-pointer inline-flex items-center gap-2 min-h-[48px]"
+                            class="px-6 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-base font-semibold transition-colors cursor-pointer inline-flex items-center gap-2 min-h-12"
                         >
-                            <span>{{ $en ? 'Sign Up Now' : 'Daftar Sekarang' }}</span>
-                            <span aria-hidden="true">→</span>
+                            <span>{{ $en ? 'Sign up now' : 'Daftar sekarang' }}</span>
+                            <x-icon name="chevron" :size="18" />
                         </button>
 
                         <button
                             type="button"
                             wire:click="openAuth('login', 'student')"
-                            class="px-6 py-3.5 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-white text-sm font-bold transition cursor-pointer inline-flex items-center gap-2 min-h-[48px]"
+                            class="px-6 py-3 rounded-xl border-[1.5px] border-white/45 hover:bg-white/10 text-white text-base font-semibold transition-colors cursor-pointer inline-flex items-center min-h-12"
                         >
-                            <span aria-hidden="true">→</span>
-                            <span>{{ $en ? 'Sign In to Account' : 'Masuk ke Akun' }}</span>
+                            <span>{{ $en ? 'Sign in' : 'Masuk ke akun' }}</span>
                         </button>
                     </div>
 
-                    <p class="text-xs sm:text-sm text-slate-300 flex flex-wrap items-center gap-2 pt-1">
+                    <p class="text-sm text-[#D2E3DB] flex flex-wrap items-center gap-x-2 pt-1">
                         <span>{{ $en ? 'Want solo practice without a class code or teacher?' : 'Mau iseng latihan sendiri tanpa kode kelas atau guru?' }}</span>
                         <button
                             type="button"
                             wire:click="startQuickIndividual"
-                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer inline-flex items-center gap-1 min-h-11"
+                            class="text-white hover:text-[#EBB134] font-semibold underline underline-offset-4 transition-colors cursor-pointer inline-flex items-center min-h-11"
                         >
                             <span wire:loading.remove wire:target="startQuickIndividual">
-                                {{ $en ? 'Try Individual Mode right away →' : 'Coba Mode Individual langsung →' }}
+                                {{ $en ? 'Try individual mode now' : 'Coba mode individual langsung' }}
                             </span>
                             <span wire:loading wire:target="startQuickIndividual">
                                 {{ $en ? 'Opening private mode...' : 'Membuka ruang pribadi...' }}
@@ -338,7 +336,6 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 {{-- Right Workspace Simulation Preview Card --}}
                 <div class="lg:col-span-5 animate-flow-in animate-flow-delay-1">
                     <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-white/20">
-                        <div class="h-1.5 bg-gradient-to-r from-[#EBB134] via-[#F7CE68] to-[#EBB134]"></div>
 
                         <div class="p-5 sm:p-6 space-y-5 text-[#132A25]">
                             <div class="flex items-start justify-between gap-3">
@@ -346,12 +343,11 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                     <p class="text-xs font-bold text-[#526B65]">
                                         {{ $en ? 'Workspace preview' : 'Simulasi ruang belajar' }}
                                     </p>
-                                    <p class="math-expr text-xl sm:text-2xl font-extrabold text-[#0B352D] mt-0.5">
+                                    <p class="math-expr text-xl sm:text-2xl font-bold text-[#0B352D] mt-0.5">
                                         <var class="math-var">x</var><sup>2</sup> &minus; 5<var class="math-var">x</var> + 6 = 0
                                     </p>
                                 </div>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold shrink-0">
-                                    <span class="w-2 h-2 rounded-full bg-[#EBB134] active-beacon" aria-hidden="true"></span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold shrink-0">
                                     {{ $en ? 'BKT Gate ≥ 0.85' : 'Gerbang BKT ≥ 0,85' }}
                                 </span>
                             </div>
@@ -391,242 +387,162 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
     <main id="main-content" tabindex="-1" class="flex-1">
         {{-- SECTION 2: TIGA OPSI PENDAFTARAN --}}
-        <section id="opsi-akun" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto space-y-2.5">
-                <p class="text-xs font-extrabold text-[#0E4D42]">
-                    {{ $en ? 'Three registration options' : 'Tiga opsi pendaftaran' }}
-                </p>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0B352D] tracking-tight">
-                    {{ $en ? 'Register the Way You Learn or Teach' : 'Daftar Sesuai Cara Kamu Belajar atau Mengajar' }}
+        <section id="opsi-akun" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-labelledby="options-heading">
+            <div class="max-w-2xl space-y-3">
+                <h2 id="options-heading" class="text-3xl sm:text-4xl font-bold text-[#0B352D] tracking-tight text-balance">
+                    {{ $en ? 'Choose how you use Clarvo' : 'Pilih cara kamu memakai Clarvo' }}
                 </h2>
-                <p class="text-xs sm:text-sm text-[#526B65] leading-relaxed">
+                <p class="text-base sm:text-lg text-[#33504A] leading-relaxed max-w-[60ch]">
                     {{ $en
-                        ? 'Whether for school/campus classwork, diagnostic teacher monitoring, or 100% private solo study without class ties.'
-                        : 'Baik untuk tugas kelas di sekolah/kampus, pemantauan diagnostik guru, maupun pemakaian pribadi tanpa ikatan kelas.' }}
+                        ? 'Practise with your class, follow a class as a teacher, or learn on your own.'
+                        : 'Berlatih bersama kelas, memantau kelas sebagai guru, atau belajar sendiri.' }}
                 </p>
             </div>
 
-            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                {{-- Card 1: Siswa --}}
-                <article class="bg-white rounded-2xl border border-[#D9E4E0] shadow-xs overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-md">
-                    <div class="h-1 bg-[#0B352D]"></div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="w-10 h-10 rounded-xl bg-[#EAF2EF] text-[#0B352D] flex items-center justify-center" aria-hidden="true">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                                </svg>
-                            </span>
-                            <span class="px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
-                                {{ $en ? 'Anonymous Code' : 'Kode Anonim' }}
-                            </span>
-                        </div>
-
-                        <h3 class="text-lg font-extrabold text-[#0B352D] mt-5">
-                            {{ $en ? 'Sign Up as Student' : 'Daftar sebagai Siswa' }}
-                        </h3>
-                        <p class="text-xs sm:text-sm text-[#526B65] mt-2 leading-relaxed">
-                            {{ $en
-                                ? 'For middle/high school & college learners practicing with a class. Privacy protected via anonymous Learner Code without real names.'
-                                : 'Untuk pelajar SMP, SMA (Fase E), dan mahasiswa yang berlatih bersama kelas. Identitas dijaga lewat Kode Pelajar tanpa nama asli.' }}
-                        </p>
-
-                        <ul class="mt-5 space-y-2.5 text-xs text-[#1E3B35] flex-1">
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Uses anonymous Learner Code (e.g. S06)' : 'Menggunakan Kode Pelajar anonim (mis. S06)' }}</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Raw answer text is never saved on server' : 'Teks jawaban mentah tidak pernah disimpan ke server' }}</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Targeted teacher assistance on 3× gate failures' : 'Bantuan tepat sasaran dari guru saat gagal gerbang 3×' }}</span>
-                            </li>
-                        </ul>
-
-                        <button
-                            type="button"
-                            wire:click="openAuth('register', 'student')"
-                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-xs sm:text-sm font-bold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
-                        >
-                            <span>{{ $en ? 'Sign Up as Student' : 'Daftar sebagai Siswa' }}</span>
-                            <span aria-hidden="true">→</span>
-                        </button>
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+                <article class="bg-white rounded-2xl border border-[#D9E4E0] p-6 flex flex-col">
+                    <div class="flex items-center gap-2.5 text-[#0B352D]">
+                        <x-icon name="book" :size="22" />
+                        <h3 class="text-xl font-bold">{{ $en ? 'Student' : 'Siswa' }}</h3>
                     </div>
+                    <p class="mt-1.5 text-sm font-semibold text-[#0E4D42]">{{ $en ? 'Class code, no real name' : 'Kode kelas, tanpa nama asli' }}</p>
+                    <p class="mt-3 text-base text-[#33504A] leading-relaxed">{{ $en ? 'For secondary-school and university learners who practise with a class.' : 'Untuk pelajar SMP, SMA, dan mahasiswa yang berlatih bersama kelas.' }}</p>
+                    <ul class="mt-5 space-y-2.5 text-[15px] text-[#1E3B35] flex-1">
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Anonymous learner code, for example S06' : 'Kode pelajar anonim, misalnya S06' }}</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Your answer text is never stored' : 'Teks jawabanmu tidak pernah disimpan' }}</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Your teacher is alerted after three missed gates' : 'Guru diberi tanda setelah tiga kali gagal di gerbang' }}</span>
+                            </li>
+                    </ul>
+                    <button
+                        type="button"
+                        wire:click="openAuth('register', 'student')"
+                        class="mt-6 w-full px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-base font-semibold transition-colors cursor-pointer inline-flex items-center justify-center min-h-12"
+                    >
+                        {{ $en ? 'Sign up as a student' : 'Daftar sebagai siswa' }}
+                    </button>
                 </article>
 
-                {{-- Card 2: Guru --}}
-                <article class="bg-white rounded-2xl border border-[#D9E4E0] shadow-xs overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-md">
-                    <div class="h-1 bg-[#0B352D]"></div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="w-10 h-10 rounded-xl bg-[#EAF2EF] text-[#0B352D] flex items-center justify-center" aria-hidden="true">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                                </svg>
-                            </span>
-                            <span class="px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
-                                {{ $en ? 'Diagnostic Dashboard' : 'Dasbor Diagnostik' }}
-                            </span>
-                        </div>
-
-                        <h3 class="text-lg font-extrabold text-[#0B352D] mt-5">
-                            {{ $en ? 'Sign Up as Teacher' : 'Daftar sebagai Guru' }}
-                        </h3>
-                        <p class="text-xs sm:text-sm text-[#526B65] mt-2 leading-relaxed">
-                            {{ $en
-                                ? 'Get automated mastery diagnostic maps for your class without manual grading overhead. Spot prerequisite gaps per class.'
-                                : 'Dapatkan peta diagnostik Kurikulum Merdeka secara otomatis tanpa waktu koreksi tambahan. Pantau celah prasyarat tiap kelas.' }}
-                        </p>
-
-                        <ul class="mt-5 space-y-2.5 text-xs text-[#1E3B35] flex-1">
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Full access to Teacher Dashboard & Workspace simulation' : 'Akses penuh Dasbor Guru & simulasi Ruang Belajar' }}</span>
+                <article class="bg-white rounded-2xl border border-[#D9E4E0] p-6 flex flex-col">
+                    <div class="flex items-center gap-2.5 text-[#0B352D]">
+                        <x-icon name="graduation" :size="22" />
+                        <h3 class="text-xl font-bold">{{ $en ? 'Teacher' : 'Guru' }}</h3>
+                    </div>
+                    <p class="mt-1.5 text-sm font-semibold text-[#0E4D42]">{{ $en ? 'One dashboard for your class' : 'Satu dasbor untuk kelasmu' }}</p>
+                    <p class="mt-3 text-base text-[#33504A] leading-relaxed">{{ $en ? 'See each learner\'s step, weakest concept and who needs help, without grading by hand.' : 'Lihat langkah, konsep terlemah, dan pelajar yang butuh bantuan tanpa mengoreksi satu per satu.' }}</p>
+                    <ul class="mt-5 space-y-2.5 text-[15px] text-[#1E3B35] flex-1">
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Teacher dashboard and the learning space' : 'Dasbor guru dan ruang belajar' }}</span>
                             </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Track weakest prerequisite & hint dependency ratio' : 'Lihat konsep terlemah & rasio ketergantungan petunjuk' }}</span>
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Weakest concept and hints used per learner' : 'Konsep terlemah dan jumlah petunjuk tiap pelajar' }}</span>
                             </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
                                 <span>{{ $en ? 'Learners who need guidance are flagged automatically' : 'Tanda otomatis untuk pelajar yang butuh bimbingan' }}</span>
                             </li>
-                        </ul>
-
-                        <button
-                            type="button"
-                            wire:click="openAuth('register', 'teacher')"
-                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-xs sm:text-sm font-bold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
-                        >
-                            <span>{{ $en ? 'Sign Up as Teacher' : 'Daftar sebagai Guru' }}</span>
-                            <span aria-hidden="true">→</span>
-                        </button>
-                    </div>
+                    </ul>
+                    <button
+                        type="button"
+                        wire:click="openAuth('register', 'teacher')"
+                        class="mt-6 w-full px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-base font-semibold transition-colors cursor-pointer inline-flex items-center justify-center min-h-12"
+                    >
+                        {{ $en ? 'Sign up as a teacher' : 'Daftar sebagai guru' }}
+                    </button>
                 </article>
 
-                {{-- Card 3: Pendaftaran Individual (Highlighted Gold) --}}
-                <article class="bg-white rounded-2xl border-2 border-[#EBB134] shadow-md overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-lg">
-                    <div class="h-1.5 bg-[#EBB134]"></div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="w-10 h-10 rounded-xl bg-[#FEF6E2] text-[#9E6B09] flex items-center justify-center" aria-hidden="true">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </span>
-                            <span class="px-3 py-1 rounded-full bg-[#FEF6E2] text-[#8C6209] text-xs font-bold">
-                                {{ $en ? '100% Private & Solo' : '100% Pribadi & Mandiri' }}
-                            </span>
-                        </div>
-
-                        <h3 class="text-lg font-extrabold text-[#0B352D] mt-5">
-                            {{ $en ? 'Individual Sign Up' : 'Pendaftaran Individual' }}
-                        </h3>
-                        <p class="text-xs sm:text-sm text-[#526B65] mt-2 leading-relaxed">
-                            {{ $en
-                                ? 'Designed for personal learning, exam prep, or sharpening math logic anytime without school or class ties.'
-                                : 'Khusus penggunaan pribadi buat kamu yang ingin belajar mandiri, persiapan ujian, atau sekadar iseng mengasah otak kapan pun.' }}
-                        </p>
-
-                        <ul class="mt-5 space-y-2.5 text-xs text-[#1E3B35] flex-1">
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'No student code & no school class code needed' : 'Tanpa kode siswa & tanpa kode kelas sekolah' }}</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'No Teacher Dashboard, just your own practice space' : 'Tanpa Dasbor Guru, murni ruang latihan pribadi' }}</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Full Socratic AI guidance & private BKT mastery' : 'Tetap dilengkapi bimbingan Sokratik & skor BKT pribadi' }}</span>
-                            </li>
-                        </ul>
-
-                        <button
-                            type="button"
-                            wire:click="openAuth('register', 'individual')"
-                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
-                        >
-                            <span>{{ $en ? 'Sign Up Individual' : 'Daftar Individual' }}</span>
-                            <span aria-hidden="true">→</span>
-                        </button>
+                <article class="bg-white rounded-2xl border-2 border-[#EBB134] p-6 flex flex-col">
+                    <div class="flex items-center gap-2.5 text-[#0B352D]">
+                        <x-icon name="user" :size="22" />
+                        <h3 class="text-xl font-bold">{{ $en ? 'Individual' : 'Individual' }}</h3>
                     </div>
+                    <p class="mt-1.5 text-sm font-semibold text-[#0E4D42]">{{ $en ? 'Private practice, no class' : 'Latihan pribadi tanpa kelas' }}</p>
+                    <p class="mt-3 text-base text-[#33504A] leading-relaxed">{{ $en ? 'For practising on your own or preparing for an exam.' : 'Untuk belajar sendiri atau bersiap menghadapi ujian.' }}</p>
+                    <ul class="mt-5 space-y-2.5 text-[15px] text-[#1E3B35] flex-1">
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'No class code needed' : 'Tidak perlu kode kelas' }}</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Never shown on a teacher dashboard' : 'Tidak pernah muncul di dasbor guru' }}</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <x-icon name="check" :size="18" class="mt-0.5 text-[#0E4D42]" />
+                                <span>{{ $en ? 'Same guidance and mastery score' : 'Bimbingan dan skor penguasaan yang sama' }}</span>
+                            </li>
+                    </ul>
+                    <button
+                        type="button"
+                        wire:click="openAuth('register', 'individual')"
+                        class="mt-6 w-full px-4 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-base font-semibold transition-colors cursor-pointer inline-flex items-center justify-center min-h-12"
+                    >
+                        {{ $en ? 'Sign up individually' : 'Daftar individual' }}
+                    </button>
                 </article>
             </div>
         </section>
 
         {{-- SECTION 3: ARSITEKTUR PEDAGOGIS --}}
-        <section id="cara-kerja" class="bg-white border-t border-[#E6EEEC] py-16 sm:py-20">
+        <section id="cara-kerja" class="bg-white border-t border-[#E6EEEC] py-16 sm:py-20" aria-labelledby="how-heading">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-2xl space-y-2">
-                    <p class="text-xs font-extrabold text-[#0E4D42]">
-                        {{ $en ? 'Pedagogical architecture' : 'Arsitektur pedagogis' }}
-                    </p>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0B352D] tracking-tight">
-                        {{ $en ? 'AI Converses, Deterministic Systems Decide' : 'AI Berdialog, Sistem Deterministik yang Memutuskan' }}
+                <div class="max-w-2xl space-y-3">
+                    <h2 id="how-heading" class="text-3xl sm:text-4xl font-bold text-[#0B352D] tracking-tight text-balance">
+                        {{ $en ? 'AI explains, exact rules decide' : 'AI menjelaskan, aturan pasti yang menilai' }}
                     </h2>
-                    <p class="text-xs sm:text-sm text-[#526B65] leading-relaxed">
+                    <p class="text-base sm:text-lg text-[#33504A] leading-relaxed max-w-[60ch]">
                         {{ $en
-                            ? 'Four mechanisms that ensure genuine mastery rather than copying solutions.'
-                            : 'Empat mekanisme yang menjaga agar kamu benar-benar menguasai konsep, bukan sekadar menyalin solusi.' }}
+                            ? 'Four ways Clarvo makes sure you master a concept instead of copying a solution.'
+                            : 'Empat cara Clarvo memastikan kamu menguasai konsep, bukan menyalin solusi.' }}
                     </p>
                 </div>
 
-                <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    @foreach ([
-                        [
-                            'num' => '1',
-                            'title_id' => '1. Lacak Prasyarat Mundur',
-                            'title_en' => '1. Backward Prerequisite Trace',
-                            'desc_id' => 'Mendeteksi bila kesulitanmu berasal dari konsep dasar sebelumnya seperti aturan tanda bilangan bulat.',
-                            'desc_en' => 'Detects when struggles originate from earlier foundational concepts like signed-integer rules.',
-                            'icon' => '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M6 8.5V12a4 4 0 0 0 4 4h5.5"/>',
-                        ],
-                        [
-                            'num' => '2',
-                            'title_id' => '2. Tangga 3 Petunjuk',
-                            'title_en' => '2. 3-Step Hint Ladder',
-                            'desc_id' => 'Memberi petunjuk bertahap yang memicu cara berpikir tanpa pernah membocorkan kunci jawaban akhir.',
-                            'desc_en' => 'Provides progressive prompts that spark reasoning without ever leaking the final answer key.',
-                            'icon' => '<path d="M12 3v3m0 12v3M3 12h3m12 0h3M6.3 6.3l2.1 2.1m7.2 7.2 2.1 2.1M17.7 6.3l-2.1 2.1M8.4 15.6l-2.1 2.1"/>',
-                        ],
-                        [
-                            'num' => '3',
-                            'title_id' => '3. Verifikasi Simbolik SymPy',
-                            'title_en' => '3. SymPy Symbolic Verification',
-                            'desc_id' => 'Memeriksa kesetaraan aljabar sekaligus bentuk faktor yang diminta secara akurat, bukan tebakan AI.',
-                            'desc_en' => 'Checks algebraic equivalence and required factored structure accurately, never LLM guessing.',
-                            'icon' => '<rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9z"/>',
-                        ],
-                        [
-                            'num' => '4',
-                            'title_id' => '4. Gerbang Mandiri 0,85',
-                            'title_en' => '4. Unaided Mastery Gate 0.85',
-                            'desc_id' => 'Membuka langkah berikutnya hanya setelah kamu menyelesaikan soal angka baru tanpa bantuan.',
-                            'desc_en' => 'Unlocks the next step only after solving a fresh isomorphic problem completely unaided.',
-                            'icon' => '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
-                        ],
-                    ] as $card)
-                        <div class="bg-[#F6F9F8] rounded-2xl border border-[#E1EBE8] p-6 space-y-4 transition duration-300 hover:border-[#0B352D]/30">
-                            <span class="w-10 h-10 rounded-xl bg-[#0B352D] text-[#EBB134] flex items-center justify-center shadow-xs" aria-hidden="true">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    {!! $card['icon'] !!}
-                                </svg>
-                            </span>
-                            <div>
-                                <h3 class="text-sm sm:text-base font-extrabold text-[#0B352D]">
-                                    {{ $en ? $card['title_en'] : $card['title_id'] }}
-                                </h3>
-                                <p class="text-xs sm:text-sm text-[#526B65] mt-1.5 leading-relaxed">
-                                    {{ $en ? $card['desc_en'] : $card['desc_id'] }}
-                                </p>
-                            </div>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                    <div class="flex gap-4 py-6 border-t border-[#E1EBE8]">
+                        <span class="w-11 h-11 shrink-0 rounded-xl bg-[#EAF2EF] text-[#0B352D] flex items-center justify-center">
+                            <x-icon name="route" :size="22" />
+                        </span>
+                        <div>
+                            <h3 class="text-lg font-semibold text-[#0B352D]">{{ $en ? 'Backward prerequisite trace' : 'Lacak prasyarat mundur' }}</h3>
+                            <p class="mt-1 text-base text-[#33504A] leading-relaxed">{{ $en ? 'Detects when a struggle comes from an earlier concept, such as signed-integer rules.' : 'Mendeteksi bila kesulitanmu berasal dari konsep dasar sebelumnya, misalnya aturan tanda bilangan bulat.' }}</p>
                         </div>
-                    @endforeach
+                    </div>
+                    <div class="flex gap-4 py-6 border-t border-[#E1EBE8]">
+                        <span class="w-11 h-11 shrink-0 rounded-xl bg-[#EAF2EF] text-[#0B352D] flex items-center justify-center">
+                            <x-icon name="ladder" :size="22" />
+                        </span>
+                        <div>
+                            <h3 class="text-lg font-semibold text-[#0B352D]">{{ $en ? 'Three-step hint ladder' : 'Tangga tiga petunjuk' }}</h3>
+                            <p class="mt-1 text-base text-[#33504A] leading-relaxed">{{ $en ? 'Gives hints one step at a time that prompt your thinking, without ever revealing the answer key.' : 'Memberi petunjuk bertahap yang memancing cara berpikir tanpa pernah membocorkan kunci jawaban.' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 py-6 border-t border-[#E1EBE8]">
+                        <span class="w-11 h-11 shrink-0 rounded-xl bg-[#EAF2EF] text-[#0B352D] flex items-center justify-center">
+                            <x-icon name="verify" :size="22" />
+                        </span>
+                        <div>
+                            <h3 class="text-lg font-semibold text-[#0B352D]">{{ $en ? 'SymPy symbolic checking' : 'Pemeriksaan simbolik SymPy' }}</h3>
+                            <p class="mt-1 text-base text-[#33504A] leading-relaxed">{{ $en ? 'Checks algebraic equivalence and the requested factor form exactly, not by an AI guess.' : 'Memeriksa kesetaraan aljabar dan bentuk faktor yang diminta secara pasti, bukan tebakan AI.' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 py-6 border-t border-[#E1EBE8]">
+                        <span class="w-11 h-11 shrink-0 rounded-xl bg-[#EAF2EF] text-[#0B352D] flex items-center justify-center">
+                            <x-icon name="lock" :size="22" />
+                        </span>
+                        <div>
+                            <h3 class="text-lg font-semibold text-[#0B352D]">{{ $en ? 'Unaided mastery gate 0.85' : 'Gerbang mandiri 0,85' }}</h3>
+                            <p class="mt-1 text-base text-[#33504A] leading-relaxed">{{ $en ? 'Opens the next step only after you answer a problem with new numbers without help.' : 'Membuka langkah berikutnya hanya setelah kamu menjawab soal dengan angka baru tanpa bantuan.' }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -634,12 +550,11 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
         {{-- Tanya jawab: hanya pertanyaan nyata dari guru dan pelajar, dengan jawaban yang bisa dicek di kode. --}}
         <section id="tanya-jawab" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-labelledby="faq-heading">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-                <div class="lg:col-span-4 space-y-2">
-                    <p class="text-xs font-extrabold text-[#0E4D42]">{{ $en ? 'Questions' : 'Tanya jawab' }}</p>
-                    <h2 id="faq-heading" class="text-2xl sm:text-3xl font-extrabold text-[#0B352D] tracking-tight">
+                <div class="lg:col-span-4 space-y-3">
+                    <h2 id="faq-heading" class="text-3xl sm:text-4xl font-bold text-[#0B352D] tracking-tight text-balance">
                         {{ $en ? 'What teachers and learners ask first' : 'Yang paling sering ditanyakan' }}
                     </h2>
-                    <p class="text-sm text-[#526B65] leading-relaxed">
+                    <p class="text-base text-[#33504A] leading-relaxed">
                         {{ $en
                             ? 'Short answers about answers, grading, privacy and offline use.'
                             : 'Jawaban singkat tentang kunci jawaban, penilaian, privasi, dan pemakaian tanpa internet.' }}
@@ -698,7 +613,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                     <path d="M6 9l6 6 6-6"/>
                                 </svg>
                             </summary>
-                            <p class="px-5 pb-5 -mt-1 text-sm text-[#3A544E] leading-relaxed max-w-prose">
+                            <p class="px-5 pb-5 -mt-1 text-base text-[#33504A] leading-relaxed max-w-prose">
                                 {{ $en ? $faq['a_en'] : $faq['a_id'] }}
                             </p>
                         </details>
@@ -718,33 +633,27 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <x-logo-mark :size="32" class="text-[#F3F7F5]" />
-                <span class="font-extrabold tracking-wider text-white text-sm">Clarvo</span>
+                <span class="font-bold tracking-wider text-white text-sm">Clarvo</span>
                 <span class="text-xs font-medium text-[#EBB134]">
                     {{ $en ? 'Understand first, then move on.' : 'Paham dulu, baru lanjut.' }}
                 </span>
             </div>
 
-            <div class="flex flex-wrap items-center gap-5 text-xs text-slate-200">
-                <button type="button" wire:click="openAuth('login', 'student')" class="inline-flex items-center min-h-11 hover:text-[#EBB134] font-semibold cursor-pointer">
-                    {{ $en ? 'Sign In' : 'Masuk' }}
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-[#D2E3DB]">
+                <button type="button" data-open-dialog="about-clarvo-dialog" class="inline-flex items-center min-h-11 hover:text-white font-medium cursor-pointer">
+                    {{ $en ? 'About' : 'Tentang' }}
                 </button>
-                <button type="button" wire:click="openAuth('register', 'individual')" class="inline-flex items-center min-h-11 hover:text-[#EBB134] font-semibold cursor-pointer">
-                    {{ $en ? 'Individual Sign Up' : 'Daftar Individual' }}
+                <button type="button" wire:click="openAuth('login', 'student')" class="inline-flex items-center min-h-11 hover:text-white font-medium cursor-pointer">
+                    {{ $en ? 'Sign in' : 'Masuk' }}
                 </button>
-                <span class="text-slate-300/80">Clarvo &middot; 2026</span>
+                <a href="https://github.com/ItzMojito/clarvo-project" class="inline-flex items-center min-h-11 hover:text-white font-medium underline underline-offset-2">
+                    {{ $en ? 'Source code (AGPL-3.0)' : 'Kode sumber (AGPL-3.0)' }}
+                </a>
+                <span class="text-[#BFD8CC]">Clarvo &middot; 2026</span>
             </div>
         </div>
     </footer>
 
-    {{-- FLOATING HELP BUTTON (?) --}}
-    <button
-        type="button"
-        data-open-dialog="about-clarvo-dialog"
-        aria-label="Informasi dan Bantuan Clarvo"
-        class="fixed bottom-5 end-5 z-30 w-11 h-11 rounded-full bg-[#152823] hover:bg-[#0B352D] border border-white/20 text-white font-extrabold shadow-lg flex items-center justify-center transition cursor-pointer"
-    >
-        ?
-    </button>
 
     {{-- MODAL LOGIN & SIGN UP 3 PERAN (NATIVE DIALOG) --}}
     <dialog
@@ -765,8 +674,8 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 <div class="flex items-center gap-3">
                     <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                     <div>
-                        <h2 id="auth-dialog-title" class="text-base font-extrabold text-white">
-                            {{ $authMode === 'register' ? 'Buat Akun Clarvo' : 'Masuk ke Akun Clarvo' }}
+                        <h2 id="auth-dialog-title" class="text-base font-bold text-white">
+                            {{ $authMode === 'register' ? 'Buat akun Clarvo' : 'Masuk ke akun Clarvo' }}
                         </h2>
                         <p class="text-xs font-medium text-[#EBB134]">Pilih peran belajarmu di bawah</p>
                     </div>
@@ -776,7 +685,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     type="button"
                     data-close-dialog
                     aria-label="Tutup form akun"
-                    class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                    class="w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
                 >
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                         <path d="M18 6L6 18M6 6l12 12"/>
@@ -789,16 +698,16 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 <button
                     type="button"
                     wire:click="setAuthMode('register')"
-                    class="px-4 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer {{ $authMode === 'register' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-slate-200 hover:text-white' }}"
+                    class="px-4 min-h-11 rounded-lg text-sm font-semibold transition cursor-pointer {{ $authMode === 'register' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-[#D2E3DB] hover:text-white' }}"
                 >
-                    Daftar Akun Baru
+                    Daftar akun baru
                 </button>
                 <button
                     type="button"
                     wire:click="setAuthMode('login')"
-                    class="px-4 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer {{ $authMode === 'login' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-slate-200 hover:text-white' }}"
+                    class="px-4 min-h-11 rounded-lg text-sm font-semibold transition cursor-pointer {{ $authMode === 'login' ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'text-[#D2E3DB] hover:text-white' }}"
                 >
-                    Masuk ke Akun
+                    Masuk ke akun
                 </button>
             </div>
         </div>
@@ -811,7 +720,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 role="tab"
                 wire:click="setAuthRole('student')"
                 aria-selected="{{ $authRole === 'student' ? 'true' : 'false' }}"
-                class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'student' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
+                class="kawung-tab min-h-12 px-2 text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'student' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
                 <x-icon name="book" :size="16" />
                 <span>Siswa</span>
@@ -823,7 +732,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 role="tab"
                 wire:click="setAuthRole('teacher')"
                 aria-selected="{{ $authRole === 'teacher' ? 'true' : 'false' }}"
-                class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'teacher' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
+                class="kawung-tab min-h-12 px-2 text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'teacher' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
                 <x-icon name="graduation" :size="16" />
                 <span>Guru</span>
@@ -835,7 +744,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 role="tab"
                 wire:click="setAuthRole('individual')"
                 aria-selected="{{ $authRole === 'individual' ? 'true' : 'false' }}"
-                class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'individual' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
+                class="kawung-tab min-h-12 px-2 text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'individual' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
                 <x-icon name="user" :size="16" />
                 <span>Individual</span>
@@ -855,16 +764,16 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             <div role="tabpanel" aria-labelledby="role-tab-student" @if($authRole !== 'student') hidden @endif>
                 <form wire:submit="submitStudentAuth" class="space-y-4">
                     <div class="rounded-xl bg-[#EAF2EF] border border-[#CFE0DA] px-3.5 py-2.5 text-xs text-[#0B352D] flex items-center justify-between gap-2">
-                        <span><strong>Privasi Anonim:</strong> Tanpa nama asli maupun email.</span>
+                        <span><strong>Privasi anonim:</strong> Tanpa nama asli maupun email.</span>
                         @if ($authMode === 'login' && !app()->isProduction())
-                            <button type="button" wire:click="fillDemoStudent" class="underline font-extrabold shrink-0 cursor-pointer">
-                                Isi Demo S02
+                            <button type="button" wire:click="fillDemoStudent" class="underline font-bold shrink-0 cursor-pointer">
+                                Isi demo S02
                             </button>
                         @endif
                     </div>
 
                     <div>
-                        <label for="auth-student-class" class="block text-xs font-bold text-[#0B352D] mb-1">Kode Kelas</label>
+                        <label for="auth-student-class" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Kode kelas</label>
                         <input
                             id="auth-student-class"
                             type="text"
@@ -872,13 +781,13 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             autocorrect="off"
                             spellcheck="false"
                             required
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm font-semibold text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base font-semibold text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="misal: Class 10A atau X-2"
                         >
                     </div>
 
                     <div>
-                        <label for="auth-student-code" class="block text-xs font-bold text-[#0B352D] mb-1">Kode Pelajar Anonim</label>
+                        <label for="auth-student-code" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Kode pelajar anonim</label>
                         <input
                             id="auth-student-code"
                             type="text"
@@ -887,29 +796,29 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             autocapitalize="characters"
                             spellcheck="false"
                             required
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm font-bold text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base font-bold text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="misal: S06"
                         >
                     </div>
 
                     <div>
-                        <label for="auth-student-pin" class="block text-xs font-bold text-[#0B352D] mb-1">PIN Keamanan (Opsional)</label>
+                        <label for="auth-student-pin" class="block text-sm font-semibold text-[#0B352D] mb-1.5">PIN keamanan (opsional)</label>
                         <input
                             id="auth-student-pin"
                             type="password"
                             wire:model="studentPin"
                             autocomplete="{{ $authMode === 'register' ? 'new-password' : 'current-password' }}"
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="Kosongkan jika tanpa PIN"
                         >
                     </div>
 
                     <button
                         type="submit"
-                        class="w-full py-3 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-sm font-extrabold transition cursor-pointer min-h-[46px]"
+                        class="w-full py-3 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-sm font-bold transition cursor-pointer min-h-[46px]"
                     >
                         <span wire:loading.remove wire:target="submitStudentAuth">
-                            {{ $authMode === 'register' ? 'Daftar & Masuk Ruang Belajar →' : 'Masuk sebagai Siswa →' }}
+                            {{ $authMode === 'register' ? 'Daftar dan masuk ruang belajar' : 'Masuk sebagai siswa' }}
                         </span>
                         <span wire:loading wire:target="submitStudentAuth">Memproses...</span>
                     </button>
@@ -922,29 +831,29 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <div class="rounded-xl bg-[#EAF2EF] border border-[#CFE0DA] px-3.5 py-2.5 text-xs text-[#0B352D] flex items-center justify-between gap-2">
                         <span>Akses penuh <strong>Dasbor Guru</strong> &amp; simulasi Ruang Belajar.</span>
                         @if ($authMode === 'login' && !app()->isProduction())
-                            <button type="button" wire:click="fillDemoTeacher" class="underline font-extrabold shrink-0 cursor-pointer">
-                                Isi Demo Guru
+                            <button type="button" wire:click="fillDemoTeacher" class="underline font-bold shrink-0 cursor-pointer">
+                                Isi demo Guru
                             </button>
                         @endif
                     </div>
 
                     @if ($authMode === 'register')
                         <div>
-                            <label for="auth-teacher-name" class="block text-xs font-bold text-[#0B352D] mb-1">Nama Guru</label>
+                            <label for="auth-teacher-name" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Nama guru</label>
                             <input
                                 id="auth-teacher-name"
                                 type="text"
                                 wire:model="teacherName"
                                 autocomplete="name"
                                 required
-                                class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                                class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                                 placeholder="misal: Ibu Sari"
                             >
                         </div>
                     @endif
 
                     <div>
-                        <label for="auth-teacher-email" class="block text-xs font-bold text-[#0B352D] mb-1">Email Guru</label>
+                        <label for="auth-teacher-email" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Email guru</label>
                         <input
                             id="auth-teacher-email"
                             type="email"
@@ -953,14 +862,14 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             autocorrect="off"
                             spellcheck="false"
                             required
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="guru@tuntas.local"
                         >
                     </div>
 
                     @if ($authMode === 'register')
                         <div>
-                            <label for="auth-teacher-class" class="block text-xs font-bold text-[#0B352D] mb-1">Kode Kelas Binaan</label>
+                            <label for="auth-teacher-class" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Kode kelas binaan</label>
                             <input
                                 id="auth-teacher-class"
                                 type="text"
@@ -968,14 +877,14 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                 autocorrect="off"
                                 spellcheck="false"
                                 required
-                                class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm font-semibold text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                                class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base font-semibold text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                                 placeholder="misal: Class 10A"
                             >
                         </div>
                     @endif
 
                     <div>
-                        <label for="auth-teacher-password" class="block text-xs font-bold text-[#0B352D] mb-1">Kata Sandi</label>
+                        <label for="auth-teacher-password" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Kata sandi</label>
                         <input
                             id="auth-teacher-password"
                             type="password"
@@ -983,17 +892,17 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             autocomplete="{{ $authMode === 'register' ? 'new-password' : 'current-password' }}"
                             minlength="6"
                             required
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="Minimal 6 karakter"
                         >
                     </div>
 
                     <button
                         type="submit"
-                        class="w-full py-3 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-sm font-extrabold transition cursor-pointer min-h-[46px]"
+                        class="w-full py-3 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-sm font-bold transition cursor-pointer min-h-[46px]"
                     >
                         <span wire:loading.remove wire:target="submitTeacherAuth">
-                            {{ $authMode === 'register' ? 'Daftar & Buka Dasbor Guru →' : 'Masuk ke Dasbor Guru →' }}
+                            {{ $authMode === 'register' ? 'Daftar dan buka Dasbor Guru' : 'Masuk ke Dasbor Guru' }}
                         </span>
                         <span wire:loading wire:target="submitTeacherAuth">Memproses...</span>
                     </button>
@@ -1004,31 +913,31 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             <div role="tabpanel" aria-labelledby="role-tab-individual" @if($authRole !== 'individual') hidden @endif>
                 <form wire:submit="submitIndividualAuth" class="space-y-4">
                     <div class="rounded-xl bg-[#FEF6E2] border border-[#F5DFAA] px-3.5 py-2.5 text-xs text-[#704C05] flex items-center justify-between gap-2">
-                        <span><strong>100% Pribadi:</strong> Tanpa kode siswa &amp; tanpa kode kelas.</span>
+                        <span><strong>Pribadi:</strong> Tanpa kode siswa &amp; tanpa kode kelas.</span>
                         @if ($authMode === 'login' && !app()->isProduction())
-                            <button type="button" wire:click="fillDemoIndividual" class="underline font-extrabold shrink-0 cursor-pointer">
-                                Isi Demo Raka
+                            <button type="button" wire:click="fillDemoIndividual" class="underline font-bold shrink-0 cursor-pointer">
+                                Isi demo Raka
                             </button>
                         @endif
                     </div>
 
                     @if ($authMode === 'register')
                         <div>
-                            <label for="auth-ind-name" class="block text-xs font-bold text-[#0B352D] mb-1">Nama Panggilan</label>
+                            <label for="auth-ind-name" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Nama panggilan</label>
                             <input
                                 id="auth-ind-name"
                                 type="text"
                                 wire:model="indName"
                                 autocomplete="given-name"
                                 required
-                                class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                                class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                                 placeholder="misal: Raka"
                             >
                         </div>
                     @endif
 
                     <div>
-                        <label for="auth-ind-email" class="block text-xs font-bold text-[#0B352D] mb-1">Email Pribadi</label>
+                        <label for="auth-ind-email" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Email pribadi</label>
                         <input
                             id="auth-ind-email"
                             type="email"
@@ -1037,13 +946,13 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             autocorrect="off"
                             spellcheck="false"
                             required
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="nama@email.com"
                         >
                     </div>
 
                     <div>
-                        <label for="auth-ind-password" class="block text-xs font-bold text-[#0B352D] mb-1">Kata Sandi</label>
+                        <label for="auth-ind-password" class="block text-sm font-semibold text-[#0B352D] mb-1.5">Kata sandi</label>
                         <input
                             id="auth-ind-password"
                             type="password"
@@ -1051,7 +960,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             autocomplete="{{ $authMode === 'register' ? 'new-password' : 'current-password' }}"
                             minlength="6"
                             required
-                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2.5 text-sm text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
+                            class="w-full rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-3 text-base text-[#0B352D] focus:bg-white focus:border-[#0B352D]"
                             placeholder="Minimal 6 karakter"
                         >
                     </div>
@@ -1076,10 +985,10 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
                     <button
                         type="submit"
-                        class="w-full py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[46px]"
+                        class="w-full py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-bold transition cursor-pointer min-h-[46px]"
                     >
                         <span wire:loading.remove wire:target="submitIndividualAuth">
-                            {{ $authMode === 'register' ? 'Mulai Ruang Latihan Pribadi →' : 'Masuk Ruang Latihan Pribadi →' }}
+                            {{ $authMode === 'register' ? 'Mulai latihan pribadi' : 'Masuk ke latihan pribadi' }}
                         </span>
                         <span wire:loading wire:target="submitIndividualAuth">Memproses...</span>
                     </button>
@@ -1088,9 +997,9 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="startQuickIndividual"
-                            class="text-xs font-bold text-[#0B352D] hover:text-[#134A3F] underline underline-offset-4 cursor-pointer"
+                            class="text-sm font-semibold text-[#0B352D] hover:text-[#134A3F] underline underline-offset-4 cursor-pointer inline-flex items-center min-h-11"
                         >
-                            Atau langsung latihan tanpa daftar (Mode Tamu) →
+                            Atau latihan tanpa daftar (mode tamu)
                         </button>
                     </div>
                 </form>

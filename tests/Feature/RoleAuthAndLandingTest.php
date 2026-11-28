@@ -26,19 +26,19 @@ class RoleAuthAndLandingTest extends TestCase
     {
         $this->get(route('tuntas.landing'))
             ->assertStatus(200)
-            ->assertSee('Bukan Sekadar Jawaban Instan.')
-            ->assertSee('Paham Dulu, Baru Lanjut.')
+            ->assertSee('Bukan sekadar jawaban instan.')
+            ->assertSee('Paham dulu, baru lanjut.')
             ->assertSee('Simulasi ruang belajar')
-            ->assertSee('Daftar sebagai Siswa')
-            ->assertSee('Daftar sebagai Guru')
-            ->assertSee('Pendaftaran Individual')
-            ->assertSee('AI Berdialog, Sistem Deterministik yang Memutuskan');
+            ->assertSee('Daftar sebagai siswa')
+            ->assertSee('Daftar sebagai guru')
+            ->assertSee('Daftar individual')
+            ->assertSee('AI menjelaskan, aturan pasti yang menilai');
 
         Livewire::test('pages::tuntas.landing')
             ->call('setLang', 'en')
-            ->assertSee('Not Just Instant Answers.')
-            ->assertSee('Sign Up as Student')
-            ->assertSee('Individual Sign Up');
+            ->assertSee('Not just instant answers.')
+            ->assertSee('Sign up as a student')
+            ->assertSee('Sign up individually');
     }
 
     public function test_student_registers_with_anonymous_code_and_cannot_open_teacher_dashboard(): void

@@ -94,6 +94,9 @@ FastAPI, port 8001   optional
 - Answer text is never written to the database. Each attempt is logged with its result and mastery change only.
 - The tutor conversation lives in the page's memory and is gone when the page closes.
 - Gemini receives only the text Clarvo has already written, never the answer key.
+- Individual sign-up asks the learner to confirm they are 18 or older, or that a parent or guardian has agreed. Indonesia's Personal Data Protection Law (UU No. 27 Tahun 2022) requires a parent's or guardian's consent before a child's data is processed. Guest mode stores no name or email.
+- Class learners are known only by their code. Before a class uses Clarvo with real students, agree on consent with the school and the parents.
+- `php artisan migrate:fresh --seed` creates demo sign-ins whose password is written in the code. The seeder skips them when `APP_ENV=production`, and the sign-in form hides the "Isi Demo" buttons there.
 
 ## Requirements
 
@@ -177,12 +180,13 @@ python -m unittest -v
 This is a prototype for a competition entry, not a finished product. Known limits:
 
 - The interface is in Indonesian only.
+- The privacy notes above are a starting point for a school trial, not legal advice.
 - A teacher sees every learner in a non-private class, not only the learners in their own class.
 - Mastery parameters are illustrative and have not been fitted to real learner data.
 
 ## Contributing
 
-Work goes through pull requests into `main`. The project lead reviews and merges. Before opening one, run `php artisan test`, and `vendor/bin/pint` on the files you changed.
+Work goes through pull requests into `main`. The project lead reviews and merges. Before opening one, run `php artisan test`, and `vendor/bin/pint` on the files you changed. GitHub Actions runs both test suites on every pull request and checks the changed PHP files with Pint.
 
 ## Licence
 

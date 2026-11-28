@@ -2,6 +2,7 @@
 
 namespace App\Services\Tuntas;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -69,6 +70,12 @@ class GateControllerService
                 ->orderBy('step_order')
                 ->get();
 
+            // Penguasaan yang dibuktikan di sesi lama diuji ulang lewat gerbang angka baru (langkah 2).
+            $gateBp = $blueprints->firstWhere('step_order', 2);
+            if ($startOrder === 3 && $gateBp && $this->masteryIsStale($learnerId, (int) $gateBp->tracked_concept_id)) {
+                $startOrder = 2;
+            }
+
             $firstBp = $blueprints->firstWhere('step_order', $startOrder) ?? $blueprints->first();
 
             $sessionId = DB::table('learning_sessions')->insertGetId([
@@ -125,15 +132,18 @@ class GateControllerService
         $tier = $this->theory->resolveTier($initialPL, 0, 0, false);
         $theoryRaw = $this->theory->buildTheoryIntro($active['step']->required_form, $params, $tier);
         $theoryMessage = $this->gemini->adaptTheoryMessage($theoryRaw, $tier, $active['item']['forbidden'] ?? []);
-        $introAction = match ($parsed['family'] ?? 'quadratic') {
-            'modulo' => "Sebelum menghitung {$parsed['latex']}, mari pahami langkah dasarnya dulu.",
-            'division' => "Sebelum menyelesaikan pembagian {$parsed['latex']}, mari cek konsep dasarnya.",
-            'linear' => "Sebelum menyelesaikan persamaan {$parsed['latex']}, mari cek langkah awalnya.",
-            'formula' => "Sebelum menyelesaikan soal {$parsed['latex']}, mari pecah langkah perhitungannya.",
-            default => (int) $active['step']->step_order === 1
-                ? "Sebelum memfaktorkan {$parsed['latex']}, mari cek prasyarat yang kamu butuhkan."
-                : "Prasyarat untuk {$parsed['latex']} sudah di atas ambang gerbang, jadi sesi dimulai dari bentuk faktor.",
-        };
+        $startsWithRecheck = (int) $active['step']->step_order === 2;
+        $introAction = $startsWithRecheck
+            ? "Penguasaan {$this->trackedConceptPhrase($active['step'])} terakhir kamu buktikan di sesi sebelumnya, jadi cek ulang dulu dengan angka baru sebelum melanjutkan {$parsed['latex']}."
+            : match ($parsed['family'] ?? 'quadratic') {
+                'modulo' => "Sebelum menghitung {$parsed['latex']}, mari pahami langkah dasarnya dulu.",
+                'division' => "Sebelum menyelesaikan pembagian {$parsed['latex']}, mari cek konsep dasarnya.",
+                'linear' => "Sebelum menyelesaikan persamaan {$parsed['latex']}, mari cek langkah awalnya.",
+                'formula' => "Sebelum menyelesaikan soal {$parsed['latex']}, mari pecah langkah perhitungannya.",
+                default => (int) $active['step']->step_order === 1
+                    ? "Sebelum memfaktorkan {$parsed['latex']}, mari cek prasyarat yang kamu butuhkan."
+                    : "Prasyarat untuk {$parsed['latex']} sudah di atas ambang gerbang, jadi sesi dimulai dari bentuk faktor.",
+            };
         $challengeMessage = "{$introAction}\n\n{$active['item']['prompt']}";
         $opening = "{$theoryMessage}\n\n{$challengeMessage}";
 
@@ -146,6 +156,27 @@ class GateControllerService
             'theory_tier' => $tier,
             'theory_tier_label' => $this->theory->tierLabel($tier),
         ];
+    }
+
+    private function masteryIsStale(int $learnerId, int $conceptId): bool
+    {
+        $row = DB::table('student_masteries')
+            ->where('learner_id', $learnerId)
+            ->where('concept_id', $conceptId)
+            ->first(['p_l', 'last_practiced_at']);
+
+        if (! $row || $row->last_practiced_at === null || (float) $row->p_l < BktEngineService::GATE_THRESHOLD) {
+            return false;
+        }
+
+        return Carbon::parse($row->last_practiced_at)->lt(now()->subHours(config('tuntas.recheck_after_hours', 24)));
+    }
+
+    private function trackedConceptPhrase(object $step): string
+    {
+        $label = AdaptiveTheoryService::conceptLabel((string) $step->concept_code, (string) $step->concept_name);
+
+        return mb_strtolower(mb_substr($label, 0, 1)).mb_substr($label, 1);
     }
 
     public function startOrResumeSession(int $learnerId, bool $resetDemo = false, string $defaultProblem = 'x^2 - 5x + 6 = 0'): int

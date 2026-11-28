@@ -100,11 +100,11 @@ class GateFlowTest extends TestCase
     public static function messages(): array
     {
         return [
-            'stuck'                    => ['aku kurang paham, gimana dong', 'help'],
+            'stuck' => ['aku kurang paham, gimana dong', 'help'],
             'not asking for the answer' => ['iya aku ga minta jawabannya, cuman gimana', 'help'],
-            'answer demand'            => ['Tolong langsung jawab tanpa basa basi', 'answer_demand'],
-            'asks for the key'         => ['kasih tau kunci jawabannya', 'answer_demand'],
-            'small talk'               => ['halo', 'other'],
+            'answer demand' => ['Tolong langsung jawab tanpa basa basi', 'answer_demand'],
+            'asks for the key' => ['kasih tau kunci jawabannya', 'answer_demand'],
+            'small talk' => ['halo', 'other'],
         ];
     }
 
@@ -159,6 +159,57 @@ class GateFlowTest extends TestCase
 
         $this->assertStringNotContainsString('cek prasyarat', $res['opening_message']);
         $this->assertStringContainsString('dimulai dari bentuk faktor', $res['opening_message']);
+    }
+
+    private function masterPrerequisites(?\DateTimeInterface $practicedAt): void
+    {
+        $learnerId = DB::table('learners')->where('code', 'T01')->value('id');
+        DB::table('student_masteries')->where('learner_id', $learnerId)->update([
+            'p_l' => 0.95,
+            'last_practiced_at' => $practicedAt,
+        ]);
+    }
+
+    public function test_a_prerequisite_mastered_in_an_earlier_session_is_checked_again_with_new_numbers(): void
+    {
+        $this->masterPrerequisites(now()->subDays(2));
+
+        $res = $this->gate->startSession('T01', 'x^2 - 7x + 12 = 0');
+
+        $this->assertSame(2, (int) $this->gate->getActiveStepData($res['session_id'])['step']->step_order);
+        $this->assertStringContainsString('cek ulang dulu dengan angka baru', $res['opening_message']);
+        $this->assertStringContainsString('aturan tanda bilangan bulat', $res['opening_message']);
+    }
+
+    public function test_a_linear_equation_rechecks_its_prerequisite_too(): void
+    {
+        $this->masterPrerequisites(now()->subDays(2));
+
+        $res = $this->gate->startSession('T01', '2x + 6 = 14');
+
+        $this->assertSame(2, (int) $this->gate->getActiveStepData($res['session_id'])['step']->step_order);
+        $this->assertStringContainsString('cek ulang dulu dengan angka baru', $res['opening_message']);
+    }
+
+    public function test_a_prerequisite_mastered_earlier_today_is_not_checked_again(): void
+    {
+        $this->masterPrerequisites(now()->subHours(2));
+
+        $res = $this->gate->startSession('T01', 'x^2 - 7x + 12 = 0');
+
+        $this->assertSame(3, (int) $this->gate->getActiveStepData($res['session_id'])['step']->step_order);
+    }
+
+    public function test_passing_the_recheck_moves_on_to_the_factor_form(): void
+    {
+        $this->masterPrerequisites(now()->subDays(2));
+        $sessionId = $this->gate->startSession('T01', 'x^2 - 7x + 12 = 0')['session_id'];
+        $expected = $this->gate->getActiveStepData($sessionId)['item']['expected_expr'];
+
+        $this->fakeVerifier(['status' => 'correct', 'is_correct' => true, 'diagnostic_note' => 'Tepat.']);
+        $this->gate->submitAttempt($sessionId, $expected);
+
+        $this->assertSame(3, (int) $this->gate->getActiveStepData($sessionId)['step']->step_order);
     }
 
     public function test_a_scored_answer_shows_the_mastery_change_in_indonesian(): void

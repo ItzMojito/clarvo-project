@@ -398,8 +398,6 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
     padding: 0.875rem 1rem;
     font-size: 0.75rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: #0B352D;
     border-block-end: 1px solid var(--kawung-border);
     white-space: nowrap;

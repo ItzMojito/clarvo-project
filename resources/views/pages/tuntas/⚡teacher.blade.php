@@ -261,12 +261,12 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                         <thead>
                             <tr>
                                 <th scope="col">Pelajar</th>
-                                <th scope="col">Soal Aktif</th>
-                                <th scope="col">Langkah Saat Ini</th>
-                                <th scope="col">Konsep Terlemah</th>
+                                <th scope="col">Soal aktif</th>
+                                <th scope="col">Langkah saat ini</th>
+                                <th scope="col">Konsep terlemah</th>
                                 <th scope="col">Petunjuk (per langkah)</th>
-                                <th scope="col">Perlu Bantuan</th>
-                                <th scope="col">Aktivitas Terakhir</th>
+                                <th scope="col">Perlu bantuan</th>
+                                <th scope="col">Aktivitas terakhir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -285,10 +285,10 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                             <span class="text-xs font-medium opacity-75 md:hidden">{{ $r->class_name }}</span>
                                         </div>
                                     </th>
-                                    <td data-label="Soal Aktif" class="math-expr font-semibold text-[#0B352D] whitespace-nowrap">
+                                    <td data-label="Soal aktif" class="math-expr font-semibold text-[#0B352D] whitespace-nowrap">
                                         {!! $this->formatMath($r->problem) !!}
                                     </td>
-                                    <td data-label="Langkah Saat Ini" class="text-[#1E3B35] font-medium">
+                                    <td data-label="Langkah saat ini" class="text-[#1E3B35] font-medium">
                                         @if ($r->status === 'completed')
                                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
                                                 <span aria-hidden="true">✓</span> {{ $r->current_step }}
@@ -301,7 +301,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                             <span class="text-xs sm:text-sm font-medium">{{ $r->current_step }}</span>
                                         @endif
                                     </td>
-                                    <td data-label="Konsep Terlemah">
+                                    <td data-label="Konsep terlemah">
                                         <div class="min-w-[170px] space-y-1">
                                             <div class="flex items-center justify-between gap-2 text-xs">
                                                 <span class="font-medium text-[#3A544E] truncate">{{ $r->weakest_name }}</span>
@@ -327,7 +327,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                             <span class="text-xs sm:text-sm font-semibold text-[#3A544E]">{{ $r->hints_label }}</span>
                                         @endif
                                     </td>
-                                    <td data-label="Perlu Bantuan">
+                                    <td data-label="Perlu bantuan">
                                         @if ($r->needs_help)
                                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold">
                                                 <x-icon name="warning" :size="14" /> {{ $r->needs_help }}
@@ -338,7 +338,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                             </span>
                                         @endif
                                     </td>
-                                    <td data-label="Aktivitas Terakhir" class="text-xs font-medium text-[#526B65] tabular-nums whitespace-nowrap">
+                                    <td data-label="Aktivitas terakhir" class="text-xs font-medium text-[#526B65] tabular-nums whitespace-nowrap">
                                         {{ $r->last_activity }}
                                     </td>
                                 </tr>

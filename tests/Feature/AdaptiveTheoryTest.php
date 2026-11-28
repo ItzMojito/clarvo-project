@@ -212,7 +212,7 @@ class AdaptiveTheoryTest extends TestCase
             ->assertDontSee('format: format:')
             ->set('microAnswer', '1, 2')
             ->call('submitAnswer')
-            ->assertSee('Teori Dasar')
+            ->assertSee('Teori dasar')
             ->assertSee('Hasil Kali Negatif')
             ->assertDontSee('Bilangan negatif dikali negatif');
     }

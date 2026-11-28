@@ -30,9 +30,9 @@ class AdaptiveTheoryService
     public function tierLabel(string $tier): string
     {
         return match ($tier) {
-            'baby' => 'Teori Dasar · Bahasa Sederhana',
-            'advanced' => 'Teori Lanjutan · Analisis Mendalam',
-            default => 'Teori Singkat · Terstruktur',
+            'baby' => 'Teori dasar · bahasa sederhana',
+            'advanced' => 'Teori lanjutan · analisis mendalam',
+            default => 'Teori singkat · terstruktur',
         };
     }
 

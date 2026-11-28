@@ -61,6 +61,7 @@ A learner enters a problem, or picks an example, and works through it step by st
 - **Adaptive theory.** Before each step the tutor gives a short explanation at one of three levels (simple, standard, advanced), chosen from the learner's mastery, recent mistakes and hint use.
 - **Hints, never answers.** The learner can ask for a hint at any step. The tutor never shows the final answer.
 - **Review before retrying.** A wrong answer at step 1, or three wrong answers at a gate, leads to a short review and then new numbers. After three wrong answers the teacher dashboard flags the learner.
+- **Re-check in a later session.** When a prerequisite was mastered more than 24 hours ago (`TUNTAS_RECHECK_AFTER_HOURS`), the next session opens with one gate question on new numbers instead of skipping ahead.
 - **Three ways in.** Students join with a class code and a learner code (optionally a PIN). Teachers sign in with email and password. Individual learners sign in or continue as a guest; their sessions are private.
 - **Teacher dashboard.** One row per learner in non-private classes: current step, weakest concept, hints per step, and a "needs help" flag, with filters and search. It refreshes every 15 seconds.
 
@@ -153,6 +154,8 @@ php artisan serve
 ```
 
 Then open http://127.0.0.1:8000/ and sign in, or continue as a guest.
+
+For a presentation, follow [docs/DEMO.md](docs/DEMO.md) (in Indonesian). It covers `php artisan clarvo:demo-reset`, `php artisan clarvo:check`, `scripts/start-demo.ps1`, the demo flow, and testing on a real phone.
 
 ## Tests
 

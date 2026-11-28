@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Clarvo · Paham dulu, baru lanjut' }}</title>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#F3F6F5] text-[#132A25] antialiased min-h-dvh flex flex-col selection:bg-[#EBB134]/30 selection:text-[#0B352D]">
@@ -27,15 +28,7 @@
                 <div class="kawung-glow-layer"></div>
             </div>
             <div class="relative z-10 flex items-center gap-3">
-                <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs" aria-hidden="true">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                        <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                        <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                        <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                        <circle cx="12" cy="12" r="2"/>
-                    </svg>
-                </span>
+                <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                 <div>
                     <h2 id="about-dialog-title" class="text-base font-extrabold tracking-wide text-white">Tentang Clarvo</h2>
                     <p class="text-xs font-medium text-[#EBB134]">Paham dulu, baru lanjut.</p>
@@ -55,7 +48,7 @@
 
         <div class="p-6 space-y-4 text-sm text-[#1E3B35] leading-relaxed">
             <p>
-                <strong>Clarvo</strong> adalah sistem tutor matematika cerdas yang memadukan tiga komponen inti:
+                <strong>Clarvo</strong> adalah tutor matematika yang memadukan tiga komponen inti:
             </p>
             <ul class="space-y-2.5 text-xs sm:text-sm">
                 <li class="flex items-start gap-2.5">
@@ -117,11 +110,9 @@
                     <div class="kawung-glow-layer"></div>
                 </div>
                 <div class="relative z-10 flex items-center gap-3">
-                    <span class="w-10 h-10 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs text-lg font-extrabold" aria-hidden="true">
-                        <x-icon name="book" :size="20" />
-                    </span>
+                    <x-logo-mark :size="40" class="text-[#F3F7F5]" />
                     <div>
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/15 text-[#EBB134] text-xs font-extrabold mb-1">
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#072620] text-[#EBB134] text-xs font-extrabold mb-1">
                             Tahap pengembangan
                         </span>
                         <h2 id="welcome-dialog-title" class="text-base sm:text-lg font-extrabold text-white leading-tight">

@@ -21,15 +21,7 @@
         {{-- Top Navigation Row --}}
         <div class="py-3.5 flex items-center justify-between gap-3 border-b border-white/10">
             <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]" title="Kembali ke Beranda Clarvo">
-                <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200" aria-hidden="true">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                        <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                        <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                        <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                        <circle cx="12" cy="12" r="2"/>
-                    </svg>
-                </span>
+                <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                 <span class="font-extrabold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
                 <span class="text-xs sm:text-sm font-medium text-[#EBB134] hidden md:inline">Paham dulu, baru lanjut.</span>
             </a>
@@ -40,7 +32,7 @@
                     <a
                         href="{{ route('tuntas.workspace') }}"
                         @if($current === 'workspace') aria-current="page" @endif
-                        class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition inline-flex items-center gap-1.5 min-h-[40px] {{ $current === 'workspace' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10 font-medium' }}"
+                        class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition inline-flex items-center gap-1.5 min-h-11 {{ $current === 'workspace' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10 font-medium' }}"
                     >
                         @if($current === 'workspace')
                             <span class="w-1.5 h-1.5 rounded-full bg-[#092B24]" aria-hidden="true"></span>
@@ -52,7 +44,7 @@
                         <a
                             href="{{ route('tuntas.teacher') }}"
                             @if($current === 'teacher') aria-current="page" @endif
-                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition inline-flex items-center gap-1.5 min-h-[40px] {{ $current === 'teacher' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10 font-medium' }}"
+                            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm transition inline-flex items-center gap-1.5 min-h-11 {{ $current === 'teacher' ? 'bg-[#EBB134] text-[#092B24] font-bold shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10 font-medium' }}"
                         >
                             @if($current === 'teacher')
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#092B24]" aria-hidden="true"></span>
@@ -64,7 +56,7 @@
                     <button
                         type="button"
                         data-open-dialog="clarvo-welcome-dialog"
-                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-[#EBB134] hover:text-white hover:bg-white/10 font-semibold transition min-h-[40px] cursor-pointer"
+                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-[#EBB134] hover:text-white hover:bg-white/10 font-semibold transition min-h-11 cursor-pointer"
                     >
                         Cakupan Soal
                     </button>
@@ -72,7 +64,7 @@
                     <button
                         type="button"
                         data-open-dialog="about-clarvo-dialog"
-                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-slate-200 hover:text-white hover:bg-white/10 font-medium transition min-h-[40px] cursor-pointer"
+                        class="px-3 py-2 rounded-xl text-xs sm:text-sm text-slate-200 hover:text-white hover:bg-white/10 font-medium transition min-h-11 cursor-pointer"
                     >
                         Tentang
                     </button>
@@ -100,7 +92,7 @@
                     @csrf
                     <button
                         type="submit"
-                        class="px-3 py-2 rounded-xl border border-white/20 bg-white/5 hover:bg-white/15 text-xs font-semibold text-slate-100 transition min-h-[40px] cursor-pointer"
+                        class="px-3 py-2 rounded-xl border border-white/20 bg-white/5 hover:bg-white/15 text-xs font-semibold text-slate-100 transition min-h-11 cursor-pointer"
                         title="Keluar atau ganti akun"
                     >
                         Keluar

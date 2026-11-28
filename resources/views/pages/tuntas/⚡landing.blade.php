@@ -170,15 +170,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             {{-- Top Navbar --}}
             <div class="py-4 flex items-center justify-between gap-4 border-b border-white/10">
                 <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]">
-                    <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200" aria-hidden="true">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                            <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                            <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                            <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                            <circle cx="12" cy="12" r="2"/>
-                        </svg>
-                    </span>
+                    <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                     <span class="font-extrabold tracking-wider text-lg sm:text-xl text-white">Clarvo</span>
                     <span class="text-xs sm:text-sm font-medium text-[#EBB134] hidden sm:inline">
                         {{ $en ? 'Understand first, then move on.' : 'Paham dulu, baru lanjut.' }}
@@ -218,7 +210,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <button
                         type="button"
                         wire:click="openAuth('login', 'student')"
-                        class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-xs sm:text-sm font-semibold text-white transition min-h-[40px] cursor-pointer"
+                        class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-xs sm:text-sm font-semibold text-white transition min-h-11 cursor-pointer"
                     >
                         <span aria-hidden="true">→</span>
                         <span>{{ $en ? 'Sign In' : 'Masuk' }}</span>
@@ -227,7 +219,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <button
                         type="button"
                         wire:click="openAuth('register', 'student')"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-[40px] cursor-pointer"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-11 cursor-pointer"
                     >
                         <span>{{ $en ? 'Sign Up' : 'Daftar' }}</span>
                     </button>
@@ -323,7 +315,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="startQuickIndividual"
-                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer inline-flex items-center gap-1"
+                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer inline-flex items-center gap-1 min-h-11"
                         >
                             <span wire:loading.remove wire:target="startQuickIndividual">
                                 {{ $en ? 'Try Individual Mode right away →' : 'Coba Mode Individual langsung →' }}
@@ -492,7 +484,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Automatic alerts for learners needing guidance' : 'Notifikasi otomatis pelajar yang butuh bimbingan' }}</span>
+                                <span>{{ $en ? 'Learners who need guidance are flagged automatically' : 'Tanda otomatis untuk pelajar yang butuh bimbingan' }}</span>
                             </li>
                         </ul>
 
@@ -538,7 +530,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'No Teacher Dashboard — pure private practice space' : 'Tanpa Dasbor Guru — murni ruang latihan pribadi' }}</span>
+                                <span>{{ $en ? 'No Teacher Dashboard, just your own practice space' : 'Tanpa Dasbor Guru, murni ruang latihan pribadi' }}</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
@@ -604,7 +596,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         ],
                         [
                             'num' => '4',
-                            'title_id' => '4. Gerbang Mandiri 0.85',
+                            'title_id' => '4. Gerbang Mandiri 0,85',
                             'title_en' => '4. Unaided Mastery Gate 0.85',
                             'desc_id' => 'Membuka langkah berikutnya hanya setelah kamu menyelesaikan soal angka baru tanpa bantuan.',
                             'desc_en' => 'Unlocks the next step only after solving a fresh isomorphic problem completely unaided.',
@@ -641,15 +633,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <span class="w-8 h-8 rounded-lg bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0" aria-hidden="true">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                        <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                        <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                        <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                        <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                        <circle cx="12" cy="12" r="2"/>
-                    </svg>
-                </span>
+                <x-logo-mark :size="32" class="text-[#F3F7F5]" />
                 <span class="font-extrabold tracking-wider text-white text-sm">Clarvo</span>
                 <span class="text-xs font-medium text-[#EBB134]">
                     {{ $en ? 'Understand first, then move on.' : 'Paham dulu, baru lanjut.' }}
@@ -657,10 +641,10 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             </div>
 
             <div class="flex flex-wrap items-center gap-5 text-xs text-slate-200">
-                <button type="button" wire:click="openAuth('login', 'student')" class="hover:text-[#EBB134] font-semibold cursor-pointer">
+                <button type="button" wire:click="openAuth('login', 'student')" class="inline-flex items-center min-h-11 hover:text-[#EBB134] font-semibold cursor-pointer">
                     {{ $en ? 'Sign In' : 'Masuk' }}
                 </button>
-                <button type="button" wire:click="openAuth('register', 'individual')" class="hover:text-[#EBB134] font-semibold cursor-pointer">
+                <button type="button" wire:click="openAuth('register', 'individual')" class="inline-flex items-center min-h-11 hover:text-[#EBB134] font-semibold cursor-pointer">
                     {{ $en ? 'Individual Sign Up' : 'Daftar Individual' }}
                 </button>
                 <span class="text-slate-300/80">Clarvo &middot; 2026</span>
@@ -695,15 +679,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
             <div class="relative z-10 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0" aria-hidden="true">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
-                            <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
-                            <ellipse cx="15.8" cy="15.8" rx="4.2" ry="2.4" transform="rotate(45 15.8 15.8)"/>
-                            <ellipse cx="8.2" cy="15.8" rx="4.2" ry="2.4" transform="rotate(-45 8.2 15.8)"/>
-                            <circle cx="12" cy="12" r="2"/>
-                        </svg>
-                    </span>
+                    <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                     <div>
                         <h2 id="auth-dialog-title" class="text-base font-extrabold text-white">
                             {{ $authMode === 'register' ? 'Buat Akun Clarvo' : 'Masuk ke Akun Clarvo' }}
@@ -777,7 +753,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 aria-selected="{{ $authRole === 'individual' ? 'true' : 'false' }}"
                 class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'individual' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
-                <span aria-hidden="true">✨</span>
+                <x-icon name="user" :size="16" />
                 <span>Individual</span>
             </button>
         </div>

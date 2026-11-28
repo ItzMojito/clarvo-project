@@ -163,7 +163,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             {{-- Top Navbar --}}
             <div class="py-4 flex items-center justify-between gap-4 border-b border-white/10">
                 <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]">
-                    <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-105" aria-hidden="true">
+                    <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200" aria-hidden="true">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                             <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
                             <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
@@ -220,7 +220,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <button
                         type="button"
                         wire:click="openAuth('register', 'student')"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-[40px] cursor-pointer"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-[40px] cursor-pointer"
                     >
                         <span>{{ $en ? 'Sign Up' : 'Daftar' }}</span>
                     </button>
@@ -270,7 +270,6 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 {{-- Left Headline & CTA --}}
                 <div class="lg:col-span-7 space-y-6 animate-flow-in">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#EBB134] text-xs font-bold">
-                        <span aria-hidden="true">✦</span>
                         <span>{{ $en ? 'Socratic AI tutor · mastery learning math' : 'Tutor AI Sokratik · belajar tuntas matematika' }}</span>
                     </div>
 
@@ -296,7 +295,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="openAuth('register', 'student')"
-                            class="px-6 py-3.5 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-sm font-extrabold shadow-md transition cursor-pointer inline-flex items-center gap-2 min-h-[48px]"
+                            class="px-6 py-3.5 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold shadow-md transition cursor-pointer inline-flex items-center gap-2 min-h-[48px]"
                         >
                             <span>{{ $en ? 'Sign Up Now' : 'Daftar Sekarang' }}</span>
                             <span aria-hidden="true">→</span>
@@ -305,7 +304,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="openAuth('login', 'student')"
-                            class="px-6 py-3.5 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 active:scale-[0.98] text-white text-sm font-bold transition cursor-pointer inline-flex items-center gap-2 min-h-[48px]"
+                            class="px-6 py-3.5 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-white text-sm font-bold transition cursor-pointer inline-flex items-center gap-2 min-h-[48px]"
                         >
                             <span aria-hidden="true">→</span>
                             <span>{{ $en ? 'Sign In to Account' : 'Masuk ke Akun' }}</span>
@@ -371,7 +370,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
                             <div class="pt-3 border-t border-[#E6EEEC] flex items-center justify-between text-xs font-medium text-[#526B65]">
                                 <span class="inline-flex items-center gap-1.5">
-                                    <span aria-hidden="true">🛡️</span>
+                                    <x-icon name="shield" :size="14" />
                                     <span>{{ $en ? 'Answer key locked in backend' : 'Kunci jawaban ditahan di dalam kode' }}</span>
                                 </span>
                                 <span class="font-bold text-[#0B352D]">SymPy + BKT</span>
@@ -402,7 +401,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
 
             <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
                 {{-- Card 1: Siswa --}}
-                <article class="bg-white rounded-2xl border border-[#D9E4E0] shadow-xs overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <article class="bg-white rounded-2xl border border-[#D9E4E0] shadow-xs overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-md">
                     <div class="h-1 bg-[#0B352D]"></div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex items-center justify-between gap-2">
@@ -443,7 +442,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="openAuth('register', 'student')"
-                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] active:scale-[0.98] text-white text-xs sm:text-sm font-bold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
+                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-xs sm:text-sm font-bold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
                         >
                             <span>{{ $en ? 'Sign Up as Student' : 'Daftar sebagai Siswa' }}</span>
                             <span aria-hidden="true">→</span>
@@ -452,7 +451,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 </article>
 
                 {{-- Card 2: Guru --}}
-                <article class="bg-white rounded-2xl border border-[#D9E4E0] shadow-xs overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <article class="bg-white rounded-2xl border border-[#D9E4E0] shadow-xs overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-md">
                     <div class="h-1 bg-[#0B352D]"></div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex items-center justify-between gap-2">
@@ -493,7 +492,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="openAuth('register', 'teacher')"
-                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] active:scale-[0.98] text-white text-xs sm:text-sm font-bold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
+                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-xs sm:text-sm font-bold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
                         >
                             <span>{{ $en ? 'Sign Up as Teacher' : 'Daftar sebagai Guru' }}</span>
                             <span aria-hidden="true">→</span>
@@ -502,7 +501,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 </article>
 
                 {{-- Card 3: Pendaftaran Individual (Highlighted Gold) --}}
-                <article class="bg-white rounded-2xl border-2 border-[#EBB134] shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <article class="bg-white rounded-2xl border-2 border-[#EBB134] shadow-md overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-lg">
                     <div class="h-1.5 bg-[#EBB134]"></div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex items-center justify-between gap-2">
@@ -543,7 +542,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="openAuth('register', 'individual')"
-                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-xs sm:text-sm font-extrabold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
+                            class="mt-6 w-full py-3 px-4 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold transition cursor-pointer inline-flex items-center justify-center gap-2 min-h-[44px]"
                         >
                             <span>{{ $en ? 'Sign Up Individual' : 'Daftar Individual' }}</span>
                             <span aria-hidden="true">→</span>
@@ -605,7 +604,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             'icon' => '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
                         ],
                     ] as $card)
-                        <div class="bg-[#F6F9F8] rounded-2xl border border-[#E1EBE8] p-6 space-y-4 transition duration-300 hover:-translate-y-1 hover:border-[#0B352D]/30">
+                        <div class="bg-[#F6F9F8] rounded-2xl border border-[#E1EBE8] p-6 space-y-4 transition duration-300 hover:border-[#0B352D]/30">
                             <span class="w-10 h-10 rounded-xl bg-[#0B352D] text-[#EBB134] flex items-center justify-center shadow-xs" aria-hidden="true">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     {!! $card['icon'] !!}
@@ -667,7 +666,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
         type="button"
         data-open-dialog="about-clarvo-dialog"
         aria-label="Informasi dan Bantuan Clarvo"
-        class="fixed bottom-5 end-5 z-30 w-11 h-11 rounded-full bg-[#152823] hover:bg-[#0B352D] border border-white/20 text-white font-extrabold shadow-lg flex items-center justify-center transition hover:scale-105 cursor-pointer"
+        class="fixed bottom-5 end-5 z-30 w-11 h-11 rounded-full bg-[#152823] hover:bg-[#0B352D] border border-white/20 text-white font-extrabold shadow-lg flex items-center justify-center transition cursor-pointer"
     >
         ?
     </button>
@@ -747,7 +746,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 aria-selected="{{ $authRole === 'student' ? 'true' : 'false' }}"
                 class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'student' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
-                <span aria-hidden="true">📘</span>
+                <x-icon name="book" :size="16" />
                 <span>Siswa</span>
             </button>
 
@@ -759,7 +758,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 aria-selected="{{ $authRole === 'teacher' ? 'true' : 'false' }}"
                 class="kawung-tab py-3 px-2 text-xs font-extrabold transition cursor-pointer flex items-center justify-center gap-1.5 {{ $authRole === 'teacher' ? 'text-[#0B352D] bg-white' : 'text-[#526B65] hover:text-[#0B352D]' }}"
             >
-                <span aria-hidden="true">🎓</span>
+                <x-icon name="graduation" :size="16" />
                 <span>Guru</span>
             </button>
 
@@ -780,7 +779,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
         <div class="p-6 max-h-[65dvh] overflow-y-auto space-y-4">
             @if ($authError)
                 <div role="alert" class="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-xs font-semibold text-rose-800 flex items-start gap-2">
-                    <span aria-hidden="true">⚠</span>
+                    <x-icon name="warning" :size="16" class="mt-0.5" />
                     <span>{{ $authError }}</span>
                 </div>
             @endif

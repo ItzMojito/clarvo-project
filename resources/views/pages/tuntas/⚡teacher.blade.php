@@ -321,7 +321,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                     <td data-label="Petunjuk (per langkah)" class="tabular-nums">
                                         @if ($highHintRatio)
                                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">
-                                                <span aria-hidden="true">💡</span> {{ $r->hints_label }}
+                                                <x-icon name="bulb" :size="14" /> {{ $r->hints_label }}
                                             </span>
                                         @else
                                             <span class="text-xs sm:text-sm font-semibold text-[#3A544E]">{{ $r->hints_label }}</span>
@@ -330,7 +330,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                     <td data-label="Perlu Bantuan">
                                         @if ($r->needs_help)
                                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold">
-                                                <span aria-hidden="true">⚠</span> {{ $r->needs_help }}
+                                                <x-icon name="warning" :size="14" /> {{ $r->needs_help }}
                                             </span>
                                         @else
                                             <span class="inline-flex items-center gap-1 text-xs font-medium text-[#667B76]">

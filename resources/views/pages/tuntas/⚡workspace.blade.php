@@ -325,7 +325,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                     default => 'bg-white/20',
                                 };
                             @endphp
-                            <div class="h-2 rounded-full transition-all duration-500 {{ $segClass }}"></div>
+                            <div class="h-2 rounded-full transition-[width,background-color] duration-500 {{ $segClass }}"></div>
                         @endforeach
                     </div>
                 </div>
@@ -346,7 +346,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                         <div
                             @if($isActive) aria-current="step" @endif
-                            class="step-card-item rounded-xl border p-3 flex flex-col justify-between min-h-[86px] transition-all duration-300 {{ $cardStyle }}"
+                            class="step-card-item rounded-xl border p-3 flex flex-col justify-between min-h-[86px] transition-colors duration-300 {{ $cardStyle }}"
                         >
                             <div class="flex items-center justify-between gap-1">
                                 <span class="text-xs font-extrabold tabular-nums {{ $isPassed || $isActive ? 'text-[#092B24]/70' : 'text-slate-300/75' }}">
@@ -483,14 +483,14 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                             @if ($formError)
                                 <div role="alert" class="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-xs font-semibold text-rose-800 flex items-start gap-2">
-                                    <span aria-hidden="true">⚠</span>
+                                    <x-icon name="warning" :size="16" class="mt-0.5" />
                                     <span>{{ $formError }}</span>
                                 </div>
                             @endif
 
                             <button
                                 type="submit"
-                                class="w-full py-3.5 px-6 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.99] text-[#092B24] text-sm font-extrabold shadow-xs transition cursor-pointer flex items-center justify-center gap-2 min-h-[48px]"
+                                class="w-full py-3.5 px-6 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold shadow-xs transition cursor-pointer flex items-center justify-center gap-2 min-h-[48px]"
                             >
                                 <span wire:loading.remove wire:target="startNewProblem">Mulai Belajar</span>
                                 <span wire:loading wire:target="startNewProblem">Menyiapkan ruang belajar...</span>
@@ -499,7 +499,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                         <div class="mt-5 pt-4 border-t border-[#EAF0EE] flex flex-wrap items-center justify-between gap-2 text-xs text-[#526B65]">
                             <span class="flex items-center gap-2">
-                                <span aria-hidden="true">🛡️</span>
+                                <x-icon name="shield" :size="14" />
                                 <span>Kunci jawaban tidak pernah dikirimkan ke AI maupun ditampilkan sebelum tuntas.</span>
                             </span>
                             <button
@@ -507,7 +507,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 data-open-dialog="clarvo-welcome-dialog"
                                 class="font-bold text-[#0E4D42] hover:text-[#0B352D] underline underline-offset-2 cursor-pointer"
                             >
-                                Daftar soal yang didukung (Beta)
+                                Daftar soal yang didukung
                             </button>
                         </div>
                     </div>
@@ -543,14 +543,14 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                                         default    => 'bg-white text-[#1B574B] border-[#C5DDD5]',
                                                     };
                                                     $tierIcon = match ($m['tier'] ?? 'standard') {
-                                                        'baby'     => '🌱',
-                                                        'advanced' => '🎓',
-                                                        default    => '📘',
+                                                        'baby'     => 'sprout',
+                                                        'advanced' => 'graduation',
+                                                        default    => 'book',
                                                     };
                                                 @endphp
                                                 <div>
                                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border {{ $tierBadgeStyle }}">
-                                                        <span>{{ $tierIcon }}</span>
+                                                        <x-icon :name="$tierIcon" :size="14" />
                                                         <span>{{ $m['tier_label'] }}</span>
                                                     </span>
                                                 </div>
@@ -589,7 +589,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 <button
                                     type="button"
                                     wire:click="continueReview"
-                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
+                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
                                 >
                                     <span wire:loading.remove wire:target="continueReview">Lanjutkan dengan angka baru</span>
                                     <span wire:loading wire:target="continueReview">Menyiapkan soal...</span>
@@ -616,7 +616,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 <button
                                     type="button"
                                     wire:click="changeProblem"
-                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
+                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
                                 >
                                     Coba Soal Baru
                                 </button>
@@ -685,7 +685,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                     <div class="flex gap-2.5">
                                         <button
                                             type="submit"
-                                            class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] active:scale-[0.98] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[46px] whitespace-nowrap"
+                                            class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[46px] whitespace-nowrap"
                                         >
                                             <span wire:loading.remove wire:target="submitAnswer">Periksa</span>
                                             <span wire:loading wire:target="submitAnswer">Memeriksa...</span>
@@ -693,7 +693,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                         <button
                                             type="button"
                                             wire:click="askHint"
-                                            class="flex-1 sm:flex-none px-5 py-3 rounded-xl border border-white/30 bg-white/5 hover:bg-white/15 active:scale-[0.98] text-white text-sm font-semibold transition cursor-pointer min-h-[46px] whitespace-nowrap"
+                                            class="flex-1 sm:flex-none px-5 py-3 rounded-xl border border-white/30 bg-white/5 hover:bg-white/15 text-white text-sm font-semibold transition cursor-pointer min-h-[46px] whitespace-nowrap"
                                         >
                                             <span wire:loading.remove wire:target="askHint">Petunjuk</span>
                                             <span wire:loading wire:target="askHint">Memuat...</span>

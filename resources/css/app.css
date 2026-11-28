@@ -165,7 +165,7 @@ html {
     }
 
     .active-beacon {
-        animation: kawung-beacon 2.2s ease-in-out infinite;
+        animation: kawung-beacon 2.2s ease-in-out 3;
     }
 
     .bar-shimmer-track::after {

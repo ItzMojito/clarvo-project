@@ -21,7 +21,7 @@
         {{-- Top Navigation Row --}}
         <div class="py-3.5 flex items-center justify-between gap-3 border-b border-white/10">
             <a href="{{ route('tuntas.landing') }}" class="flex items-center gap-3 group min-h-[44px]" title="Kembali ke Beranda Clarvo">
-                <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200 group-hover:scale-105" aria-hidden="true">
+                <span class="w-9 h-9 rounded-xl bg-[#EBB134] text-[#0B352D] flex items-center justify-center shrink-0 shadow-xs transition-transform duration-200" aria-hidden="true">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                         <ellipse cx="8.2" cy="8.2" rx="4.2" ry="2.4" transform="rotate(45 8.2 8.2)"/>
                         <ellipse cx="15.8" cy="8.2" rx="4.2" ry="2.4" transform="rotate(-45 15.8 8.2)"/>
@@ -115,7 +115,7 @@
                     aria-controls="kawung-mobile-menu"
                     aria-label="Buka menu navigasi"
                     style="anchor-name: --kawung-menu-btn"
-                    class="md:hidden w-11 h-11 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] flex items-center justify-center shadow-xs transition active:scale-95 cursor-pointer"
+                    class="md:hidden w-11 h-11 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] flex items-center justify-center shadow-xs transition cursor-pointer"
                 >
                     <svg class="w-5 h-5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
                         <path d="M4 7h16M4 12h16M4 17h16"/>
@@ -158,7 +158,7 @@
                             data-open-dialog="clarvo-welcome-dialog"
                             class="w-full text-left flex items-center justify-between px-3.5 py-3 rounded-xl text-[#EBB134] hover:bg-white/10 font-semibold transition min-h-[44px] cursor-pointer"
                         >
-                            <span>Cakupan Soal (Beta)</span>
+                            <span>Cakupan soal</span>
                         </button>
                     </li>
                     <li>

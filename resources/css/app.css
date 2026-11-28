@@ -124,12 +124,55 @@ html {
     }
 }
 
-@keyframes bar-shimmer {
-    0% {
+/* Panah tanya jawab berputar saat dibuka; tanpa animasi bila gerak dikurangi. */
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-chevron {
+    transition: transform 200ms ease, color 200ms ease;
+}
+
+.faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .faq-chevron {
+        transition: none;
+    }
+}
+
+/* Momen belajar: tiap animasi diputar sekali saat ada perubahan nyata, lalu diam. */
+@keyframes mastery-rise {
+    from {
         transform: translateX(-100%);
     }
+    to {
+        transform: translateX(260%);
+    }
+}
+
+@keyframes gate-crossed {
+    0% {
+        box-shadow: 0 0 0 0 rgba(235, 177, 52, 0.75);
+    }
     100% {
-        transform: translateX(220%);
+        box-shadow: 0 0 0 9px rgba(235, 177, 52, 0);
+    }
+}
+
+@keyframes step-unlock {
+    0% {
+        transform: translateY(6px) scale(0.97);
+        box-shadow: 0 0 0 0 rgba(235, 177, 52, 0.8);
+    }
+    60% {
+        transform: translateY(0) scale(1.02);
+    }
+    100% {
+        transform: translateY(0) scale(1.02);
+        box-shadow: 0 0 0 10px rgba(235, 177, 52, 0);
     }
 }
 
@@ -155,14 +198,22 @@ html {
         animation: kawung-beacon 2.2s ease-in-out 3;
     }
 
-    .bar-shimmer-track::after {
+    .mastery-rising .mastery-bar-fill::after {
         content: "";
         position: absolute;
         inset-block: 0;
         inset-inline-start: 0;
         inline-size: 40%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
-        animation: bar-shimmer 2.8s ease-in-out infinite;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+        animation: mastery-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+    }
+
+    .gate-just-crossed .gate-threshold-mark {
+        animation: gate-crossed 0.9s ease-out 0.6s 2;
+    }
+
+    .step-just-unlocked {
+        animation: step-unlock 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 }
 

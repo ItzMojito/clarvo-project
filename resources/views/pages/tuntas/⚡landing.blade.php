@@ -185,6 +185,9 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <a href="#cara-kerja" class="hover:text-[#EBB134] transition py-2">
                             {{ $en ? 'How It Works' : 'Cara Kerja' }}
                         </a>
+                        <a href="#tanya-jawab" class="hover:text-[#EBB134] transition py-2">
+                            {{ $en ? 'Questions' : 'Tanya Jawab' }}
+                        </a>
                     </div>
 
                     {{-- ID | EN Language Toggle --}}
@@ -248,6 +251,11 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <li>
                             <a href="#cara-kerja" onclick="this.closest('[popover]')?.hidePopover?.()" class="block px-3.5 py-3 rounded-xl text-white hover:bg-white/10 font-medium">
                                 {{ $en ? 'How It Works' : 'Cara Kerja' }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tanya-jawab" onclick="this.closest('[popover]')?.hidePopover?.()" class="block px-3.5 py-3 rounded-xl text-white hover:bg-white/10 font-medium">
+                                {{ $en ? 'Questions' : 'Tanya Jawab' }}
                             </a>
                         </li>
                         <li>
@@ -362,7 +370,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                     <span class="text-[#0B352D] tabular-nums">0,89 ({{ $en ? 'passed' : 'tuntas' }})</span>
                                 </div>
                                 <div class="relative h-2.5 w-full bg-[#DCE4E1] rounded-full overflow-visible">
-                                    <div class="h-full rounded-full bg-[#0B352D] bar-shimmer-track relative overflow-hidden" style="width: 89%"></div>
+                                    <div class="h-full rounded-full bg-[#0B352D] relative overflow-hidden" style="width: 89%"></div>
                                     <div class="absolute -top-1 -bottom-1 w-[3px] bg-[#D49B27] rounded-full" style="left: 85%" aria-hidden="true"></div>
                                 </div>
                             </div>
@@ -618,6 +626,82 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                 </p>
                             </div>
                         </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        {{-- Tanya jawab: hanya pertanyaan nyata dari guru dan pelajar, dengan jawaban yang bisa dicek di kode. --}}
+        <section id="tanya-jawab" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-labelledby="faq-heading">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+                <div class="lg:col-span-4 space-y-2">
+                    <p class="text-xs font-extrabold text-[#0E4D42]">{{ $en ? 'Questions' : 'Tanya jawab' }}</p>
+                    <h2 id="faq-heading" class="text-2xl sm:text-3xl font-extrabold text-[#0B352D] tracking-tight">
+                        {{ $en ? 'What teachers and learners ask first' : 'Yang paling sering ditanyakan' }}
+                    </h2>
+                    <p class="text-sm text-[#526B65] leading-relaxed">
+                        {{ $en
+                            ? 'Short answers about answers, grading, privacy and offline use.'
+                            : 'Jawaban singkat tentang kunci jawaban, penilaian, privasi, dan pemakaian tanpa internet.' }}
+                    </p>
+                </div>
+
+                <div class="lg:col-span-8 space-y-3">
+                    @foreach ([
+                        [
+                            'q_id' => 'Apakah Clarvo memberi jawaban akhir?',
+                            'q_en' => 'Does Clarvo give the final answer?',
+                            'a_id' => 'Tidak. Tutor memberi petunjuk bertahap dan ulasan singkat, lalu soal baru dengan angka berbeda. Kunci jawaban tidak pernah dikirim ke AI dan tidak ditampilkan kepadamu.',
+                            'a_en' => 'No. The tutor gives step-by-step hints and a short review, then a new problem with different numbers. The answer key is never sent to the AI and never shown to you.',
+                        ],
+                        [
+                            'q_id' => 'Siapa yang memeriksa jawabanku?',
+                            'q_en' => 'Who checks my answer?',
+                            'a_id' => 'SymPy, pustaka matematika simbolik, memeriksa apakah jawabanmu setara dan sudah dalam bentuk yang diminta. AI (Gemini, opsional) hanya menyusun ulang kalimat umpan balik, dan saringan isSafe() menolak kalimat yang menambahkan angka atau bentuk jawaban yang tidak ada di pesan Clarvo.',
+                            'a_en' => 'SymPy, a symbolic maths library, checks whether your answer is equivalent and in the requested form. The AI (Gemini, optional) only rewords the feedback, and the isSafe() filter rejects any reply that adds numbers or answer forms Clarvo did not write.',
+                        ],
+                        [
+                            'q_id' => 'Kapan langkah berikutnya terbuka?',
+                            'q_en' => 'When does the next step open?',
+                            'a_id' => 'Saat penguasaan konsep mencapai 0,85 menurut Bayesian Knowledge Tracing. Hanya jawaban mandiri tanpa petunjuk yang dihitung. Konsep yang dikuasai lebih dari sehari lalu diuji ulang dengan angka baru di sesi berikutnya.',
+                            'a_en' => 'When your mastery of the concept reaches 0.85 under Bayesian Knowledge Tracing. Only answers given without a hint count. A concept mastered more than a day ago is checked again with new numbers in your next session.',
+                        ],
+                        [
+                            'q_id' => 'Apa yang dilihat guru?',
+                            'q_en' => 'What does the teacher see?',
+                            'a_id' => 'Kode pelajar, soal yang sedang dikerjakan, langkah saat ini, konsep terlemah, jumlah petunjuk, dan tanda perlu bantuan. Guru tidak melihat teks jawabanmu. Pelajar mode individual tidak pernah muncul di dasbor guru.',
+                            'a_en' => 'The learner code, the current problem and step, the weakest concept, the number of hints, and a needs-help flag. Teachers do not see your answer text. Individual learners never appear on a teacher dashboard.',
+                        ],
+                        [
+                            'q_id' => 'Apakah jawabanku disimpan?',
+                            'q_en' => 'Is my answer stored?',
+                            'a_id' => 'Teks jawaban tidak disimpan. Clarvo hanya mencatat hasil benar atau salah dan perubahan penguasaan. Percakapan dengan tutor hilang saat halaman ditutup. Pendaftaran individual menyimpan nama panggilan dan email.',
+                            'a_en' => 'Your answer text is not stored. Clarvo only records whether it was right and how your mastery changed. The tutor conversation is gone when you close the page. Individual sign-up stores a nickname and an email.',
+                        ],
+                        [
+                            'q_id' => 'Topik apa saja yang didukung?',
+                            'q_en' => 'Which topics are supported?',
+                            'a_id' => 'Persamaan kuadrat dalam enam langkah, serta persamaan linear, modulus, pembagian bersisa, dan rumus dasar seperti persen, Pythagoras, luas, akar, dan pangkat.',
+                            'a_en' => 'Quadratic equations in six steps, plus linear equations, modulo, division with remainder, and basic formulas such as percentages, Pythagoras, area, square roots and powers.',
+                        ],
+                        [
+                            'q_id' => 'Bisakah dipakai tanpa internet?',
+                            'q_en' => 'Does it work without internet?',
+                            'a_id' => 'Bisa, bila Clarvo dijalankan di satu laptop, misalnya di kelas. Pemeriksaan SymPy berjalan di laptop itu. Tanpa internet, hanya penyusunan ulang kalimat oleh Gemini yang tidak aktif, dan umpan balik tetap tampil.',
+                            'a_en' => 'Yes, when Clarvo runs on one laptop, for example in a classroom. SymPy checking runs on that laptop. Without internet only the Gemini rewording is off, and feedback still appears.',
+                        ],
+                    ] as $faq)
+                        <details class="faq-item group bg-white rounded-2xl border border-[#D9E4E0] open:border-[#0B352D]/30">
+                            <summary class="flex items-center justify-between gap-4 px-5 py-4 min-h-11 cursor-pointer list-none text-sm sm:text-base font-bold text-[#0B352D]">
+                                <span>{{ $en ? $faq['q_en'] : $faq['q_id'] }}</span>
+                                <svg class="faq-chevron w-5 h-5 shrink-0 text-[#526B65] group-open:text-[#C78C14]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </summary>
+                            <p class="px-5 pb-5 -mt-1 text-sm text-[#3A544E] leading-relaxed max-w-prose">
+                                {{ $en ? $faq['a_en'] : $faq['a_id'] }}
+                            </p>
+                        </details>
                     @endforeach
                 </div>
             </div>

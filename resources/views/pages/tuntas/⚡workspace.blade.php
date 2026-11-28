@@ -263,11 +263,11 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                 <p class="text-xs sm:text-xs font-bold text-[#9DC4B9]">
                     Ruang belajar &middot; Tutor matematika Sokratik
                 </p>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
-                    Masukkan Soal Matematika
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1 tracking-tight">
+                    Masukkan soal matematika
                 </h1>
-                <p class="text-xs sm:text-sm text-slate-200/90 mt-1 max-w-2xl">
-                    Dukung persamaan kuadrat, persamaan linear, modulus, hasil bagi, dan rumus dasar lain dengan bimbingan Sokratik serta verifikasi SymPy.
+                <p class="text-xs sm:text-sm text-[#D2E3DB] mt-1 max-w-2xl">
+                    Mendukung persamaan kuadrat, persamaan linear, modulus, hasil bagi, dan rumus dasar lain dengan bimbingan Sokratik serta verifikasi SymPy.
                 </p>
             </div>
         @else
@@ -298,16 +298,16 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                     </div>
 
                     <div class="flex items-center gap-3 text-xs sm:text-sm">
-                        <span class="text-slate-200 font-medium tabular-nums hidden sm:inline">
+                        <span class="text-[#D2E3DB] font-medium tabular-nums hidden sm:inline">
                             Langkah <strong class="text-white">{{ $currentStepNum }}</strong> dari {{ $totalSteps }}
                         </span>
-                        <span class="text-slate-200 font-medium tabular-nums sm:hidden">
+                        <span class="text-[#D2E3DB] font-medium tabular-nums sm:hidden">
                             Langkah {{ $currentStepNum }}/{{ $totalSteps }}
                         </span>
                         <button
                             type="button"
                             wire:click="changeProblem"
-                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer py-1 px-1.5 rounded-lg"
+                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition-colors cursor-pointer px-1.5 rounded-lg inline-flex items-center min-h-11"
                         >
                             Ganti soal
                         </button>
@@ -351,11 +351,11 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             class="step-card-item rounded-xl border p-3 flex flex-col justify-between min-h-[86px] transition-colors duration-300 {{ $cardStyle }}"
                         >
                             <div class="flex items-center justify-between gap-1">
-                                <span class="text-xs font-extrabold tabular-nums {{ $isPassed || $isActive ? 'text-[#092B24]/70' : 'text-slate-300/75' }}">
+                                <span class="text-xs font-bold tabular-nums {{ $isPassed || $isActive ? 'text-[#092B24]/70' : 'text-[#BFD8CC]' }}">
                                     {{ $meta['num'] }}
                                 </span>
                                 @if ($meta['gate_badge'])
-                                    <span class="text-xs font-extrabold px-1.5 py-0.5 rounded {{ $isActive ? 'bg-[#EAF2EF] text-[#0B352D]' : ($isPassed ? 'bg-[#092B24]/15 text-[#092B24]' : 'bg-white/10 text-slate-200') }}">
+                                    <span class="text-xs font-bold px-1.5 py-0.5 rounded {{ $isActive ? 'bg-[#EAF2EF] text-[#0B352D]' : ($isPassed ? 'bg-[#092B24]/15 text-[#092B24]' : 'bg-white/10 text-[#D2E3DB]') }}">
                                         {{ $meta['gate_badge'] }}
                                     </span>
                                 @endif
@@ -365,7 +365,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 {{ $meta['title'] }}
                             </p>
 
-                            <p class="text-xs font-semibold mt-1.5 flex items-center gap-1.5 {{ $isPassed || $isActive ? 'text-[#092B24]/80' : 'text-slate-300/70' }}">
+                            <p class="text-xs font-semibold mt-1.5 flex items-center gap-1.5 {{ $isPassed || $isActive ? 'text-[#092B24]/80' : 'text-[#BFD8CC]' }}">
                                 @if ($isPassed)
                                     <span aria-hidden="true">✓</span>
                                     <span>Selesai</span>
@@ -388,25 +388,17 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
         @if (!$session)
             <div class="max-w-xl w-full mx-auto px-4 py-8 sm:py-12">
                 <section class="bg-white rounded-2xl border border-[#D9E4E0] shadow-sm overflow-hidden animate-flow-in animate-flow-delay-1">
-                    <div class="h-1.5 bg-gradient-to-r from-[#0B352D] via-[#EBB134] to-[#0B352D]"></div>
 
                     <div class="p-6 sm:p-8">
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
-                            <h2 class="text-lg sm:text-xl font-extrabold text-[#0B352D]">Mulai Sesi Belajar</h2>
+                            <h2 class="text-lg sm:text-xl font-bold text-[#0B352D]">Mulai sesi belajar</h2>
                             @if ($role === 'student')
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
                                     Anonim &middot; Kode {{ $learnerCode }} ({{ $className }})
                                 </span>
                             @elseif ($role === 'teacher')
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
                                     Simulasi Ruang Belajar Guru
-                                </span>
-                            @else
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FEF6E2] text-[#8C6209] text-xs font-bold">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
-                                    100% Pribadi &middot; Mandiri · {{ $displayName ?: 'Tamu' }}
                                 </span>
                             @endif
                         </div>
@@ -492,9 +484,9 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                             <button
                                 type="submit"
-                                class="w-full py-3.5 px-6 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold shadow-xs transition cursor-pointer flex items-center justify-center gap-2 min-h-[48px]"
+                                class="w-full py-3.5 px-6 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-bold shadow-xs transition cursor-pointer flex items-center justify-center gap-2 min-h-[48px]"
                             >
-                                <span wire:loading.remove wire:target="startNewProblem">Mulai Belajar</span>
+                                <span wire:loading.remove wire:target="startNewProblem">Mulai belajar</span>
                                 <span wire:loading wire:target="startNewProblem">Menyiapkan ruang belajar...</span>
                             </button>
                         </form>
@@ -577,13 +569,13 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                     @if ($session->status === 'remedial')
                         <div class="gate-card-flow rounded-2xl bg-[#0B352D] text-white p-5 sm:p-6 border border-[#1B574B] shadow-md space-y-4">
                             <div class="flex flex-wrap items-center gap-2.5">
-                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-extrabold">
+                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-bold">
                                     {{ $remedialReview['badge'] ?? 'Ulasan singkat' }}
                                 </span>
-                                <span class="text-xs font-medium text-slate-300">{{ $remedialReview['title'] ?? 'penyegaran konsep' }}</span>
+                                <span class="text-xs font-medium text-[#BFD8CC]">{{ $remedialReview['title'] ?? 'penyegaran konsep' }}</span>
                             </div>
 
-                            <p class="text-sm sm:text-base text-slate-100 leading-relaxed math-expr">
+                            <p class="text-sm sm:text-base text-[#F3F7F5] leading-relaxed math-expr">
                                 {!! $this->formatMath($remedialReview['body'] ?? '') !!}
                             </p>
 
@@ -591,7 +583,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 <button
                                     type="button"
                                     wire:click="continueReview"
-                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
+                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-bold transition cursor-pointer min-h-[44px]"
                                 >
                                     <span wire:loading.remove wire:target="continueReview">Lanjutkan dengan angka baru</span>
                                     <span wire:loading wire:target="continueReview">Menyiapkan soal...</span>
@@ -601,7 +593,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                     @elseif ($session->status === 'completed')
                         <div class="gate-card-flow rounded-2xl bg-[#0B352D] text-white p-5 sm:p-6 border-2 border-[#EBB134] shadow-md space-y-4">
                             <div class="flex items-center gap-2.5">
-                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-extrabold">
+                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-bold">
                                     ✓ Sesi Tuntas
                                 </span>
                                 <span class="text-xs font-medium text-[#9DC4B9]">gerbang penguasaan tercapai</span>
@@ -610,7 +602,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             <p class="text-base sm:text-lg font-bold leading-snug">
                                 Selamat! Kamu menyelesaikan seluruh tahapan dan soal transfer secara mandiri.
                             </p>
-                            <p class="text-xs sm:text-sm text-slate-200">
+                            <p class="text-xs sm:text-sm text-[#D2E3DB]">
                                 Semua pembuktian dikerjakan mandiri tanpa bocoran kunci jawaban.
                             </p>
 
@@ -618,7 +610,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 <button
                                     type="button"
                                     wire:click="changeProblem"
-                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[44px]"
+                                    class="px-5 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-bold transition cursor-pointer min-h-[44px]"
                                 >
                                     Coba Soal Baru
                                 </button>
@@ -638,10 +630,10 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                         @endphp
                         <div class="gate-card-flow rounded-2xl bg-[#0B352D] text-white p-5 sm:p-6 shadow-md space-y-4">
                             <div class="flex items-center gap-2.5">
-                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-extrabold">
+                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-bold">
                                     {{ $activeMeta['pill'] }}
                                 </span>
-                                <span class="text-xs font-medium text-slate-300">
+                                <span class="text-xs font-medium text-[#BFD8CC]">
                                     {{ $activeMeta['pill_sub'] }}
                                 </span>
                             </div>
@@ -651,7 +643,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             </p>
 
                             <form wire:submit="submitAnswer" class="space-y-2" data-math-wrapper>
-                                <label for="micro-answer" class="block text-xs font-medium text-slate-300">
+                                <label for="micro-answer" class="block text-xs font-medium text-[#BFD8CC]">
                                     Jawabanmu atau Tanya Tutor AI
                                 </label>
 
@@ -687,7 +679,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                     <div class="flex gap-2.5">
                                         <button
                                             type="submit"
-                                            class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer min-h-[46px] whitespace-nowrap"
+                                            class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-bold transition cursor-pointer min-h-[46px] whitespace-nowrap"
                                         >
                                             <span wire:loading.remove wire:target="submitAnswer">Periksa</span>
                                             <span wire:loading wire:target="submitAnswer">Memeriksa...</span>
@@ -706,7 +698,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 <x-math-keyboard keypad-id="answer-math-keypad" input-id="micro-answer" mode="answer" />
                             </form>
 
-                            <p class="text-xs text-slate-300/85 pt-0.5">
+                            <p class="text-xs text-[#BFD8CC] pt-0.5">
                                 Jawaban akhir tidak pernah ditampilkan.
                             </p>
                         </div>
@@ -733,7 +725,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             <div class="space-y-1.5">
                                 <div class="flex items-baseline justify-between gap-2">
                                     <span class="text-xs sm:text-sm font-medium text-[#3A544E]">{{ $label }}</span>
-                                    <span class="text-base sm:text-lg font-extrabold tabular-nums {{ $passed ? 'text-emerald-700' : 'text-[#0B352D]' }}">
+                                    <span class="text-base sm:text-lg font-bold tabular-nums {{ $passed ? 'text-emerald-700' : 'text-[#0B352D]' }}">
                                         {{ number_format($val, 2, ',', '.') }}
                                     </span>
                                 </div>

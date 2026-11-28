@@ -158,15 +158,14 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
         <div class="space-y-4 animate-flow-in">
             <div class="flex flex-wrap items-end justify-between gap-3">
                 <div>
-                    <p class="text-xs font-bold text-[#9DC4B9]">
+                    <p class="text-sm font-bold text-[#9DC4B9]">
                         Dasbor guru &middot; Pemantauan penguasaan BKT
                     </p>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
-                        Pemantauan Kemajuan Kelas
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1 tracking-tight">
+                        Pemantauan kemajuan kelas
                     </h1>
                 </div>
-                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-xs font-medium text-slate-200">
-                    <span class="w-2 h-2 rounded-full bg-[#EBB134] active-beacon" aria-hidden="true"></span>
+                <span class="inline-flex items-center px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 text-sm font-medium text-[#D2E3DB]">
                     Ambang gerbang 0,85
                 </span>
             </div>
@@ -174,23 +173,23 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
             {{-- Summary KPI Cards Inside Kawung Header --}}
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div class="rounded-xl bg-white/10 border border-white/15 backdrop-blur-xs p-3.5 sm:p-4">
-                    <p class="text-xs font-bold text-[#9DC4B9]">Total pelajar</p>
-                    <p class="text-2xl font-extrabold text-white mt-1 tabular-nums">{{ $stats['total'] }}</p>
+                    <p class="text-sm font-bold text-[#9DC4B9]">Total pelajar</p>
+                    <p class="text-2xl font-bold text-white mt-1 tabular-nums">{{ $stats['total'] }}</p>
                 </div>
 
                 <div class="rounded-xl p-3.5 sm:p-4 {{ $stats['needs_help'] > 0 ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'bg-white/10 border border-white/15 text-white' }}">
-                    <p class="text-xs font-bold {{ $stats['needs_help'] > 0 ? 'text-[#092B24]/80' : 'text-[#9DC4B9]' }}">Perlu bantuan</p>
-                    <p class="text-2xl font-extrabold mt-1 tabular-nums">{{ $stats['needs_help'] }}</p>
+                    <p class="text-sm font-bold {{ $stats['needs_help'] > 0 ? 'text-[#092B24]/80' : 'text-[#9DC4B9]' }}">Perlu bantuan</p>
+                    <p class="text-2xl font-bold mt-1 tabular-nums">{{ $stats['needs_help'] }}</p>
                 </div>
 
                 <div class="rounded-xl bg-white/10 border border-white/15 backdrop-blur-xs p-3.5 sm:p-4">
-                    <p class="text-xs font-bold text-[#9DC4B9]">Sedang belajar</p>
-                    <p class="text-2xl font-extrabold text-white mt-1 tabular-nums">{{ $stats['active'] }}</p>
+                    <p class="text-sm font-bold text-[#9DC4B9]">Sedang belajar</p>
+                    <p class="text-2xl font-bold text-white mt-1 tabular-nums">{{ $stats['active'] }}</p>
                 </div>
 
                 <div class="rounded-xl bg-white/10 border border-white/15 backdrop-blur-xs p-3.5 sm:p-4">
-                    <p class="text-xs font-bold text-[#9DC4B9]">Tuntas mandiri</p>
-                    <p class="text-2xl font-extrabold text-[#EBB134] mt-1 tabular-nums">{{ $stats['completed'] }}</p>
+                    <p class="text-sm font-bold text-[#9DC4B9]">Tuntas mandiri</p>
+                    <p class="text-2xl font-bold text-white mt-1 tabular-nums">{{ $stats['completed'] }}</p>
                 </div>
             </div>
         </div>
@@ -201,16 +200,16 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
             {{-- Toolbar Filter & Search --}}
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 id="class-overview-heading" class="text-base sm:text-lg font-extrabold text-[#0B352D]">
-                        Daftar Sesi Pelajar ({{ $rows->count() }})
+                    <h2 id="class-overview-heading" class="text-base sm:text-lg font-bold text-[#0B352D]">
+                        Daftar sesi pelajar ({{ $rows->count() }})
                     </h2>
-                    <p class="text-xs sm:text-sm text-[#526B65] mt-0.5">
+                    <p class="text-sm text-[#526B65] mt-0.5 max-w-[65ch]">
                         Penguasaan di bawah 0,85 belum membuka gerbang. Rasio petunjuk &gt; 1 menandakan pelajar bergantung pada bantuan.
                     </p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <search>
+                <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                    <search class="w-full sm:w-auto">
                         <form wire:submit.prevent class="relative">
                             <label for="teacher-search" class="visually-hidden">Cari kode pelajar</label>
                             <input
@@ -221,7 +220,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                 autocorrect="off"
                                 autocapitalize="characters"
                                 spellcheck="false"
-                                class="rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2 text-xs sm:text-sm font-medium text-[#0B352D] placeholder:text-[#667B76] focus:bg-white focus:border-[#0B352D] min-h-11 w-44 sm:w-52"
+                                class="w-full sm:w-64 rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2 text-sm font-medium text-[#0B352D] placeholder:text-[#667B76] focus:bg-white focus:border-[#0B352D] min-h-11 w-44 sm:w-52"
                             >
                         </form>
                     </search>
@@ -229,7 +228,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                     <div class="flex flex-wrap gap-1.5" role="group" aria-label="Filter status pelajar">
                         @foreach ([
                             'all' => 'Semua',
-                            'help' => 'Perlu Bantuan',
+                            'help' => 'Perlu bantuan',
                             'active' => 'Aktif',
                             'completed' => 'Tuntas',
                         ] as $key => $label)
@@ -237,7 +236,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                 type="button"
                                 wire:click="setFilter('{{ $key }}')"
                                 aria-pressed="{{ $filter === $key ? 'true' : 'false' }}"
-                                class="px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer min-h-11 {{ $filter === $key ? 'bg-[#0B352D] text-white shadow-xs' : 'bg-[#EAF2EF] text-[#0B352D] hover:bg-[#DCEAE5]' }}"
+                                class="px-3 py-2 rounded-xl text-sm font-bold transition cursor-pointer min-h-11 {{ $filter === $key ? 'bg-[#0B352D] text-white shadow-xs' : 'bg-[#EAF2EF] text-[#0B352D] hover:bg-[#DCEAE5]' }}"
                             >
                                 {{ $label }}
                             </button>
@@ -250,7 +249,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
             @if ($rows->isEmpty())
                 <div class="rounded-xl border border-dashed border-[#C7D6D1] bg-[#FAFDFC] p-10 text-center space-y-2">
                     <p class="text-sm font-bold text-[#0B352D]">Tidak ada data pelajar pada filter ini.</p>
-                    <p class="text-xs text-[#526B65]">Ubah kata kunci pencarian atau pilih filter "Semua".</p>
+                    <p class="text-sm text-[#526B65]">Ubah kata kunci pencarian atau pilih filter "Semua".</p>
                 </div>
             @else
                 <div tabindex="0" role="region" aria-labelledby="teacher-table-caption" class="kawung-table-wrapper">
@@ -279,33 +278,33 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                 <tr wire:key="teacher-row-{{ $r->id }}">
                                     <th scope="row">
                                         <div class="flex items-center gap-2">
-                                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#EBB134] text-[#092B24] font-extrabold text-xs shrink-0">
+                                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#EAF2EF] text-[#0B352D] border border-[#C8D7D2] text-[#092B24] font-bold text-sm shrink-0">
                                                 {{ $r->code }}
                                             </span>
-                                            <span class="text-xs font-medium opacity-75 md:hidden">{{ $r->class_name }}</span>
+                                            <span class="text-sm font-medium opacity-75 md:hidden">{{ $r->class_name }}</span>
                                         </div>
                                     </th>
                                     <td data-label="Soal aktif" class="math-expr font-semibold text-[#0B352D] whitespace-nowrap">
-                                        {!! $this->formatMath($r->problem) !!}
+                                        <span>{!! $this->formatMath($r->problem) !!}</span>
                                     </td>
                                     <td data-label="Langkah saat ini" class="text-[#1E3B35] font-medium">
                                         @if ($r->status === 'completed')
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-sm font-bold">
                                                 <span aria-hidden="true">✓</span> {{ $r->current_step }}
                                             </span>
                                         @elseif ($r->status === 'remedial')
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-sm font-bold">
                                                 <span aria-hidden="true">↻</span> {{ $r->current_step }}
                                             </span>
                                         @else
-                                            <span class="text-xs sm:text-sm font-medium">{{ $r->current_step }}</span>
+                                            <span class="text-sm font-medium">{{ $r->current_step }}</span>
                                         @endif
                                     </td>
                                     <td data-label="Konsep terlemah">
-                                        <div class="min-w-[170px] space-y-1">
-                                            <div class="flex items-center justify-between gap-2 text-xs">
-                                                <span class="font-medium text-[#3A544E] truncate">{{ $r->weakest_name }}</span>
-                                                <span class="font-extrabold tabular-nums {{ $passedGate ? 'text-emerald-700' : 'text-[#0B352D]' }}">
+                                        <div class="flex-1 min-w-0 max-w-[240px] sm:min-w-[170px] space-y-1">
+                                            <div class="flex items-center justify-between gap-2 text-sm">
+                                                <span class="font-medium text-[#3A544E]">{{ $r->weakest_name }}</span>
+                                                <span class="font-bold tabular-nums {{ $passedGate ? 'text-emerald-700' : 'text-[#0B352D]' }}">
                                                     {{ number_format($r->weakest_score, 2, ',', '.') }}
                                                 </span>
                                             </div>
@@ -320,25 +319,25 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                     </td>
                                     <td data-label="Petunjuk (per langkah)" class="tabular-nums">
                                         @if ($highHintRatio)
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-sm font-bold">
                                                 <x-icon name="bulb" :size="14" /> {{ $r->hints_label }}
                                             </span>
                                         @else
-                                            <span class="text-xs sm:text-sm font-semibold text-[#3A544E]">{{ $r->hints_label }}</span>
+                                            <span class="text-sm font-semibold text-[#3A544E]">{{ $r->hints_label }}</span>
                                         @endif
                                     </td>
                                     <td data-label="Perlu bantuan">
                                         @if ($r->needs_help)
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-sm font-bold">
                                                 <x-icon name="warning" :size="14" /> {{ $r->needs_help }}
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 text-xs font-medium text-[#667B76]">
+                                            <span class="inline-flex items-center gap-1 text-sm font-medium text-[#667B76]">
                                                 Aman
                                             </span>
                                         @endif
                                     </td>
-                                    <td data-label="Aktivitas terakhir" class="text-xs font-medium text-[#526B65] tabular-nums whitespace-nowrap">
+                                    <td data-label="Aktivitas terakhir" class="text-sm font-medium text-[#526B65] tabular-nums whitespace-nowrap">
                                         {{ $r->last_activity }}
                                     </td>
                                 </tr>

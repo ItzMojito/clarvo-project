@@ -411,7 +411,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                         <p class="text-xs sm:text-sm text-[#526B65]">
                             @if ($role === 'individual')
-                                Ruang latihan pribadi sepenuhnya — tanpa kode kelas dan sesi tidak dikirim ke daftar pantauan kelas mana pun.
+                                Ruang latihan ini sepenuhnya pribadi: tanpa kode kelas, dan sesimu tidak muncul di daftar pantauan kelas mana pun.
                             @elseif ($role === 'teacher')
                                 Coba pengalaman belajar Sokratik sebagai simulasi. Percobaan simulasi ini bersifat privat dan tidak mengotori daftar pantauan kelas.
                             @else

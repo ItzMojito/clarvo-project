@@ -538,7 +538,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'No Teacher Dashboard — pure private practice space' : 'Tanpa Dasbor Guru — murni ruang latihan pribadi' }}</span>
+                                <span>{{ $en ? 'No Teacher Dashboard, just your own practice space' : 'Tanpa Dasbor Guru, murni ruang latihan pribadi' }}</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#C68913] font-bold mt-0.5" aria-hidden="true">✓</span>
@@ -604,7 +604,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         ],
                         [
                             'num' => '4',
-                            'title_id' => '4. Gerbang Mandiri 0.85',
+                            'title_id' => '4. Gerbang Mandiri 0,85',
                             'title_en' => '4. Unaided Mastery Gate 0.85',
                             'desc_id' => 'Membuka langkah berikutnya hanya setelah kamu menyelesaikan soal angka baru tanpa bantuan.',
                             'desc_en' => 'Unlocks the next step only after solving a fresh isomorphic problem completely unaided.',

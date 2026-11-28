@@ -334,7 +334,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                             </span>
                                         @else
                                             <span class="inline-flex items-center gap-1 text-xs font-medium text-[#667B76]">
-                                                <span aria-hidden="true">—</span> Aman
+                                                Aman
                                             </span>
                                         @endif
                                     </td>

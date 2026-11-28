@@ -55,7 +55,7 @@
 
         <div class="p-6 space-y-4 text-sm text-[#1E3B35] leading-relaxed">
             <p>
-                <strong>Clarvo</strong> adalah sistem tutor matematika cerdas yang memadukan tiga komponen inti:
+                <strong>Clarvo</strong> adalah tutor matematika yang memadukan tiga komponen inti:
             </p>
             <ul class="space-y-2.5 text-xs sm:text-sm">
                 <li class="flex items-start gap-2.5">

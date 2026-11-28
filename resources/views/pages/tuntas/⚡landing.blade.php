@@ -492,7 +492,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="text-[#0E4D42] font-bold mt-0.5" aria-hidden="true">✓</span>
-                                <span>{{ $en ? 'Automatic alerts for learners needing guidance' : 'Notifikasi otomatis pelajar yang butuh bimbingan' }}</span>
+                                <span>{{ $en ? 'Learners who need guidance are flagged automatically' : 'Tanda otomatis untuk pelajar yang butuh bimbingan' }}</span>
                             </li>
                         </ul>
 

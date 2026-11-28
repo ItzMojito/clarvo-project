@@ -68,6 +68,16 @@ class RoleAuthAndLandingTest extends TestCase
             ->assertRedirect(route('tuntas.landing', ['auth' => 'login', 'role' => 'teacher']));
     }
 
+    public function test_landing_has_a_faq_with_a_nav_link(): void
+    {
+        $this->get(route('tuntas.landing'))
+            ->assertOk()
+            ->assertSee('href="#tanya-jawab"', false)
+            ->assertSee('id="tanya-jawab"', false)
+            ->assertSee('Apakah Clarvo memberi jawaban akhir?')
+            ->assertSee('Teks jawaban tidak disimpan.');
+    }
+
     public function test_individual_sign_up_needs_the_age_or_guardian_consent(): void
     {
         Livewire::test('pages::tuntas.landing')

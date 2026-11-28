@@ -346,6 +346,8 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                         <div
                             @if($isActive) aria-current="step" @endif
+                            data-step-order="{{ (int) $st->step_order }}"
+                            data-step-status="{{ $st->status }}"
                             class="step-card-item rounded-xl border p-3 flex flex-col justify-between min-h-[86px] transition-colors duration-300 {{ $cardStyle }}"
                         >
                             <div class="flex items-center justify-between gap-1">
@@ -736,9 +738,13 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                     </span>
                                 </div>
 
-                                <div class="mastery-bar-track relative h-2.5 w-full bg-[#DCE4E1] rounded-full overflow-visible">
+                                <div
+                                    class="mastery-bar-track relative h-2.5 w-full bg-[#DCE4E1] rounded-full overflow-visible"
+                                    data-mastery-code="{{ $m->code }}"
+                                    data-mastery-value="{{ $val }}"
+                                >
                                     <div
-                                        class="mastery-bar-fill relative h-full rounded-full overflow-hidden {{ $passed ? 'bg-emerald-600' : 'bg-[#0E4D42]' }} {{ $passed || $val > 0.35 ? 'bar-shimmer-track' : '' }}"
+                                        class="mastery-bar-fill relative h-full rounded-full overflow-hidden {{ $passed ? 'bg-emerald-600' : 'bg-[#0E4D42]' }}"
                                         style="width: {{ min($pct, 100) }}%"
                                     ></div>
                                     {{-- Garis Kuning Ambang Gerbang 0.85 --}}

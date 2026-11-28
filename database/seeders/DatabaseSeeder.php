@@ -8,9 +8,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call([
-            QuadraticCurriculumSeeder::class,
-            ClassDemoSeeder::class,
-        ]);
+        $this->call(QuadraticCurriculumSeeder::class);
+
+        // Akun demo memakai kata sandi yang tertulis di kode, jadi jangan dibuat di server publik.
+        if (! app()->isProduction()) {
+            $this->call(ClassDemoSeeder::class);
+        }
     }
 }

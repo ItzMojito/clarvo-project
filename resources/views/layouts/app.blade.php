@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Clarvo · Paham dulu, baru lanjut' }}</title>
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#F3F6F5] text-[#132A25] antialiased min-h-dvh flex flex-col selection:bg-[#EBB134]/30 selection:text-[#0B352D]">
@@ -12,13 +13,15 @@
 
     {{ $slot }}
 
-    {{-- AGPL-3.0 pasal 13: pengguna aplikasi yang di-hosting harus ditawari source code-nya. --}}
+    {{-- AGPL-3.0 pasal 13: pengguna aplikasi yang di-hosting harus ditawari source code-nya. Beranda punya footer sendiri. --}}
+    @unless (request()->routeIs('tuntas.landing'))
     <footer class="mt-auto border-t border-[#DCE6E2] px-4 py-4 text-sm text-[#3A544E]">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
-            <span>Clarvo · Purwarupa untuk NEC 6</span>
+            <span>Clarvo · Purwarupa</span>
             <a href="https://github.com/ItzMojito/clarvo-project" class="font-medium text-[#0B352D] underline underline-offset-2">Kode sumber (AGPL-3.0)</a>
         </div>
     </footer>
+    @endunless
 
     {{-- Modal Informasi "Tentang Clarvo" (Native Dialog) --}}
     <dialog id="about-clarvo-dialog" class="kawung-dialog" aria-labelledby="about-dialog-title">
@@ -30,14 +33,14 @@
             <div class="relative z-10 flex items-center gap-3">
                 <x-logo-mark :size="36" class="text-[#F3F7F5]" />
                 <div>
-                    <h2 id="about-dialog-title" class="text-base font-extrabold tracking-wide text-white">Tentang Clarvo</h2>
+                    <h2 id="about-dialog-title" class="text-base font-bold tracking-wide text-white">Tentang Clarvo</h2>
                     <p class="text-xs font-medium text-[#EBB134]">Paham dulu, baru lanjut.</p>
                 </div>
             </div>
             <button
                 type="button"
                 data-close-dialog
-                class="relative z-10 w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                class="relative z-10 w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Tutup dialog"
             >
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -85,7 +88,7 @@
                 <button
                     type="button"
                     data-close-dialog
-                    class="px-5 py-2.5 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-sm font-semibold transition cursor-pointer"
+                    class="px-5 rounded-xl bg-[#0B352D] hover:bg-[#134A3F] text-white text-base font-semibold transition-colors cursor-pointer min-h-12"
                 >
                     Mengerti
                 </button>
@@ -112,10 +115,10 @@
                 <div class="relative z-10 flex items-center gap-3">
                     <x-logo-mark :size="40" class="text-[#F3F7F5]" />
                     <div>
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#072620] text-[#EBB134] text-xs font-extrabold mb-1">
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#072620] text-[#EBB134] text-xs font-bold mb-1">
                             Tahap pengembangan
                         </span>
-                        <h2 id="welcome-dialog-title" class="text-base sm:text-lg font-extrabold text-white leading-tight">
+                        <h2 id="welcome-dialog-title" class="text-base sm:text-lg font-bold text-white leading-tight">
                             Selamat Datang di Clarvo
                         </h2>
                     </div>
@@ -123,7 +126,7 @@
                 <button
                     type="button"
                     data-close-dialog
-                    class="relative z-10 w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                    class="relative z-10 w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
                     aria-label="Tutup informasi pengembangan"
                 >
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -138,32 +141,32 @@
                 </div>
 
                 <div class="space-y-2">
-                    <p class="text-xs font-extrabold text-[#0B352D]">
+                    <p class="text-xs font-bold text-[#0B352D]">
                         Jenis soal &amp; rumus yang sudah didukung saat ini:
                     </p>
                     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
-                            <p class="font-extrabold text-[#0B352D]">1. Persamaan Kuadrat</p>
+                            <p class="font-bold text-[#0B352D]">1. Persamaan Kuadrat</p>
                             <p class="text-[#526B65]">Pemfaktoran &amp; mencari akar bulat.</p>
                             <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">x^2 - 5x + 6 = 0</code>
                         </li>
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
-                            <p class="font-extrabold text-[#0B352D]">2. Persamaan Linear</p>
+                            <p class="font-bold text-[#0B352D]">2. Persamaan Linear</p>
                             <p class="text-[#526B65]">Pindah ruas &amp; mencari nilai <em>x</em>.</p>
                             <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">2x + 6 = 14</code>
                         </li>
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
-                            <p class="font-extrabold text-[#0B352D]">3. Modulus (Sisa Bagi)</p>
+                            <p class="font-bold text-[#0B352D]">3. Modulus (Sisa Bagi)</p>
                             <p class="text-[#526B65]">Operasi <code>mod</code> atau <code>%</code>.</p>
                             <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">17 mod 5</code>
                         </li>
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
-                            <p class="font-extrabold text-[#0B352D]">4. Hasil Bagi &amp; Pembagian</p>
+                            <p class="font-bold text-[#0B352D]">4. Hasil Bagi &amp; Pembagian</p>
                             <p class="text-[#526B65]">Hasil bagi bulat &amp; sisa pembagian.</p>
                             <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">19 / 4</code>
                         </li>
                         <li class="sm:col-span-2 rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1.5">
-                            <p class="font-extrabold text-[#0B352D]">5. Rumus &amp; Aritmetika Dasar Lainnya</p>
+                            <p class="font-bold text-[#0B352D]">5. Rumus &amp; Aritmetika Dasar Lainnya</p>
                             <p class="text-[#526B65]">Persentase, pangkat &amp; akar, Pythagoras, luas/keliling bangun datar, dan hitung campur.</p>
                             <div class="flex flex-wrap gap-1.5">
                                 <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">25% dari 80</code>
@@ -180,9 +183,9 @@
                     <button
                         type="button"
                         data-close-dialog
-                        class="px-5 py-2.5 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-sm font-extrabold transition cursor-pointer"
+                        class="px-5 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-base font-semibold transition-colors cursor-pointer min-h-12"
                     >
-                        Mengerti, Mulai Belajar
+                        Mengerti, mulai belajar
                     </button>
                 </div>
             </div>

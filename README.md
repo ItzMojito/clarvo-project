@@ -1,10 +1,44 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/clarvo-logo-light.svg">
+  <img src="docs/images/clarvo-logo.svg" alt="Clarvo logo" width="96">
+</picture>
+
 # Clarvo
 
-Clarvo is a math tutor that lets a learner move on only after they have shown they understand the current step. It is a working prototype built for the NEC 6 essay competition.
+*Earn the next step.*
+
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-157A55)](LICENSE)
+[![Laravel 13](https://img.shields.io/badge/Laravel-13-0B352D)](https://laravel.com)
+[![Livewire 4](https://img.shields.io/badge/Livewire-4-0B352D)](https://livewire.laravel.com)
+[![SymPy](https://img.shields.io/badge/checked%20by-SymPy-EBB134)](https://www.sympy.org)
+
+[Features](#what-it-does) • [How it works](#how-it-works) • [Setup](#setup) • [Licence](#licence)
+
+</div>
+
+Clarvo is a math tutor that will not hand you the answer. It breaks a problem into steps, checks every answer with a symbolic math engine, and opens the next step only when your mastery of the concept says you are ready. Teachers see where each learner is stuck; private learners stay invisible to everyone but themselves. Built in Laravel 13 and Livewire 4 for the NEC 6 essay competition.
+
+<p align="center">
+  <img src="docs/images/ruang-belajar.png" alt="Clarvo learning space: a learner answers 2, 3 to a sign question, the tutor explains the sign rule, and mastery for signed-integer rules drops to 0,19" width="900">
+</p>
 
 ## Ringkasan
 
-Clarvo adalah purwarupa tutor matematika untuk pelajar sekolah dan mahasiswa tahun pertama. Soal dipecah menjadi langkah-langkah, dan gerbang ke langkah berikutnya baru terbuka setelah penguasaan konsep mencapai 0,85 menurut Bayesian Knowledge Tracing. Jawaban diperiksa secara deterministik oleh SymPy. Model bahasa (Gemini, opsional) hanya memparafrase umpan balik dan teori singkat, dan tidak pernah menerima kunci jawaban. Pelajar masuk dengan kode kelas, guru memantau kelas lewat dasbor, dan pengguna mandiri belajar secara pribadi tanpa tampil di dasbor guru.
+Clarvo adalah purwarupa tutor matematika untuk pelajar sekolah dan mahasiswa tahun pertama. Soal dipecah menjadi langkah-langkah, dan gerbang ke langkah berikutnya baru terbuka setelah penguasaan konsep mencapai 0,85 menurut Bayesian Knowledge Tracing. Jawaban diperiksa secara deterministik oleh SymPy. Model bahasa (Gemini, opsional) hanya memparafrase umpan balik dan teori singkat, dan tidak pernah menerima kunci jawaban. Slogan bahasa Indonesianya: *Paham dulu, baru lanjut.*
+
+## Why
+
+A chatbot that answers everything makes practice look better than it is. In a field experiment with nearly 1,000 high-school students, those who practised with plain GPT-4 scored 48% higher during practice and 17% lower on the exam without it (Bastani et al., 2025, *PNAS*). Indonesia adds a second problem: many learners reach quadratics without the integer and sign skills underneath them.
+
+So Clarvo does three things a chat window does not. It traces a problem back to its prerequisites and checks those first. It decides who moves on in code, from mastery scores, so no prompt can talk it into skipping a step. And it lets a language model reword feedback, never grade it or reveal it.
+
+## Screenshots
+
+| Landing | Teacher dashboard |
+|---|---|
+| ![Clarvo landing page with sign-in options for students, teachers and individual learners](docs/images/beranda.png) | ![Teacher dashboard: five demo learners, with S02 flagged as needing help at Gate 1](docs/images/dasbor-guru.png) |
 
 ## What it does
 
@@ -27,6 +61,7 @@ A learner enters a problem, or picks an example, and works through it step by st
 - **Adaptive theory.** Before each step the tutor gives a short explanation at one of three levels (simple, standard, advanced), chosen from the learner's mastery, recent mistakes and hint use.
 - **Hints, never answers.** The learner can ask for a hint at any step. The tutor never shows the final answer.
 - **Review before retrying.** A wrong answer at step 1, or three wrong answers at a gate, leads to a short review and then new numbers. After three wrong answers the teacher dashboard flags the learner.
+- **Re-check in a later session.** When a prerequisite was mastered more than 24 hours ago (`TUNTAS_RECHECK_AFTER_HOURS`), the next session opens with one gate question on new numbers instead of skipping ahead.
 - **Three ways in.** Students join with a class code and a learner code (optionally a PIN). Teachers sign in with email and password. Individual learners sign in or continue as a guest; their sessions are private.
 - **Teacher dashboard.** One row per learner in non-private classes: current step, weakest concept, hints per step, and a "needs help" flag, with filters and search. It refreshes every 15 seconds.
 
@@ -60,6 +95,9 @@ FastAPI, port 8001   optional
 - Answer text is never written to the database. Each attempt is logged with its result and mastery change only.
 - The tutor conversation lives in the page's memory and is gone when the page closes.
 - Gemini receives only the text Clarvo has already written, never the answer key.
+- Individual sign-up asks the learner to confirm they are 18 or older, or that a parent or guardian has agreed. Indonesia's Personal Data Protection Law (UU No. 27 Tahun 2022) requires a parent's or guardian's consent before a child's data is processed. Guest mode stores no name or email.
+- Class learners are known only by their code. Before a class uses Clarvo with real students, agree on consent with the school and the parents.
+- `php artisan migrate:fresh --seed` creates demo sign-ins whose password is written in the code. The seeder skips them when `APP_ENV=production`, and the sign-in form hides the "Isi Demo" buttons there.
 
 ## Requirements
 
@@ -117,6 +155,8 @@ php artisan serve
 
 Then open http://127.0.0.1:8000/ and sign in, or continue as a guest.
 
+For a presentation, follow [docs/DEMO.md](docs/DEMO.md) (in Indonesian). It covers `php artisan clarvo:demo-reset`, `php artisan clarvo:check`, `scripts/start-demo.ps1`, the demo flow, and testing on a real phone.
+
 ## Tests
 
 ```bash
@@ -143,12 +183,13 @@ python -m unittest -v
 This is a prototype for a competition entry, not a finished product. Known limits:
 
 - The interface is in Indonesian only.
+- The privacy notes above are a starting point for a school trial, not legal advice.
 - A teacher sees every learner in a non-private class, not only the learners in their own class.
 - Mastery parameters are illustrative and have not been fitted to real learner data.
 
 ## Contributing
 
-Work goes through pull requests into `main`. The project lead reviews and merges. Before opening one, run `php artisan test`, and `vendor/bin/pint` on the files you changed.
+Work goes through pull requests into `main`. The project lead reviews and merges. Before opening one, run `php artisan test`, and `vendor/bin/pint` on the files you changed. GitHub Actions runs both test suites on every pull request and checks the changed PHP files with Pint.
 
 ## Licence
 

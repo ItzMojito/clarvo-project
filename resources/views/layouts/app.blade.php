@@ -121,7 +121,7 @@
                         <x-icon name="book" :size="20" />
                     </span>
                     <div>
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/15 text-[#EBB134] text-xs font-extrabold mb-1">
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#072620] text-[#EBB134] text-xs font-extrabold mb-1">
                             Tahap pengembangan
                         </span>
                         <h2 id="welcome-dialog-title" class="text-base sm:text-lg font-extrabold text-white leading-tight">

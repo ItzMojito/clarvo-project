@@ -98,7 +98,7 @@ class MultiTopicSupportAndOnboardingTest extends TestCase
 
     public function test_parser_supports_modulo_division_linear_and_basic_formulas(): void
     {
-        $gen = new IsomorphicItemGeneratorService();
+        $gen = new IsomorphicItemGeneratorService;
 
         $mod = $gen->parseProblem('17 mod 5');
         $this->assertSame('modulo', $mod['family']);
@@ -154,13 +154,13 @@ class MultiTopicSupportAndOnboardingTest extends TestCase
     {
         $verifier = $this->mock(SymbolicVerifierService::class);
         $verifier->shouldReceive('verify')->once()->andReturn([
-            'status'          => 'wrong',
-            'is_correct'      => false,
+            'status' => 'wrong',
+            'is_correct' => false,
             'diagnostic_note' => 'Belum tepat.',
         ]);
         $verifier->shouldReceive('verify')->times(4)->andReturn([
-            'status'          => 'correct',
-            'is_correct'      => true,
+            'status' => 'correct',
+            'is_correct' => true,
             'diagnostic_note' => 'Tepat.',
         ]);
 

@@ -33,8 +33,8 @@
     class="math-kbd-panel"
 >
     {{-- Baris pintasan cepat sesuai konteks (box soal / box jawaban & chat AI) --}}
-    <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-[#DCE6E2]">
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+    <div class="flex items-start justify-between gap-2 pb-1.5 border-b border-[#DCE6E2]">
+        <div class="flex flex-wrap items-center gap-1.5">
             @foreach ($quickChips as $chip)
                 <button
                     type="button"
@@ -51,7 +51,7 @@
             type="button"
             data-math-action="close"
             aria-label="Tutup keyboard matematika"
-            class="shrink-0 px-2 py-1 rounded-lg text-xs font-bold text-[#526B65] hover:text-[#0B352D] hover:bg-[#E4ECE9] transition cursor-pointer min-h-[32px]"
+            class="math-kbd-close"
         >
             Tutup
         </button>

@@ -20,7 +20,7 @@ class AdaptiveTheoryService
             return 'baby';
         }
 
-        if ($pL >= 0.65 && $failedAttempts === 0 && !$justDropped) {
+        if ($pL >= 0.65 && $failedAttempts === 0 && ! $justDropped) {
             return 'advanced';
         }
 
@@ -30,9 +30,9 @@ class AdaptiveTheoryService
     public function tierLabel(string $tier): string
     {
         return match ($tier) {
-            'baby'     => 'Teori Dasar · Bahasa Sederhana',
+            'baby' => 'Teori Dasar · Bahasa Sederhana',
             'advanced' => 'Teori Lanjutan · Analisis Mendalam',
-            default    => 'Teori Singkat · Terstruktur',
+            default => 'Teori Singkat · Terstruktur',
         };
     }
 
@@ -81,7 +81,7 @@ class AdaptiveTheoryService
                         ? 'Cara paling gampangnya begini: hasil kalinya positif tetapi hasil jumlahnya negatif, berarti kedua angka rahasianya sama-sama negatif (ibarat utang ditambah utang).'
                         : 'Cara gampangnya: kedua angka sama-sama positif, cukup cari dua angka kecil yang kalau dikalikan dan dijumlahkan cocok dengan target.'),
                 'factored_form' => 'Kita sederhanakan ya: tulis dua tanda kurung berdampingan berisi variabel x lalu masukkan kedua angka tadi beserta tandanya masing-masing tanpa dikalikan balik.',
-                default         => 'Cara paling mudah: lihat masing-masing kurung secara terpisah, lalu tebak angka apa yang membuat isi di dalam satu kurung itu bernilai nol.',
+                default => 'Cara paling mudah: lihat masing-masing kurung secara terpisah, lalu tebak angka apa yang membuat isi di dalam satu kurung itu bernilai nol.',
             };
         }
 
@@ -89,7 +89,7 @@ class AdaptiveTheoryService
             return match ($requiredForm) {
                 'integers_pair' => 'Tinjau kembali dekomposisi faktor bilangan bulat dari konstanta target; pastikan keseimbangan tanda aljabar memenuhi relasi penjumlahan dan perkalian sekaligus.',
                 'factored_form' => 'Pastikan kedua faktor linear (x + p)(x + q) konsisten mengekspresikan identitas ekspansi tanpa perubahan tanda suku tengah maupun konstanta.',
-                default         => 'Evaluasi kembali akar linear dari masing-masing faktor berdasarkan Sifat Hasil Kali Nol agar kedua persamaan linear bernilai nol.',
+                default => 'Evaluasi kembali akar linear dari masing-masing faktor berdasarkan Sifat Hasil Kali Nol agar kedua persamaan linear bernilai nol.',
             };
         }
 
@@ -98,7 +98,7 @@ class AdaptiveTheoryService
                 ? 'Ingat aturan tanda: hasil kali negatif berasal dari satu bilangan positif dan satu bilangan negatif.'
                 : 'Perhatikan tanda hasil kali dan jumlahnya; gunakan pasangan faktor bilangan bulat dari target perkalian.',
             'factored_form' => 'Tuliskan kembali dalam bentuk perkalian dua faktor linear tanpa menjabarkan ulang.',
-            default         => 'Samakan setiap faktor kurung dengan nol lalu selesaikan untuk x.',
+            default => 'Samakan setiap faktor kurung dengan nol lalu selesaikan untuk x.',
         };
     }
 
@@ -198,7 +198,7 @@ class AdaptiveTheoryService
                 return [
                     'badge' => 'Ulasan singkat · bahasa sederhana',
                     'title' => 'Aturan Tanda: Hasil Kali Negatif',
-                    'body'  => 'Kalau dua angka dikalikan lalu hasilnya negatif (minus), dua angka itu pasti beda jenis: yang satu positif (+) dan satunya lagi negatif (−). Saat dijumlahkan, angka yang nilainya lebih besar akan menentukan tanda hasil akhirnya.',
+                    'body' => 'Kalau dua angka dikalikan lalu hasilnya negatif (minus), dua angka itu pasti beda jenis: yang satu positif (+) dan satunya lagi negatif (−). Saat dijumlahkan, angka yang nilainya lebih besar akan menentukan tanda hasil akhirnya.',
                 ];
             }
 
@@ -206,14 +206,14 @@ class AdaptiveTheoryService
                 return [
                     'badge' => 'Ulasan singkat · bahasa sederhana',
                     'title' => 'Aturan Tanda: Hasil Kali Positif, Jumlah Negatif',
-                    'body'  => 'Bilangan negatif dikali negatif menghasilkan positif, sedangkan dua bilangan negatif bila dijumlahkan tetap menghasilkan negatif (ibarat utang ditambah utang). Jadi kedua bilanganmu sama-sama negatif.',
+                    'body' => 'Bilangan negatif dikali negatif menghasilkan positif, sedangkan dua bilangan negatif bila dijumlahkan tetap menghasilkan negatif (ibarat utang ditambah utang). Jadi kedua bilanganmu sama-sama negatif.',
                 ];
             }
 
             return [
                 'badge' => 'Ulasan singkat · bahasa sederhana',
                 'title' => 'Aturan Tanda: Hasil Kali & Jumlah Positif',
-                'body'  => 'Jika hasil kali dan hasil jumlahnya sama-sama positif, maka kedua bilangan rahasiamu bernilai positif. Cukup daftarkan pasangan faktor perkaliannya sampai jumlahnya cocok.',
+                'body' => 'Jika hasil kali dan hasil jumlahnya sama-sama positif, maka kedua bilangan rahasiamu bernilai positif. Cukup daftarkan pasangan faktor perkaliannya sampai jumlahnya cocok.',
             ];
         }
 
@@ -221,14 +221,14 @@ class AdaptiveTheoryService
             return [
                 'badge' => 'Ulasan singkat · konsep faktor',
                 'title' => 'Menyusun Dua Kurung Faktor',
-                'body'  => 'Bentuk faktor berarti menulis persamaan sebagai perkalian dua kurung (x + p)(x + q). Masukkan kedua angka yang hasil kalinya sama dengan konstanta akhir dan jumlahnya sama dengan angka di depan x.',
+                'body' => 'Bentuk faktor berarti menulis persamaan sebagai perkalian dua kurung (x + p)(x + q). Masukkan kedua angka yang hasil kalinya sama dengan konstanta akhir dan jumlahnya sama dengan angka di depan x.',
             ];
         }
 
         return [
             'badge' => 'Ulasan singkat · akar persamaan',
             'title' => 'Menemukan Nilai x dari Kurung Faktor',
-            'body'  => 'Supaya perkalian dua kurung sama dengan nol, salah satu kurungnya harus bernilai nol. Ambil nilai x yang tandanya berlawanan dengan angka di dalam masing-masing kurung.',
+            'body' => 'Supaya perkalian dua kurung sama dengan nol, salah satu kurungnya harus bernilai nol. Ambil nilai x yang tandanya berlawanan dengan angka di dalam masing-masing kurung.',
         ];
     }
 
@@ -241,6 +241,7 @@ class AdaptiveTheoryService
             if ($b < 0) {
                 return 'Teori Singkat (Bahasa Sederhana): Bayangkan kamu punya dua angka rahasia. Kalau dua angka bertanda negatif dikalikan hasilnya menjadi positif, tapi kalau keduanya digabung hasilnya tetap negatif — persis seperti utang ditambah utang!';
             }
+
             return 'Teori Singkat (Bahasa Sederhana): Kita cukup mencari dua angka positif yang kalau dikalikan tepat mengenai target kali, dan kalau digabung tepat mengenai target jumlah.';
         }
 
@@ -304,6 +305,7 @@ class AdaptiveTheoryService
         }
 
         $subtype = $params['subtype'] ?? 'arithmetic';
+
         return match ($subtype) {
             'percent' => match ($tier) {
                 'baby' => 'Teori Singkat (Bahasa Sederhana): Persen (%) artinya "per seratus". Supaya gampang, kalikan dulu angka persen dengan bilangannya, setelah itu tinggal dibagi seratus!',
@@ -352,6 +354,7 @@ class AdaptiveTheoryService
                     ? 'Cara gampangnya: tulis dua angka dipisah koma — angka depan berapa kelompok penuh yang berhasil dibagi, angka belakang berapa sisa yang tertinggal (tulis 0 bila pas tanpa sisa).'
                     : 'Tulis format hasil_bagi, sisa (contoh: 4, 3). Pastikan pembagi × hasil_bagi + sisa sama dengan bilangan awal.';
             }
+
             return $tier === 'baby'
                 ? 'Cara mudahnya: tebak perkalian pembagi dengan angka bulat kecil yang hasilnya mendekati bilangan awal tapi jangan sampai kelewatan!'
                 : 'Cari bilangan bulat q terbesar sehingga hasil kali q × pembagi tidak melebihi bilangan yang dibagi.';
@@ -378,6 +381,7 @@ class AdaptiveTheoryService
                     default => 'Petunjuk 3: Angka selisih yang tersisa (selalu lebih kecil dari pembagi) itulah hasil modulusnya!',
                 };
             }
+
             return match ($level) {
                 1 => 'Petunjuk 1: Cari hasil bagi bulat q sehingga m × q ≤ a < m × (q + 1).',
                 2 => 'Petunjuk 2: Hitung hasil produk kelipatan utuhnya (m × q), lalu kurangkan dari nilai awal a.',
@@ -397,6 +401,7 @@ class AdaptiveTheoryService
                         : 'Petunjuk 3: Tuliskan cukup satu bilangan bulat hasil bagi yang paling mendekati tanpa melebihi target.',
                 };
             }
+
             return match ($level) {
                 1 => 'Petunjuk 1: Gunakan perkalian kebalikan untuk mencari kelipatan pembagi terdekat di bawah bilangan awal.',
                 2 => 'Petunjuk 2: Pastikan selisih sisanya lebih kecil dari pembagi dan tidak bernilai negatif.',
@@ -417,6 +422,7 @@ class AdaptiveTheoryService
         }
 
         $subtype = $params['subtype'] ?? 'arithmetic';
+
         return match ($subtype) {
             'percent' => match ($level) {
                 1 => 'Petunjuk 1: Ingat bahwa lambang persen (%) berarti per 100.',
@@ -449,7 +455,7 @@ class AdaptiveTheoryService
             return [
                 'badge' => 'Ulasan singkat · modulus',
                 'title' => 'Memahami Hasil Bagi & Sisa (Modulus)',
-                'body'  => 'Dalam operasi a mod m, pertama cari berapa kali m masuk utuh ke dalam a tanpa melebihinya. Setelah itu kurangkan a dengan kelipatan utuh tersebut. Sisa pengurangan itulah nilai modulusnya.',
+                'body' => 'Dalam operasi a mod m, pertama cari berapa kali m masuk utuh ke dalam a tanpa melebihinya. Setelah itu kurangkan a dengan kelipatan utuh tersebut. Sisa pengurangan itulah nilai modulusnya.',
             ];
         }
 
@@ -457,7 +463,7 @@ class AdaptiveTheoryService
             return [
                 'badge' => 'Ulasan singkat · pembagian',
                 'title' => 'Hubungan Hasil Bagi & Sisa',
-                'body'  => 'Setiap pembagian bulat a ÷ b mengikuti aturan: bilangan awal = (hasil bagi × pembagi) + sisa, dengan sisa selalu lebih kecil dari pembagi. Jika habis dibagi, tulis sisanya 0.',
+                'body' => 'Setiap pembagian bulat a ÷ b mengikuti aturan: bilangan awal = (hasil bagi × pembagi) + sisa, dengan sisa selalu lebih kecil dari pembagi. Jika habis dibagi, tulis sisanya 0.',
             ];
         }
 
@@ -465,14 +471,14 @@ class AdaptiveTheoryService
             return [
                 'badge' => 'Ulasan singkat · persamaan linear',
                 'title' => 'Aturan Pindah Ruas & Pembagian Koefisien',
-                'body'  => 'Untuk mencari x pada persamaan linear, pindahkan suku konstanta melewati tanda sama dengan sambil membalik tandanya (+ jadi −, − jadi +). Setelah tinggal ax = k, bagilah k dengan a.',
+                'body' => 'Untuk mencari x pada persamaan linear, pindahkan suku konstanta melewati tanda sama dengan sambil membalik tandanya (+ jadi −, − jadi +). Setelah tinggal ax = k, bagilah k dengan a.',
             ];
         }
 
         return [
             'badge' => 'Ulasan singkat · rumus dasar',
             'title' => 'Urutan & Pemecahan Langkah Rumus',
-            'body'  => 'Pecah perhitungan rumus menjadi langkah kecil: hitung operasi prioritas (kurung, pangkat, atau perkalian dasar) terlebih dahulu sebelum melakukan pembagian, penarikan akar, atau penggabungan hasil akhir.',
+            'body' => 'Pecah perhitungan rumus menjadi langkah kecil: hitung operasi prioritas (kurung, pangkat, atau perkalian dasar) terlebih dahulu sebelum melakukan pembagian, penarikan akar, atau penggabungan hasil akhir.',
         ];
     }
 
@@ -503,15 +509,15 @@ class AdaptiveTheoryService
     public static function conceptLabel(string $code, string $fallback): string
     {
         return match ($code) {
-            'signed_integer_rules'    => 'Aturan tanda bilangan bulat',
-            'integer_product_sum'     => 'Hasil kali dan jumlah',
-            'factoring_trinomials'    => 'Memfaktorkan trinomial',
-            'quadratic_equations'     => 'Persamaan kuadrat',
+            'signed_integer_rules' => 'Aturan tanda bilangan bulat',
+            'integer_product_sum' => 'Hasil kali dan jumlah',
+            'factoring_trinomials' => 'Memfaktorkan trinomial',
+            'quadratic_equations' => 'Persamaan kuadrat',
             'integer_division_basics' => 'Pembagian & hasil bagi',
-            'modulo_arithmetic'       => 'Aritmetika modulus',
-            'linear_equations'        => 'Persamaan linear',
-            'basic_formulas'          => 'Rumus & aritmetika dasar',
-            default                   => $fallback,
+            'modulo_arithmetic' => 'Aritmetika modulus',
+            'linear_equations' => 'Persamaan linear',
+            'basic_formulas' => 'Rumus & aritmetika dasar',
+            default => $fallback,
         };
     }
 

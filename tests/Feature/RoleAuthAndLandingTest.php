@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Services\Tuntas\GateControllerService;
 use App\Services\Tuntas\TuntasAuthService;
 use Database\Seeders\ClassDemoSeeder;
 use Database\Seeders\QuadraticCurriculumSeeder;
@@ -69,6 +68,21 @@ class RoleAuthAndLandingTest extends TestCase
             ->assertRedirect(route('tuntas.landing', ['auth' => 'login', 'role' => 'teacher']));
     }
 
+    public function test_individual_sign_up_needs_the_age_or_guardian_consent(): void
+    {
+        Livewire::test('pages::tuntas.landing')
+            ->set('authMode', 'register')
+            ->set('authRole', 'individual')
+            ->set('indName', 'Bintang')
+            ->set('indEmail', 'bintang@example.com')
+            ->set('indPassword', 'rahasia123')
+            ->call('submitIndividualAuth')
+            ->assertNoRedirect()
+            ->assertSet('authError', 'Centang pernyataan usia atau persetujuan orang tua/wali untuk mendaftar.');
+
+        $this->assertDatabaseMissing('users', ['email' => 'bintang@example.com']);
+    }
+
     public function test_individual_learner_is_private_and_never_shown_on_teacher_dashboard(): void
     {
         // Daftar Individual tanpa kode siswa & tanpa kode kelas
@@ -78,6 +92,7 @@ class RoleAuthAndLandingTest extends TestCase
             ->set('indName', 'Bintang')
             ->set('indEmail', 'bintang@example.com')
             ->set('indPassword', 'rahasia123')
+            ->set('indConsent', true)
             ->call('submitIndividualAuth')
             ->assertRedirect(route('tuntas.workspace'));
 

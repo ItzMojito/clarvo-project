@@ -34,6 +34,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
     public string $indName = '';
     public string $indEmail = '';
     public string $indPassword = '';
+    public bool $indConsent = false;
 
     public function mount(): void
     {
@@ -127,6 +128,12 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
     public function submitIndividualAuth(TuntasAuthService $authService): mixed
     {
         $this->authError = null;
+        // UU PDP: data anak di bawah 18 tahun hanya boleh diproses dengan persetujuan orang tua/wali.
+        if ($this->authMode === 'register' && !$this->indConsent) {
+            $this->authError = 'Centang pernyataan usia atau persetujuan orang tua/wali untuk mendaftar.';
+            return null;
+        }
+
         $res = $this->authMode === 'register'
             ? $authService->registerIndividual($this->indName, $this->indEmail, $this->indPassword)
             : $authService->loginIndividual($this->indEmail, $this->indPassword);
@@ -789,7 +796,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 <form wire:submit="submitStudentAuth" class="space-y-4">
                     <div class="rounded-xl bg-[#EAF2EF] border border-[#CFE0DA] px-3.5 py-2.5 text-xs text-[#0B352D] flex items-center justify-between gap-2">
                         <span><strong>Privasi Anonim:</strong> Tanpa nama asli maupun email.</span>
-                        @if ($authMode === 'login')
+                        @if ($authMode === 'login' && !app()->isProduction())
                             <button type="button" wire:click="fillDemoStudent" class="underline font-extrabold shrink-0 cursor-pointer">
                                 Isi Demo S02
                             </button>
@@ -854,7 +861,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 <form wire:submit="submitTeacherAuth" class="space-y-4">
                     <div class="rounded-xl bg-[#EAF2EF] border border-[#CFE0DA] px-3.5 py-2.5 text-xs text-[#0B352D] flex items-center justify-between gap-2">
                         <span>Akses penuh <strong>Dasbor Guru</strong> &amp; simulasi Ruang Belajar.</span>
-                        @if ($authMode === 'login')
+                        @if ($authMode === 'login' && !app()->isProduction())
                             <button type="button" wire:click="fillDemoTeacher" class="underline font-extrabold shrink-0 cursor-pointer">
                                 Isi Demo Guru
                             </button>
@@ -938,7 +945,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                 <form wire:submit="submitIndividualAuth" class="space-y-4">
                     <div class="rounded-xl bg-[#FEF6E2] border border-[#F5DFAA] px-3.5 py-2.5 text-xs text-[#704C05] flex items-center justify-between gap-2">
                         <span><strong>100% Pribadi:</strong> Tanpa kode siswa &amp; tanpa kode kelas.</span>
-                        @if ($authMode === 'login')
+                        @if ($authMode === 'login' && !app()->isProduction())
                             <button type="button" wire:click="fillDemoIndividual" class="underline font-extrabold shrink-0 cursor-pointer">
                                 Isi Demo Raka
                             </button>
@@ -988,6 +995,24 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                             placeholder="Minimal 6 karakter"
                         >
                     </div>
+
+                    @if ($authMode === 'register')
+                        <div class="space-y-1.5">
+                            <label for="auth-ind-consent" class="flex items-start gap-2.5 text-sm text-[#0B352D] cursor-pointer">
+                                <input
+                                    id="auth-ind-consent"
+                                    type="checkbox"
+                                    wire:model="indConsent"
+                                    required
+                                    class="mt-0.5 size-5 shrink-0 accent-[#0B352D] cursor-pointer"
+                                >
+                                <span>Saya berusia 18 tahun ke atas, atau orang tua/wali saya sudah menyetujui pendaftaran ini.</span>
+                            </label>
+                            <p class="text-xs text-[#526B65] ps-7.5">
+                                Clarvo menyimpan nama panggilan, email, dan hasil latihan. Teks jawabanmu tidak disimpan.
+                            </p>
+                        </div>
+                    @endif
 
                     <button
                         type="submit"

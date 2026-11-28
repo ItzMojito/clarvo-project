@@ -221,7 +221,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                 autocorrect="off"
                                 autocapitalize="characters"
                                 spellcheck="false"
-                                class="rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2 text-xs sm:text-sm font-medium text-[#0B352D] placeholder:text-[#667B76] focus:bg-white focus:border-[#0B352D] min-h-[40px] w-44 sm:w-52"
+                                class="rounded-xl border border-[#C7D6D1] bg-[#FAFDFC] px-3.5 py-2 text-xs sm:text-sm font-medium text-[#0B352D] placeholder:text-[#667B76] focus:bg-white focus:border-[#0B352D] min-h-11 w-44 sm:w-52"
                             >
                         </form>
                     </search>
@@ -237,7 +237,7 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
                                 type="button"
                                 wire:click="setFilter('{{ $key }}')"
                                 aria-pressed="{{ $filter === $key ? 'true' : 'false' }}"
-                                class="px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer min-h-[40px] {{ $filter === $key ? 'bg-[#0B352D] text-white shadow-xs' : 'bg-[#EAF2EF] text-[#0B352D] hover:bg-[#DCEAE5]' }}"
+                                class="px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer min-h-11 {{ $filter === $key ? 'bg-[#0B352D] text-white shadow-xs' : 'bg-[#EAF2EF] text-[#0B352D] hover:bg-[#DCEAE5]' }}"
                             >
                                 {{ $label }}
                             </button>

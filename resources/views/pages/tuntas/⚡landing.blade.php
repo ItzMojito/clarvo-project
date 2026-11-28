@@ -218,7 +218,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <button
                         type="button"
                         wire:click="openAuth('login', 'student')"
-                        class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-xs sm:text-sm font-semibold text-white transition min-h-[40px] cursor-pointer"
+                        class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/25 bg-white/5 hover:bg-white/15 text-xs sm:text-sm font-semibold text-white transition min-h-11 cursor-pointer"
                     >
                         <span aria-hidden="true">→</span>
                         <span>{{ $en ? 'Sign In' : 'Masuk' }}</span>
@@ -227,7 +227,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                     <button
                         type="button"
                         wire:click="openAuth('register', 'student')"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-[40px] cursor-pointer"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBB134] hover:bg-[#F5C04B] text-[#092B24] text-xs sm:text-sm font-extrabold shadow-xs transition min-h-11 cursor-pointer"
                     >
                         <span>{{ $en ? 'Sign Up' : 'Daftar' }}</span>
                     </button>
@@ -323,7 +323,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <button
                             type="button"
                             wire:click="startQuickIndividual"
-                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer inline-flex items-center gap-1"
+                            class="text-[#EBB134] hover:text-[#F5C04B] font-bold underline underline-offset-4 transition cursor-pointer inline-flex items-center gap-1 min-h-11"
                         >
                             <span wire:loading.remove wire:target="startQuickIndividual">
                                 {{ $en ? 'Try Individual Mode right away →' : 'Coba Mode Individual langsung →' }}
@@ -657,10 +657,10 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             </div>
 
             <div class="flex flex-wrap items-center gap-5 text-xs text-slate-200">
-                <button type="button" wire:click="openAuth('login', 'student')" class="hover:text-[#EBB134] font-semibold cursor-pointer">
+                <button type="button" wire:click="openAuth('login', 'student')" class="inline-flex items-center min-h-11 hover:text-[#EBB134] font-semibold cursor-pointer">
                     {{ $en ? 'Sign In' : 'Masuk' }}
                 </button>
-                <button type="button" wire:click="openAuth('register', 'individual')" class="hover:text-[#EBB134] font-semibold cursor-pointer">
+                <button type="button" wire:click="openAuth('register', 'individual')" class="inline-flex items-center min-h-11 hover:text-[#EBB134] font-semibold cursor-pointer">
                     {{ $en ? 'Individual Sign Up' : 'Daftar Individual' }}
                 </button>
                 <span class="text-slate-300/80">Clarvo &middot; 2026</span>

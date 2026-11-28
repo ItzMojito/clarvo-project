@@ -472,7 +472,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                             <button
                                                 type="button"
                                                 wire:click="selectPreset('{{ $preset }}')"
-                                                class="math-expr px-2.5 py-1 rounded-lg text-xs font-semibold border transition cursor-pointer {{ trim($problemInput) === $preset ? 'bg-[#0B352D] text-white border-[#0B352D]' : 'bg-[#EAF2EF] text-[#0B352D] border-[#CFE0DA] hover:border-[#0B352D]' }}"
+                                                class="math-expr px-2.5 py-1 pointer-coarse:min-h-11 pointer-coarse:px-3 rounded-lg text-xs font-semibold border transition cursor-pointer {{ trim($problemInput) === $preset ? 'bg-[#0B352D] text-white border-[#0B352D]' : 'bg-[#EAF2EF] text-[#0B352D] border-[#CFE0DA] hover:border-[#0B352D]' }}"
                                             >
                                                 {!! $this->formatMath($preset) !!}
                                             </button>
@@ -505,7 +505,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             <button
                                 type="button"
                                 data-open-dialog="clarvo-welcome-dialog"
-                                class="font-bold text-[#0E4D42] hover:text-[#0B352D] underline underline-offset-2 cursor-pointer"
+                                class="inline-flex items-center min-h-11 font-bold text-[#0E4D42] hover:text-[#0B352D] underline underline-offset-2 cursor-pointer"
                             >
                                 Daftar soal yang didukung
                             </button>

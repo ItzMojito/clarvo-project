@@ -581,6 +581,23 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
     transition: background-color 130ms ease, border-color 130ms ease;
 }
 
+.math-kbd-close {
+    flex-shrink: 0;
+    min-height: 32px;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #3A544E;
+    cursor: pointer;
+    transition: background-color 130ms ease, color 130ms ease;
+}
+
+.math-kbd-close:hover {
+    color: #0B352D;
+    background-color: #E4ECE9;
+}
+
 .math-kbd-chip:hover {
     background-color: #EAF2EF;
     border-color: #0B352D;
@@ -652,6 +669,17 @@ dialog.kawung-dialog[open]:not([data-closing])::backdrop {
 @media (pointer: coarse) {
     .math-kbd-key {
         min-block-size: 46px;
+    }
+
+    .math-kbd-chip,
+    .math-kbd-close {
+        min-height: 44px;
+    }
+
+    .math-kbd-toggle {
+        width: 2.75rem;
+        height: 2.75rem;
+        inset-inline-end: 0.2rem;
     }
 }
 

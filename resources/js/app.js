@@ -88,6 +88,20 @@ function scrollChatFeedToBottom() {
 const openMathKeypads = new Set();
 const dismissedMathKeypads = new Set();
 
+// Keyboard matematika hanya dibuka otomatis di layar sentuh; di laptop pakai tombol toggle.
+const isTouchScreen = () => window.matchMedia('(pointer: coarse)').matches;
+
+// inputmode="none" menahan keyboard bawaan ponsel selama keypad matematika dipakai.
+function syncMathInputModes() {
+    document.querySelectorAll('[data-math-input]').forEach((input) => {
+        if (isTouchScreen() && !dismissedMathKeypads.has(input.dataset.mathInput)) {
+            input.setAttribute('inputmode', 'none');
+        } else {
+            input.removeAttribute('inputmode');
+        }
+    });
+}
+
 function syncMathKeypads() {
     for (const keypadId of [...openMathKeypads]) {
         const keypad = document.getElementById(keypadId);
@@ -99,6 +113,7 @@ function syncMathKeypads() {
         keypad.hidden = false;
         if (toggle) toggle.setAttribute('aria-expanded', 'true');
     }
+    syncMathInputModes();
 }
 
 function setMathKeypadOpen(keypadId, shouldOpen, { markDismissed = false } = {}) {
@@ -115,6 +130,7 @@ function setMathKeypadOpen(keypadId, shouldOpen, { markDismissed = false } = {})
         if (toggle) toggle.setAttribute('aria-expanded', 'true');
         openMathKeypads.add(keypadId);
         dismissedMathKeypads.delete(keypadId);
+        syncMathInputModes();
         return;
     }
 
@@ -126,6 +142,7 @@ function setMathKeypadOpen(keypadId, shouldOpen, { markDismissed = false } = {})
     } else {
         dismissedMathKeypads.delete(keypadId);
     }
+    syncMathInputModes();
 }
 
 function insertIntoMathInput(input, rawText) {
@@ -170,7 +187,7 @@ document.addEventListener('focusin', (event) => {
     const input = event.target.closest?.('[data-math-input]');
     if (!input) return;
     const keypadId = input.dataset.mathInput;
-    if (keypadId && !dismissedMathKeypads.has(keypadId)) {
+    if (keypadId && isTouchScreen() && !dismissedMathKeypads.has(keypadId)) {
         setMathKeypadOpen(keypadId, true);
     }
 });
@@ -228,9 +245,18 @@ document.addEventListener('click', (event) => {
             const pos = Math.min(input.value.length, end + 1);
             input.setSelectionRange(pos, pos);
             input.focus();
-        } else if (action === 'abc' || action === 'close') {
+        } else if (action === 'abc') {
+            // Fokus ulang agar ponsel menampilkan keyboard huruf setelah inputmode dilepas.
             setMathKeypadOpen(keypadId, false, { markDismissed: true });
+            input.blur();
             input.focus();
+        } else if (action === 'close') {
+            setMathKeypadOpen(keypadId, false, { markDismissed: true });
+            if (isTouchScreen()) {
+                input.blur();
+            } else {
+                input.focus();
+            }
         } else if (action === 'submit') {
             input.dispatchEvent(new Event('change', { bubbles: true }));
             input.form?.requestSubmit();
@@ -291,6 +317,7 @@ document.addEventListener('keydown', (event) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     scrollChatFeedToBottom();
+    syncMathInputModes();
     document.querySelectorAll('dialog[data-auto-open="true"]').forEach((dialog) => {
         if (!dialog.open && typeof dialog.showModal === 'function') {
             dialog.showModal();

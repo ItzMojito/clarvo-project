@@ -81,7 +81,7 @@
                 {{-- Lencana Privasi & Pil Identitas Peran --}}
                 <div class="hidden sm:flex items-center gap-1.5">
                     @if ($privacyTag)
-                        <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-400/15 border border-emerald-300/25 text-[11px] font-bold text-emerald-100">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-400/15 border border-emerald-300/25 text-xs font-bold text-emerald-100">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
                             {{ $privacyTag }}
                         </span>

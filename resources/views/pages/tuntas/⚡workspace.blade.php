@@ -134,12 +134,12 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
     {
         if ($targetCode === 'quadratic_equations') {
             return match ($stepOrder) {
-                1 => ['num' => '01', 'title' => 'Cek prasyarat', 'gate_badge' => null, 'pill' => 'CEK PRASYARAT', 'pill_sub' => 'aturan tanda'],
-                2 => ['num' => '02', 'title' => 'Angka baru', 'gate_badge' => 'GERBANG 1', 'pill' => 'GERBANG 1', 'pill_sub' => 'angka baru'],
-                3 => ['num' => '03', 'title' => 'Tulis bentuk faktor', 'gate_badge' => null, 'pill' => 'TERPANDU', 'pill_sub' => 'bentuk faktor'],
-                4 => ['num' => '04', 'title' => 'Faktorkan soal baru', 'gate_badge' => 'GERBANG 2', 'pill' => 'GERBANG 2', 'pill_sub' => 'faktor baru'],
-                5 => ['num' => '05', 'title' => 'Cari akar', 'gate_badge' => null, 'pill' => 'TERPANDU', 'pill_sub' => 'nilai x'],
-                default => ['num' => '06', 'title' => 'Soal transfer', 'gate_badge' => null, 'pill' => 'SOAL TRANSFER', 'pill_sub' => 'evaluasi mandiri'],
+                1 => ['num' => '01', 'title' => 'Cek prasyarat', 'gate_badge' => null, 'pill' => 'Cek prasyarat', 'pill_sub' => 'aturan tanda'],
+                2 => ['num' => '02', 'title' => 'Angka baru', 'gate_badge' => 'Gerbang 1', 'pill' => 'Gerbang 1', 'pill_sub' => 'angka baru'],
+                3 => ['num' => '03', 'title' => 'Tulis bentuk faktor', 'gate_badge' => null, 'pill' => 'Terpandu', 'pill_sub' => 'bentuk faktor'],
+                4 => ['num' => '04', 'title' => 'Faktorkan soal baru', 'gate_badge' => 'Gerbang 2', 'pill' => 'Gerbang 2', 'pill_sub' => 'faktor baru'],
+                5 => ['num' => '05', 'title' => 'Cari akar', 'gate_badge' => null, 'pill' => 'Terpandu', 'pill_sub' => 'nilai x'],
+                default => ['num' => '06', 'title' => 'Soal transfer', 'gate_badge' => null, 'pill' => 'Soal transfer', 'pill_sub' => 'evaluasi mandiri'],
             };
         }
 
@@ -148,12 +148,12 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
         return [
             'num'        => str_pad((string) $stepOrder, 2, '0', STR_PAD_LEFT),
             'title'      => $stepRow->title ?? "Langkah {$stepOrder}",
-            'gate_badge' => $stepType === 'gate_check' ? 'GERBANG 1' : null,
+            'gate_badge' => $stepType === 'gate_check' ? 'Gerbang 1' : null,
             'pill'       => match ($stepType) {
-                'diagnostic' => 'CEK PRASYARAT',
-                'gate_check' => 'GERBANG 1',
-                'transfer'   => 'SOAL TRANSFER',
-                default      => 'TERPANDU',
+                'diagnostic' => 'Cek prasyarat',
+                'gate_check' => 'Gerbang 1',
+                'transfer'   => 'Soal transfer',
+                default      => 'Terpandu',
             },
             'pill_sub'   => mb_strtolower((string) ($stepRow->subtitle ?? 'latihan bertahap')),
         ];
@@ -260,8 +260,8 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
     <x-kawung-header current="workspace" :role="$role" :privacyTag="$privacyTag" :badge="$badgeFull" :mobileBadge="$badgeShort">
         @if (!$session)
             <div class="py-2 sm:py-4 animate-flow-in">
-                <p class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#9DC4B9]">
-                    Ruang Belajar &middot; Tutor Matematika Sokratik
+                <p class="text-xs sm:text-xs font-bold text-[#9DC4B9]">
+                    Ruang belajar &middot; Tutor matematika Sokratik
                 </p>
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
                     Masukkan Soal Matematika
@@ -289,7 +289,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
             <div class="space-y-4 animate-flow-in">
                 <div class="flex flex-wrap items-end justify-between gap-3">
                     <div>
-                        <p class="text-[11px] font-bold uppercase tracking-widest text-[#9DC4B9]">
+                        <p class="text-xs font-bold text-[#9DC4B9]">
                             Soalmu &middot; {{ $targetConceptLabel }}
                         </p>
                         <h1 class="math-expr text-2xl sm:text-4xl font-bold text-white mt-1 tracking-tight">
@@ -353,7 +353,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                     {{ $meta['num'] }}
                                 </span>
                                 @if ($meta['gate_badge'])
-                                    <span class="text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded {{ $isActive ? 'bg-[#EAF2EF] text-[#0B352D]' : ($isPassed ? 'bg-[#092B24]/15 text-[#092B24]' : 'bg-white/10 text-slate-200') }}">
+                                    <span class="text-xs font-extrabold px-1.5 py-0.5 rounded {{ $isActive ? 'bg-[#EAF2EF] text-[#0B352D]' : ($isPassed ? 'bg-[#092B24]/15 text-[#092B24]' : 'bg-white/10 text-slate-200') }}">
                                         {{ $meta['gate_badge'] }}
                                     </span>
                                 @endif
@@ -363,7 +363,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 {{ $meta['title'] }}
                             </p>
 
-                            <p class="text-[11px] font-semibold mt-1.5 flex items-center gap-1.5 {{ $isPassed || $isActive ? 'text-[#092B24]/80' : 'text-slate-300/70' }}">
+                            <p class="text-xs font-semibold mt-1.5 flex items-center gap-1.5 {{ $isPassed || $isActive ? 'text-[#092B24]/80' : 'text-slate-300/70' }}">
                                 @if ($isPassed)
                                     <span aria-hidden="true">✓</span>
                                     <span>Selesai</span>
@@ -392,17 +392,17 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
                             <h2 class="text-lg sm:text-xl font-extrabold text-[#0B352D]">Mulai Sesi Belajar</h2>
                             @if ($role === 'student')
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-[11px] font-bold">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
                                     Anonim &middot; Kode {{ $learnerCode }} ({{ $className }})
                                 </span>
                             @elseif ($role === 'teacher')
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-[11px] font-bold">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
                                     Simulasi Ruang Belajar Guru
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FEF6E2] text-[#8C6209] text-[11px] font-bold">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FEF6E2] text-[#8C6209] text-xs font-bold">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#EBB134]" aria-hidden="true"></span>
                                     100% Pribadi &middot; Mandiri · {{ $displayName ?: 'Tamu' }}
                                 </span>
@@ -421,8 +421,8 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                         <form wire:submit="startNewProblem" class="mt-6 space-y-5">
                             <div data-math-wrapper>
-                                <label for="problem-input" class="block text-xs font-bold uppercase tracking-wider text-[#0B352D] mb-1.5">
-                                    Masukkan Soal
+                                <label for="problem-input" class="block text-xs font-bold text-[#0B352D] mb-1.5">
+                                    Masukkan soal
                                 </label>
                                 <div class="relative">
                                     <input
@@ -456,7 +456,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
 
                                 {{-- Contoh soal cepat lintas topik --}}
                                 <div class="mt-3 space-y-1.5">
-                                    <span class="block text-[11px] font-medium text-[#526B65]">Contoh cepat (klik untuk memilih):</span>
+                                    <span class="block text-xs font-medium text-[#526B65]">Contoh cepat (klik untuk memilih):</span>
                                     <div class="flex flex-wrap items-center gap-1.5">
                                         @foreach ([
                                             'x^2 - 5x + 6 = 0',
@@ -497,7 +497,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                             </button>
                         </form>
 
-                        <div class="mt-5 pt-4 border-t border-[#EAF0EE] flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#526B65]">
+                        <div class="mt-5 pt-4 border-t border-[#EAF0EE] flex flex-wrap items-center justify-between gap-2 text-xs text-[#526B65]">
                             <span class="flex items-center gap-2">
                                 <span aria-hidden="true">🛡️</span>
                                 <span>Kunci jawaban tidak pernah dikirimkan ke AI maupun ditampilkan sebelum tuntas.</span>
@@ -519,7 +519,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                 <section class="lg:col-span-8 bg-white rounded-2xl border border-[#D9E4E0] p-4 sm:p-6 shadow-xs flex flex-col gap-4 animate-flow-in animate-flow-delay-1" aria-labelledby="tutor-heading">
                     <div class="flex items-center justify-between">
                         <h2 id="tutor-heading" class="text-sm font-bold text-[#132A25]">Tutor</h2>
-                        <span class="text-[11px] font-semibold text-[#526B65] bg-[#EAF2EF] px-2.5 py-1 rounded-full">
+                        <span class="text-xs font-semibold text-[#526B65] bg-[#EAF2EF] px-2.5 py-1 rounded-full">
                             Bimbingan Sokratik
                         </span>
                     </div>
@@ -549,7 +549,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                                     };
                                                 @endphp
                                                 <div>
-                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $tierBadgeStyle }}">
+                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border {{ $tierBadgeStyle }}">
                                                         <span>{{ $tierIcon }}</span>
                                                         <span>{{ $m['tier_label'] }}</span>
                                                     </span>
@@ -575,8 +575,8 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                     @if ($session->status === 'remedial')
                         <div class="gate-card-flow rounded-2xl bg-[#0B352D] text-white p-5 sm:p-6 border border-[#1B574B] shadow-md space-y-4">
                             <div class="flex flex-wrap items-center gap-2.5">
-                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-[11px] font-extrabold uppercase tracking-wider">
-                                    {{ $remedialReview['badge'] ?? 'Ulasan Singkat' }}
+                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-extrabold">
+                                    {{ $remedialReview['badge'] ?? 'Ulasan singkat' }}
                                 </span>
                                 <span class="text-xs font-medium text-slate-300">{{ $remedialReview['title'] ?? 'penyegaran konsep' }}</span>
                             </div>
@@ -599,7 +599,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                     @elseif ($session->status === 'completed')
                         <div class="gate-card-flow rounded-2xl bg-[#0B352D] text-white p-5 sm:p-6 border-2 border-[#EBB134] shadow-md space-y-4">
                             <div class="flex items-center gap-2.5">
-                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-[11px] font-extrabold uppercase tracking-wider">
+                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-extrabold">
                                     ✓ Sesi Tuntas
                                 </span>
                                 <span class="text-xs font-medium text-[#9DC4B9]">gerbang penguasaan tercapai</span>
@@ -636,7 +636,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                         @endphp
                         <div class="gate-card-flow rounded-2xl bg-[#0B352D] text-white p-5 sm:p-6 shadow-md space-y-4">
                             <div class="flex items-center gap-2.5">
-                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-[11px] font-extrabold uppercase tracking-wider">
+                                <span class="px-2.5 py-1 rounded-md bg-[#EBB134] text-[#092B24] text-xs font-extrabold">
                                     {{ $activeMeta['pill'] }}
                                 </span>
                                 <span class="text-xs font-medium text-slate-300">
@@ -704,7 +704,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                                 <x-math-keyboard keypad-id="answer-math-keypad" input-id="micro-answer" mode="answer" />
                             </form>
 
-                            <p class="text-[11px] text-slate-300/85 pt-0.5">
+                            <p class="text-xs text-slate-300/85 pt-0.5">
                                 Jawaban akhir tidak pernah ditampilkan.
                             </p>
                         </div>
@@ -715,7 +715,7 @@ new #[Title('Clarvo · Ruang Belajar')] class extends Component
                 <aside class="lg:col-span-4 bg-white rounded-2xl border border-[#D9E4E0] p-5 sm:p-6 shadow-xs space-y-5 animate-flow-in animate-flow-delay-2" aria-labelledby="mastery-heading">
                     <div class="flex items-center justify-between">
                         <h2 id="mastery-heading" class="text-sm font-bold text-[#132A25]">Penguasaanmu</h2>
-                        <span class="text-[11px] font-bold text-[#0B352D] bg-[#EAF2EF] px-2.5 py-1 rounded-full tabular-nums">
+                        <span class="text-xs font-bold text-[#0B352D] bg-[#EAF2EF] px-2.5 py-1 rounded-full tabular-nums">
                             Gerbang 0,85
                         </span>
                     </div>

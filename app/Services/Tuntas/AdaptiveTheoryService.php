@@ -196,7 +196,7 @@ class AdaptiveTheoryService
         if ($requiredForm === 'integers_pair') {
             if ($c < 0) {
                 return [
-                    'badge' => 'ULASAN SINGKAT · BAHASA SEDERHANA',
+                    'badge' => 'Ulasan singkat · bahasa sederhana',
                     'title' => 'Aturan Tanda: Hasil Kali Negatif',
                     'body'  => 'Kalau dua angka dikalikan lalu hasilnya negatif (minus), dua angka itu pasti beda jenis: yang satu positif (+) dan satunya lagi negatif (−). Saat dijumlahkan, angka yang nilainya lebih besar akan menentukan tanda hasil akhirnya.',
                 ];
@@ -204,14 +204,14 @@ class AdaptiveTheoryService
 
             if ($b < 0) {
                 return [
-                    'badge' => 'ULASAN SINGKAT · BAHASA SEDERHANA',
+                    'badge' => 'Ulasan singkat · bahasa sederhana',
                     'title' => 'Aturan Tanda: Hasil Kali Positif, Jumlah Negatif',
                     'body'  => 'Bilangan negatif dikali negatif menghasilkan positif, sedangkan dua bilangan negatif bila dijumlahkan tetap menghasilkan negatif (ibarat utang ditambah utang). Jadi kedua bilanganmu sama-sama negatif.',
                 ];
             }
 
             return [
-                'badge' => 'ULASAN SINGKAT · BAHASA SEDERHANA',
+                'badge' => 'Ulasan singkat · bahasa sederhana',
                 'title' => 'Aturan Tanda: Hasil Kali & Jumlah Positif',
                 'body'  => 'Jika hasil kali dan hasil jumlahnya sama-sama positif, maka kedua bilangan rahasiamu bernilai positif. Cukup daftarkan pasangan faktor perkaliannya sampai jumlahnya cocok.',
             ];
@@ -219,14 +219,14 @@ class AdaptiveTheoryService
 
         if ($requiredForm === 'factored_form') {
             return [
-                'badge' => 'ULASAN SINGKAT · KONSEP FAKTOR',
+                'badge' => 'Ulasan singkat · konsep faktor',
                 'title' => 'Menyusun Dua Kurung Faktor',
                 'body'  => 'Bentuk faktor berarti menulis persamaan sebagai perkalian dua kurung (x + p)(x + q). Masukkan kedua angka yang hasil kalinya sama dengan konstanta akhir dan jumlahnya sama dengan angka di depan x.',
             ];
         }
 
         return [
-            'badge' => 'ULASAN SINGKAT · AKAR PERSAMAAN',
+            'badge' => 'Ulasan singkat · akar persamaan',
             'title' => 'Menemukan Nilai x dari Kurung Faktor',
             'body'  => 'Supaya perkalian dua kurung sama dengan nol, salah satu kurungnya harus bernilai nol. Ambil nilai x yang tandanya berlawanan dengan angka di dalam masing-masing kurung.',
         ];
@@ -447,7 +447,7 @@ class AdaptiveTheoryService
     {
         if ($family === 'modulo') {
             return [
-                'badge' => 'ULASAN SINGKAT · MODULUS',
+                'badge' => 'Ulasan singkat · modulus',
                 'title' => 'Memahami Hasil Bagi & Sisa (Modulus)',
                 'body'  => 'Dalam operasi a mod m, pertama cari berapa kali m masuk utuh ke dalam a tanpa melebihinya. Setelah itu kurangkan a dengan kelipatan utuh tersebut. Sisa pengurangan itulah nilai modulusnya.',
             ];
@@ -455,7 +455,7 @@ class AdaptiveTheoryService
 
         if ($family === 'division') {
             return [
-                'badge' => 'ULASAN SINGKAT · PEMBAGIAN',
+                'badge' => 'Ulasan singkat · pembagian',
                 'title' => 'Hubungan Hasil Bagi & Sisa',
                 'body'  => 'Setiap pembagian bulat a ÷ b mengikuti aturan: bilangan awal = (hasil bagi × pembagi) + sisa, dengan sisa selalu lebih kecil dari pembagi. Jika habis dibagi, tulis sisanya 0.',
             ];
@@ -463,14 +463,14 @@ class AdaptiveTheoryService
 
         if ($family === 'linear') {
             return [
-                'badge' => 'ULASAN SINGKAT · PERSAMAAN LINEAR',
+                'badge' => 'Ulasan singkat · persamaan linear',
                 'title' => 'Aturan Pindah Ruas & Pembagian Koefisien',
                 'body'  => 'Untuk mencari x pada persamaan linear, pindahkan suku konstanta melewati tanda sama dengan sambil membalik tandanya (+ jadi −, − jadi +). Setelah tinggal ax = k, bagilah k dengan a.',
             ];
         }
 
         return [
-            'badge' => 'ULASAN SINGKAT · RUMUS DASAR',
+            'badge' => 'Ulasan singkat · rumus dasar',
             'title' => 'Urutan & Pemecahan Langkah Rumus',
             'body'  => 'Pecah perhitungan rumus menjadi langkah kecil: hitung operasi prioritas (kurung, pangkat, atau perkalian dasar) terlebih dahulu sebelum melakukan pembagian, penarikan akar, atau penggabungan hasil akhir.',
         ];

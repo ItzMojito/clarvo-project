@@ -269,9 +269,9 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
             <div class="py-12 sm:py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                 {{-- Left Headline & CTA --}}
                 <div class="lg:col-span-7 space-y-6 animate-flow-in">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#EBB134] text-[11px] font-bold uppercase tracking-widest">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[#EBB134] text-xs font-bold">
                         <span aria-hidden="true">✦</span>
-                        <span>{{ $en ? 'SOCRATIC AI TUTOR · MASTERY LEARNING MATH' : 'TUTOR AI SOKRATIK · BELAJAR TUNTAS MATEMATIKA' }}</span>
+                        <span>{{ $en ? 'Socratic AI tutor · mastery learning math' : 'Tutor AI Sokratik · belajar tuntas matematika' }}</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-[1.13] tracking-tight">
@@ -337,14 +337,14 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <div class="p-5 sm:p-6 space-y-5 text-[#132A25]">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <p class="text-[11px] font-bold uppercase tracking-wider text-[#526B65]">
-                                        {{ $en ? 'WORKSPACE PREVIEW' : 'SIMULASI RUANG BELAJAR' }}
+                                    <p class="text-xs font-bold text-[#526B65]">
+                                        {{ $en ? 'Workspace preview' : 'Simulasi ruang belajar' }}
                                     </p>
                                     <p class="math-expr text-xl sm:text-2xl font-extrabold text-[#0B352D] mt-0.5">
                                         <var class="math-var">x</var><sup>2</sup> &minus; 5<var class="math-var">x</var> + 6 = 0
                                     </p>
                                 </div>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-[11px] font-bold shrink-0">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold shrink-0">
                                     <span class="w-2 h-2 rounded-full bg-[#EBB134] active-beacon" aria-hidden="true"></span>
                                     {{ $en ? 'BKT Gate ≥ 0.85' : 'Gerbang BKT ≥ 0,85' }}
                                 </span>
@@ -369,7 +369,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                 </div>
                             </div>
 
-                            <div class="pt-3 border-t border-[#E6EEEC] flex items-center justify-between text-[11px] font-medium text-[#526B65]">
+                            <div class="pt-3 border-t border-[#E6EEEC] flex items-center justify-between text-xs font-medium text-[#526B65]">
                                 <span class="inline-flex items-center gap-1.5">
                                     <span aria-hidden="true">🛡️</span>
                                     <span>{{ $en ? 'Answer key locked in backend' : 'Kunci jawaban ditahan di dalam kode' }}</span>
@@ -387,8 +387,8 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
         {{-- SECTION 2: TIGA OPSI PENDAFTARAN --}}
         <section id="opsi-akun" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto space-y-2.5">
-                <p class="text-xs font-extrabold uppercase tracking-widest text-[#0E4D42]">
-                    {{ $en ? 'THREE REGISTRATION OPTIONS' : 'TIGA OPSI PENDAFTARAN' }}
+                <p class="text-xs font-extrabold text-[#0E4D42]">
+                    {{ $en ? 'Three registration options' : 'Tiga opsi pendaftaran' }}
                 </p>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0B352D] tracking-tight">
                     {{ $en ? 'Register the Way You Learn or Teach' : 'Daftar Sesuai Cara Kamu Belajar atau Mengajar' }}
@@ -411,7 +411,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                                 </svg>
                             </span>
-                            <span class="px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-[11px] font-bold">
+                            <span class="px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
                                 {{ $en ? 'Anonymous Code' : 'Kode Anonim' }}
                             </span>
                         </div>
@@ -461,7 +461,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                     <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
                                 </svg>
                             </span>
-                            <span class="px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-[11px] font-bold">
+                            <span class="px-3 py-1 rounded-full bg-[#EAF2EF] text-[#0B352D] text-xs font-bold">
                                 {{ $en ? 'Diagnostic Dashboard' : 'Dasbor Diagnostik' }}
                             </span>
                         </div>
@@ -511,7 +511,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                                 </svg>
                             </span>
-                            <span class="px-3 py-1 rounded-full bg-[#FEF6E2] text-[#8C6209] text-[11px] font-bold">
+                            <span class="px-3 py-1 rounded-full bg-[#FEF6E2] text-[#8C6209] text-xs font-bold">
                                 {{ $en ? '100% Private & Solo' : '100% Pribadi & Mandiri' }}
                             </span>
                         </div>
@@ -557,8 +557,8 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
         <section id="cara-kerja" class="bg-white border-t border-[#E6EEEC] py-16 sm:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl space-y-2">
-                    <p class="text-xs font-extrabold uppercase tracking-widest text-[#0E4D42]">
-                        {{ $en ? 'PEDAGOGICAL ARCHITECTURE' : 'ARSITEKTUR PEDAGOGIS' }}
+                    <p class="text-xs font-extrabold text-[#0E4D42]">
+                        {{ $en ? 'Pedagogical architecture' : 'Arsitektur pedagogis' }}
                     </p>
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0B352D] tracking-tight">
                         {{ $en ? 'AI Converses, Deterministic Systems Decide' : 'AI Berdialog, Sistem Deterministik yang Memutuskan' }}
@@ -702,7 +702,7 @@ new #[Title('Clarvo · Paham dulu, baru lanjut.')] class extends Component
                         <h2 id="auth-dialog-title" class="text-base font-extrabold text-white">
                             {{ $authMode === 'register' ? 'Buat Akun Clarvo' : 'Masuk ke Akun Clarvo' }}
                         </h2>
-                        <p class="text-[11px] font-medium text-[#EBB134]">Pilih peran belajarmu di bawah</p>
+                        <p class="text-xs font-medium text-[#EBB134]">Pilih peran belajarmu di bawah</p>
                     </div>
                 </div>
 

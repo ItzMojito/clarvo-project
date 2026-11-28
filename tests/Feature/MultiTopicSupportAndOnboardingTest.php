@@ -179,7 +179,7 @@ class MultiTopicSupportAndOnboardingTest extends TestCase
         $this->assertTrue($wrong['entered_remedial']);
 
         $review = $gate->getRemedialReview($sid);
-        $this->assertStringContainsString('MODULUS', $review['badge']);
+        $this->assertStringContainsString('modulus', $review['badge']);
 
         $gate->continueAfterReview($sid);
 

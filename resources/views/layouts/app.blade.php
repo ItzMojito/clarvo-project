@@ -121,8 +121,8 @@
                         ✦
                     </span>
                     <div>
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/15 text-[#EBB134] text-[10px] font-extrabold uppercase tracking-wider mb-1">
-                            Tahap Pengembangan &middot; Beta
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/15 text-[#EBB134] text-xs font-extrabold mb-1">
+                            Tahap pengembangan &middot; Beta
                         </span>
                         <h2 id="welcome-dialog-title" class="text-base sm:text-lg font-extrabold text-white leading-tight">
                             Selamat Datang di Clarvo
@@ -147,39 +147,39 @@
                 </div>
 
                 <div class="space-y-2">
-                    <p class="text-xs font-extrabold uppercase tracking-wider text-[#0B352D]">
-                        Jenis Soal &amp; Rumus yang Sudah Didukung Saat Ini:
+                    <p class="text-xs font-extrabold text-[#0B352D]">
+                        Jenis soal &amp; rumus yang sudah didukung saat ini:
                     </p>
                     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
                             <p class="font-extrabold text-[#0B352D]">1. Persamaan Kuadrat</p>
                             <p class="text-[#526B65]">Pemfaktoran &amp; mencari akar bulat.</p>
-                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">x^2 - 5x + 6 = 0</code>
+                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">x^2 - 5x + 6 = 0</code>
                         </li>
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
                             <p class="font-extrabold text-[#0B352D]">2. Persamaan Linear</p>
                             <p class="text-[#526B65]">Pindah ruas &amp; mencari nilai <em>x</em>.</p>
-                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">2x + 6 = 14</code>
+                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">2x + 6 = 14</code>
                         </li>
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
                             <p class="font-extrabold text-[#0B352D]">3. Modulus (Sisa Bagi)</p>
                             <p class="text-[#526B65]">Operasi <code>mod</code> atau <code>%</code>.</p>
-                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">17 mod 5</code>
+                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">17 mod 5</code>
                         </li>
                         <li class="rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1">
                             <p class="font-extrabold text-[#0B352D]">4. Hasil Bagi &amp; Pembagian</p>
                             <p class="text-[#526B65]">Hasil bagi bulat &amp; sisa pembagian.</p>
-                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">19 / 4</code>
+                            <code class="inline-block px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">19 / 4</code>
                         </li>
                         <li class="sm:col-span-2 rounded-xl bg-[#F4F8F6] border border-[#DCE6E2] p-3 space-y-1.5">
                             <p class="font-extrabold text-[#0B352D]">5. Rumus &amp; Aritmetika Dasar Lainnya</p>
                             <p class="text-[#526B65]">Persentase, pangkat &amp; akar, Pythagoras, luas/keliling bangun datar, dan hitung campur.</p>
                             <div class="flex flex-wrap gap-1.5">
-                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">25% dari 80</code>
-                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">pythagoras 3, 4</code>
-                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">luas persegi panjang 8 x 5</code>
-                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">sqrt(144)</code>
-                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-[11px] font-mono text-[#0B352D]">(12 + 8) * 3</code>
+                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">25% dari 80</code>
+                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">pythagoras 3, 4</code>
+                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">luas persegi panjang 8 x 5</code>
+                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">sqrt(144)</code>
+                                <code class="px-1.5 py-0.5 rounded bg-white border border-[#DCE6E2] text-xs font-mono text-[#0B352D]">(12 + 8) * 3</code>
                             </div>
                         </li>
                     </ul>

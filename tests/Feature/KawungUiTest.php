@@ -45,7 +45,7 @@ class KawungUiTest extends TestCase
             ->call('startNewProblem')
             ->assertSee('Cek prasyarat')
             ->assertSee('Angka baru')
-            ->assertSee('GERBANG 1')
+            ->assertSee('Gerbang 1')
             ->assertSee('Penguasaanmu')
             ->assertSee('Periksa')
             ->assertSee('Petunjuk')
@@ -63,7 +63,7 @@ class KawungUiTest extends TestCase
             ->set('microAnswer', '-2, -3')
             ->call('submitAnswer')
             ->assertSee('0,71')
-            ->assertSee('GERBANG 1')
+            ->assertSee('Gerbang 1')
             ->call('askHint')
             ->assertSee('Petunjuk 1');
     }

@@ -158,8 +158,8 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
         <div class="space-y-4 animate-flow-in">
             <div class="flex flex-wrap items-end justify-between gap-3">
                 <div>
-                    <p class="text-[11px] font-bold uppercase tracking-widest text-[#9DC4B9]">
-                        Dasbor Guru &middot; Pemantauan Penguasaan BKT
+                    <p class="text-xs font-bold text-[#9DC4B9]">
+                        Dasbor guru &middot; Pemantauan penguasaan BKT
                     </p>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
                         Pemantauan Kemajuan Kelas
@@ -174,22 +174,22 @@ new #[Title('Clarvo · Dasbor Guru')] class extends Component
             {{-- Summary KPI Cards Inside Kawung Header --}}
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div class="rounded-xl bg-white/10 border border-white/15 backdrop-blur-xs p-3.5 sm:p-4">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-[#9DC4B9]">Total Pelajar</p>
+                    <p class="text-xs font-bold text-[#9DC4B9]">Total pelajar</p>
                     <p class="text-2xl font-extrabold text-white mt-1 tabular-nums">{{ $stats['total'] }}</p>
                 </div>
 
                 <div class="rounded-xl p-3.5 sm:p-4 {{ $stats['needs_help'] > 0 ? 'bg-[#EBB134] text-[#092B24] shadow-xs' : 'bg-white/10 border border-white/15 text-white' }}">
-                    <p class="text-[11px] font-bold uppercase tracking-wider {{ $stats['needs_help'] > 0 ? 'text-[#092B24]/80' : 'text-[#9DC4B9]' }}">Perlu Bantuan</p>
+                    <p class="text-xs font-bold {{ $stats['needs_help'] > 0 ? 'text-[#092B24]/80' : 'text-[#9DC4B9]' }}">Perlu bantuan</p>
                     <p class="text-2xl font-extrabold mt-1 tabular-nums">{{ $stats['needs_help'] }}</p>
                 </div>
 
                 <div class="rounded-xl bg-white/10 border border-white/15 backdrop-blur-xs p-3.5 sm:p-4">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-[#9DC4B9]">Sedang Belajar</p>
+                    <p class="text-xs font-bold text-[#9DC4B9]">Sedang belajar</p>
                     <p class="text-2xl font-extrabold text-white mt-1 tabular-nums">{{ $stats['active'] }}</p>
                 </div>
 
                 <div class="rounded-xl bg-white/10 border border-white/15 backdrop-blur-xs p-3.5 sm:p-4">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-[#9DC4B9]">Tuntas Mandiri</p>
+                    <p class="text-xs font-bold text-[#9DC4B9]">Tuntas mandiri</p>
                     <p class="text-2xl font-extrabold text-[#EBB134] mt-1 tabular-nums">{{ $stats['completed'] }}</p>
                 </div>
             </div>

@@ -51,7 +51,7 @@
             type="button"
             data-math-action="close"
             aria-label="Tutup keyboard matematika"
-            class="shrink-0 px-2 py-1 rounded-lg text-[11px] font-bold text-[#526B65] hover:text-[#0B352D] hover:bg-[#E4ECE9] transition cursor-pointer min-h-[32px]"
+            class="shrink-0 px-2 py-1 rounded-lg text-xs font-bold text-[#526B65] hover:text-[#0B352D] hover:bg-[#E4ECE9] transition cursor-pointer min-h-[32px]"
         >
             Tutup
         </button>

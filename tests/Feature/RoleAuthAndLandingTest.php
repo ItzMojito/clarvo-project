@@ -29,7 +29,7 @@ class RoleAuthAndLandingTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Bukan Sekadar Jawaban Instan.')
             ->assertSee('Paham Dulu, Baru Lanjut.')
-            ->assertSee('SIMULASI RUANG BELAJAR')
+            ->assertSee('Simulasi ruang belajar')
             ->assertSee('Daftar sebagai Siswa')
             ->assertSee('Daftar sebagai Guru')
             ->assertSee('Pendaftaran Individual')

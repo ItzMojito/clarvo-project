@@ -45,8 +45,8 @@ class AdaptiveTheoryTest extends TestCase
             ->shouldReceive('verify')
             ->once()
             ->andReturn([
-                'status'          => 'wrong_math',
-                'is_correct'      => false,
+                'status' => 'wrong_math',
+                'is_correct' => false,
                 'diagnostic_note' => 'Hasil kali belum tepat.',
             ]);
 
@@ -67,8 +67,8 @@ class AdaptiveTheoryTest extends TestCase
         $verifier->shouldReceive('verify')
             ->twice()
             ->andReturn([
-                'status'          => 'wrong_math',
-                'is_correct'      => false,
+                'status' => 'wrong_math',
+                'is_correct' => false,
                 'diagnostic_note' => 'Masih keliru.',
             ]);
 
@@ -96,15 +96,15 @@ class AdaptiveTheoryTest extends TestCase
         $verifier->shouldReceive('verify')
             ->once()
             ->andReturn([
-                'status'          => 'wrong_math',
-                'is_correct'      => false,
+                'status' => 'wrong_math',
+                'is_correct' => false,
                 'diagnostic_note' => 'Belum tepat.',
             ]);
         $verifier->shouldReceive('verify')
             ->twice()
             ->andReturn([
-                'status'          => 'correct',
-                'is_correct'      => true,
+                'status' => 'correct',
+                'is_correct' => true,
                 'diagnostic_note' => 'Tepat.',
             ]);
 
@@ -179,7 +179,7 @@ class AdaptiveTheoryTest extends TestCase
                 ], 200),
         ]);
 
-        $gemini = new GeminiSocraticService();
+        $gemini = new GeminiSocraticService;
         $base = 'Teori Singkat: Perhatikan tanda positif dan negatif sebelum mencari dua angka.';
 
         $blocked = $gemini->adaptTheoryMessage($base, 'baby', ['(x + 4)(x - 2)', '4, -2']);
@@ -199,8 +199,8 @@ class AdaptiveTheoryTest extends TestCase
             ->shouldReceive('verify')
             ->once()
             ->andReturn([
-                'status'          => 'wrong_math',
-                'is_correct'      => false,
+                'status' => 'wrong_math',
+                'is_correct' => false,
                 'diagnostic_note' => 'Hasil kali belum cocok.',
             ]);
 
@@ -223,15 +223,15 @@ class AdaptiveTheoryTest extends TestCase
         $verifier->shouldReceive('verify')
             ->times(4)
             ->andReturn([
-                'status'          => 'ignored_non_answer',
-                'is_correct'      => false,
+                'status' => 'ignored_non_answer',
+                'is_correct' => false,
                 'diagnostic_note' => 'Diabaikan: bukan jawaban matematika.',
             ]);
         $verifier->shouldReceive('verify')
             ->once()
             ->andReturn([
-                'status'          => 'verifier_error',
-                'is_correct'      => false,
+                'status' => 'verifier_error',
+                'is_correct' => false,
                 'diagnostic_note' => 'Layanan verifikasi simbolik tidak merespons.',
             ]);
 
@@ -278,13 +278,13 @@ class AdaptiveTheoryTest extends TestCase
                 ->push([
                     'candidates' => [[
                         'finishReason' => 'MAX_TOKENS',
-                        'content'      => ['parts' => [['text' => 'Petunjuk 1: Halo! Sebelum kita mencari faktor-faktornya, mari kita ingat kembali']]],
+                        'content' => ['parts' => [['text' => 'Petunjuk 1: Halo! Sebelum kita mencari faktor-faktornya, mari kita ingat kembali']]],
                     ]],
                 ], 200)
                 ->push([
                     'candidates' => [[
                         'finishReason' => 'STOP',
-                        'content'      => ['parts' => [
+                        'content' => ['parts' => [
                             ['thought' => true, 'text' => 'berpikir internal 1 2 3'],
                             ['text' => 'Petunjuk 1: Periksa dahulu tanda positif dan negatif dari hasil perkaliannya.'],
                         ]],
@@ -292,7 +292,7 @@ class AdaptiveTheoryTest extends TestCase
                 ], 200),
         ]);
 
-        $gemini = new GeminiSocraticService();
+        $gemini = new GeminiSocraticService;
         $fallbackHint = 'Petunjuk 1: Periksa tanda positif dan negatif dari hasil kalinya.';
 
         // Kandidat dengan finishReason MAX_TOKENS ditolak agar tidak tampil terpotong
@@ -305,6 +305,7 @@ class AdaptiveTheoryTest extends TestCase
 
         Http::assertSent(function ($request) {
             $gen = $request['generationConfig'] ?? [];
+
             return ($gen['maxOutputTokens'] ?? 0) === 1024
                 && (($gen['thinkingConfig']['thinkingBudget'] ?? -1) === 0);
         });
@@ -319,14 +320,14 @@ class AdaptiveTheoryTest extends TestCase
             'generativelanguage.googleapis.com/*' => Http::response([
                 'candidates' => [[
                     'finishReason' => 'STOP',
-                    'content'      => ['parts' => [[
+                    'content' => ['parts' => [[
                         'text' => 'Untuk mencari koefisien $x$, tentukan pasangan dengan hasil kali $+10$ dan hasil jumlah $-7$.',
                     ]]],
                 ]],
             ], 200),
         ]);
 
-        $gemini = new GeminiSocraticService();
+        $gemini = new GeminiSocraticService;
         $base = 'Untuk mencari koefisien x, tentukan dua bilangan bulat dengan hasil kali +10 dan hasil jumlah -7.';
 
         $cleaned = $gemini->adaptTheoryMessage($base, 'standard', []);
